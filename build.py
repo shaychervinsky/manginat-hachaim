@@ -1,4 +1,4 @@
-"""Build the installable web app (PWA) in ./pwa from index.html.
+"""Build the installable web app (PWA) in ./docs from index.html.
 
 index.html is written as page content (no <html>/<head>) so it can also be
 published as a Claude artifact. This script wraps it in a full document and
@@ -9,7 +9,7 @@ Usage: python3 build.py
 import json, pathlib, re
 
 ROOT = pathlib.Path(__file__).parent
-OUT = ROOT / "pwa"
+OUT = ROOT / "docs"
 src = (ROOT / "index.html").read_text(encoding="utf-8")
 
 title = re.search(r"<title>(.*?)</title>", src).group(1)
