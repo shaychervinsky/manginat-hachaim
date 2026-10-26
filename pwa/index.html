@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>מנגינת החיים</title>
+<meta name="description" content="עבודה פנימית יומית לפי מודל הנפש של ספר התניא">
+<meta name="theme-color" content="#0E1227">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="מנגינת החיים">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Assistant:wght@400;600;700&display=swap">
+<style>
+/* Layout: a phone-width app column; night indigo ground, one lamp-amber accent for the inner self. */
+:root{
+  --bg:#EDF0F6; --surface:#F8F9FC; --sunk:#E3E7F0; --ink:#1A2040; --muted:#565E7E; --line:#CDD3E3;
+  --lamp:#B36A10; --lamp-soft:rgba(214,140,40,.16); --on-lamp:#FFFFFF; --good:#2F7A55; --auto:#7A5AA6; --warn:#B3261E;
+  --display:"Frank Ruhl Libre","David Libre",Georgia,"Times New Roman",serif;
+  --body:"Assistant","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1227; --surface:#161B36; --sunk:#1E2444; --ink:#E7E9F4; --muted:#9CA3C4; --line:#2A3158;
+  --lamp:#F0A93B; --lamp-soft:rgba(240,169,59,.15); --on-lamp:#1A1205; --good:#6BC79A; --auto:#B79BE3; --warn:#FF8A80; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1227; --surface:#161B36; --sunk:#1E2444; --ink:#E7E9F4; --muted:#9CA3C4; --line:#2A3158;
+  --lamp:#F0A93B; --lamp-soft:rgba(240,169,59,.15); --on-lamp:#1A1205; --good:#6BC79A; --auto:#B79BE3; --warn:#FF8A80; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.app{max-width:480px;margin:0 auto;padding-block:8px 110px;display:grid;gap:16px}
+h1,h2,h3{font-family:var(--display);line-height:1.2;margin:0;text-wrap:balance}
+p{margin:0}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--lamp);outline-offset:2px;border-radius:8px}
+
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding-top:10px}
+.brand{font-family:var(--display);font-weight:900;font-size:1.35rem}
+.hdate{color:var(--muted);font-size:.9rem}
+.theme-chip{display:inline-block;background:var(--lamp-soft);color:var(--ink);border-radius:999px;padding:2px 12px;font-size:.85rem;margin-top:4px}
+.iconbtn{background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;font-size:.85rem;color:var(--muted);white-space:nowrap}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:10px}
+.card.accent{border-color:var(--lamp);background:linear-gradient(var(--lamp-soft),var(--lamp-soft)),var(--surface)}
+.eyebrow{font-size:.78rem;letter-spacing:.06em;font-weight:700;color:var(--lamp)}
+.label{font-size:.8rem;font-weight:700;color:var(--muted)}
+.insight-title{font-size:1.6rem;font-weight:900}
+.src{font-family:var(--display);color:var(--muted);font-size:.9rem}
+.action{background:var(--sunk);border-radius:12px;padding:12px 14px;display:grid;gap:8px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border-radius:999px;padding:10px 20px;font-weight:700;cursor:pointer;border:1.5px solid var(--lamp);background:var(--lamp);color:var(--on-lamp)}
+.btn.ghost{background:none;color:var(--ink);border-color:var(--line)}
+.btn.done{background:none;color:var(--good);border-color:var(--good)}
+.btn[disabled]{opacity:.5;cursor:default}
+.link{background:none;border:none;color:var(--lamp);cursor:pointer;padding:0;font-weight:600;text-decoration:underline}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+
+.level{display:grid;gap:6px}
+.lvl-head{display:flex;justify-content:space-between;align-items:baseline}
+.lvl-name{font-family:var(--display);font-weight:900;font-size:1.25rem}
+.bar{height:8px;border-radius:4px;background:var(--sunk);overflow:hidden}
+.bar > i{display:block;height:100%;background:var(--lamp);border-radius:4px}
+.steps{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted)}
+.steps b{color:var(--lamp)}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer;background:var(--surface);font-size:.92rem}
+.chip[aria-pressed="true"]{border-color:var(--lamp);background:var(--lamp-soft);font-weight:700}
+textarea,input[type=text]{width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;resize:vertical;min-height:44px}
+textarea:focus,input[type=text]:focus{border-color:var(--lamp);outline:none}
+.q{font-family:var(--display);font-weight:700;font-size:1.15rem}
+
+/* map */
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;text-align:center}
+.wd{display:grid;gap:4px;justify-items:center;padding:8px 2px;border-radius:12px;background:var(--sunk);font-size:.78rem}
+.wd.today{outline:2px solid var(--lamp)}
+.wd .n{font-weight:700;font-size:.8rem}
+.dots{display:flex;gap:3px;flex-wrap:wrap;justify-content:center;min-height:10px}
+.dot{width:8px;height:8px;border-radius:50%}
+.dot.win{background:var(--good)} .dot.auto{background:var(--auto)} .dot.done{background:var(--lamp)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.hbars{display:grid;gap:8px}
+.hb{display:grid;grid-template-columns:7.5em minmax(0,1fr) 2.2em;gap:8px;align-items:center;font-size:.9rem}
+.hb .track{height:12px;background:var(--sunk);border-radius:6px;overflow:hidden;display:flex}
+.hb .track i{display:block;height:100%}
+.hb .num{font-variant-numeric:tabular-nums;color:var(--muted);text-align:end}
+.big{font-family:var(--display);font-size:2rem;font-weight:900;line-height:1}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;text-align:center}
+.demo-banner{background:var(--auto);color:var(--bg);border-radius:10px;padding:6px 12px;font-size:.85rem;font-weight:600}
+
+/* nav */
+.nav{position:fixed;inset:auto 0 0 0;background:var(--surface);border-top:1px solid var(--line);
+  padding:8px max(16px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));z-index:5}
+.nav-in{max-width:480px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1.3fr 1fr;align-items:end;gap:4px}
+.tab{background:none;border:none;cursor:pointer;padding:6px 2px;display:grid;justify-items:center;gap:2px;color:var(--muted);font-size:.8rem}
+.tab svg{width:22px;height:22px}
+.tab[aria-current="page"]{color:var(--lamp);font-weight:700}
+.moment-btn{justify-self:center;background:var(--lamp);color:var(--on-lamp);border:none;border-radius:999px;padding:12px 16px;font-weight:700;cursor:pointer;font-size:.9rem;box-shadow:0 4px 14px var(--lamp-soft);transform:translateY(-10px);white-space:nowrap}
+
+/* overlays */
+.overlay{position:fixed;inset:0;background:var(--bg);z-index:10;overflow:auto;
+  padding:calc(16px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
+.ov-in{max-width:480px;margin:0 auto;display:grid;gap:18px}
+.close{justify-self:start;background:none;border:none;color:var(--muted);cursor:pointer;font-size:.95rem;padding:4px 0}
+.breath{width:180px;height:180px;margin:12px auto;border-radius:50%;background:radial-gradient(circle,var(--lamp-soft),transparent 70%);border:2px solid var(--lamp);display:grid;place-items:center;font-family:var(--display);font-size:1.3rem;font-weight:700}
+@media (prefers-reduced-motion:no-preference){.breath.in{animation:grow 4s ease-in-out forwards}.breath.out{animation:shrink 4s ease-in-out forwards}}
+@keyframes grow{from{transform:scale(.75)}to{transform:scale(1.05)}}
+@keyframes shrink{from{transform:scale(1.05)}to{transform:scale(.75)}}
+.center{text-align:center}
+.help{border-color:var(--warn)}
+.help .eyebrow{color:var(--warn)}
+.phone{font-family:var(--display);font-size:1.4rem;font-weight:900;direction:ltr;unicode-bidi:isolate}
+.toast{position:fixed;inset:auto 0 calc(96px + env(safe-area-inset-bottom, 0px)) 0;display:flex;justify-content:center;pointer-events:none;z-index:20}
+.toast span{background:var(--ink);color:var(--bg);border-radius:999px;padding:8px 18px;font-weight:600;font-size:.92rem}
+.opt{text-align:start;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:12px 16px;cursor:pointer;line-height:1.4}
+.opt:hover{border-color:var(--lamp)}
+.check{display:flex;gap:10px;align-items:flex-start}
+.check input{margin-top:5px;width:18px;height:18px;accent-color:var(--lamp)}
+.foot{font-size:.8rem;color:var(--muted);text-align:center;display:grid;gap:4px}
+.loading{padding:60px 0;text-align:center;color:var(--muted)}
+</style>
+
+<div class="app" id="app" dir="rtl" lang="he"><div class="loading">טוען…</div></div>
+<nav class="nav" id="nav" hidden aria-label="ניווט" dir="rtl" lang="he">
+  <div class="nav-in">
+    <button class="tab" data-tab="today" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>היום</button>
+    <button class="tab" data-tab="debrief" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>תחקיר</button>
+    <button class="moment-btn" data-act="moment" type="button">אני באוטומט</button>
+    <button class="tab" data-tab="map" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>המפה</button>
+  </div>
+</nav>
+<div id="overlay" dir="rtl" lang="he"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+/* ---------- content (original wording; source text: the Tanya only) ---------- */
+const POWERS = [
+ {key:"thought", name:"מחשבה", items:[
+  {t:"מחשבה היא לא אתה", x:"לפי התניא, גם אצל הבינוני עולות מחשבות שהוא לא בחר בהן. ההבדל הוא לא במה שעולה, אלא במה שאתה עושה עם זה: לא להתווכח עם המחשבה ולא להתעסק בה, אלא להסיט ממנה את תשומת הלב.", s:"תניא, פרק י״ב", a:"כשעולה היום מחשבה מטרידה, תן לה שם (״זה האוטומט״) ועבור לדבר אחר תוך עשר שניות."},
+  {t:"המחשבה היא לבוש", x:"התניא מתאר שלושה לבושים שדרכם הנפש יוצאת לעולם: מחשבה, דיבור ומעשה. המחשבה היא הלבוש הפנימי ביותר, והיא תמיד איתך. מי שמנהל את המחשבה מתחיל לנהל את כל השאר.", s:"תניא, פרק ד׳", a:"בחר מחשבה אחת שתחזור אליה היום בכל פעם שאתה מחכה: בתור, ברמזור, מול הטלפון."}]},
+ {key:"speech", name:"דיבור", items:[
+  {t:"מה יוצא מהפה", x:"הבינוני, לפי התניא, אולי לא שולט במה שעולה בלב, אבל הוא שולט במה שיוצא מהפה. בין הרגש לבין המילה יש רגע של בחירה.", s:"תניא, פרק י״ב", a:"לפני משפט אחד שעומד לצאת בכעס או בעלבון, עצור לנשימה אחת. אם צריך, אל תגיד אותו."},
+  {t:"מילה יוצאת לעולם", x:"הדיבור הוא לבוש גלוי יותר מהמחשבה. מה שנאמר כבר יוצא לעולם ומשפיע על אחרים. לכן דיבור טוב אחד שווה הרבה כוונות טובות.", s:"תניא, פרק ד׳", a:"אמור היום משפט אחד של הכרת תודה לאדם שבדרך כלל לא שומע ממך כזה."}]},
+ {key:"action", name:"מעשה", items:[
+  {t:"המעשה הוא העיקר", x:"לפי התניא, תכלית הבריאה מתממשת דווקא בעולם הזה, במעשים הממשיים. לא בהרגשה הנכונה ולא בכוונה היפה, אלא במה שאתה עושה בפועל.", s:"תניא, פרק ל״ו", a:"עשה היום מעשה אחד שדחית, גם אם הוא קטן. רק אחד."},
+  {t:"גם בלי חשק", x:"הבינוני עושה את הדבר הנכון גם כשהלב לא שם. התניא לא מחכה שהרגש יסכים. המעשה קודם, והלב לומד אחריו.", s:"תניא, פרק י״ב", a:"בחר דבר אחד שאין לך חשק לעשות, ועשה אותו עשר דקות בלבד."}]},
+ {key:"middot", name:"מידות ורגש", items:[
+  {t:"עשרה כוחות בנפש", x:"לפי התניא, לנפש יש עשרה כוחות: שלושה של שכל ושבע מידות של רגש, כמו אהבה, גבורה ורחמים. אף מידה אינה טובה או רעה מעצמה. השאלה היא מי מנהל אותה.", s:"תניא, פרק ג׳", a:"שים לב היום לרגש חזק אחד, ושאל: איזו מידה זו, ומי מנהל אותה עכשיו, האוטומט או האני העמוק?"},
+  {t:"ההבנה מולידה רגש", x:"התניא מלמד שההבנה וההתבוננות הן שמולידות את הרגש. מי שמתבונן לעומק בדבר, מרגיש אותו אחרת.", s:"תניא, פרק ג׳", a:"לפני השינה, התבונן שתי דקות במשהו טוב שיש לך. אל תסתפק בלחשוב עליו. הישאר איתו עד שתרגיש."}]},
+ {key:"will", name:"רצון", items:[
+  {t:"בכל רגע מחדש", x:"התניא קובע שכל אדם יכול להיות בינוני בכל שעה ובכל רגע. זו לא דרגה שמגיעים אליה פעם אחת, אלא בחירה שעושים שוב ושוב.", s:"תניא, פרק י״ד", a:"בחר מראש רגע אחד בהמשך היום, למשל החזרה הביתה, והחלט עכשיו איך אתה רוצה להיות בו."},
+  {t:"שני מלכים, עיר אחת", x:"התניא מתאר את שתי הנפשות כשני מלכים הנלחמים על עיר קטנה, שהיא הגוף. האני האוטומטי רוצה נוחות מיידית, והאני העמוק רוצה משמעות. שניהם בך, והבחירה שלך.", s:"תניא, פרק ט׳", a:"כשמשהו מושך אותך היום, שאל: מי רוצה את זה עכשיו, האוטומט או האני העמוק?"}]},
+ {key:"joy", name:"שמחה", items:[
+  {t:"עצבות מכבידה", x:"התניא משווה את המאבק הפנימי להיאבקות עם יריב. מי שנאבק בעצלות ובכבדות, מפסיד גם מול יריב חלש. עצבות והלקאה עצמית לא מקדמות. הן רק מכבידות.", s:"תניא, פרק כ״ו", a:"כשתתפוס את עצמך היום מלקה את עצמך, החלף את זה במשפט: ״ראיתי, למדתי, ממשיכים״."},
+  {t:"כל ניצחון קטן נחשב", x:"לפי התניא, בכל פעם שאדם דוחה מחשבה או דחף שלא רצה בהם, יש בזה ערך גדול, גם אם הם חוזרים שוב ושוב. החזרה של הדחף איננה כישלון. הדחייה שלו היא הניצחון.", s:"תניא, פרק כ״ז", a:"ספור היום את הניצחונות הקטנים, ולחץ ״ניצחתי״ בכל פעם."}]}
+];
+const DAY_LABEL = ["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"];
+const MONTHS = [
+ ["תשרי","התחדשות והצבת כוונה לשנה"],["חשו","התמדה ביומיום, החודש בלי חגים"],["כסלו","אור בתוך חושך"],["טבת","להחזיק מעמד בימים הקרים"],
+ ["שבט","צמיחה ושורשים"],["אדר","שמחה כעבודה"],["ניסן","חירות: יציאה משעבוד האוטומט"],["אייר","עבודה על המידות, ימי הספירה"],
+ ["סיו","מחויבות וקבלה"],["תמוז","התמודדות עם שבר"],["אלול","חשבון נפש והתבוננות במה שהיה"],["אב","נחמה ותיקון"]];
+const LEVELS = [
+ {n:"נפש", d:"מודעות: לזהות את האוטומט", from:0},
+ {n:"רוח", d:"רגש: לעבוד עם המידות", from:30},
+ {n:"נשמה", d:"הבנה: התבוננות עמוקה", from:90},
+ {n:"חיה", d:"רצון: מה באמת מניע אותי", from:180},
+ {n:"יחידה", d:"שליחות: ללוות אחרים", from:300}];
+const ARENAS = [["self","עם עצמי"],["home","בבית ובזוגיות"],["kids","עם הילדים"],["work","בעבודה ובפרנסה"],["people","עם אנשים"]];
+const CHANNELS = [["thought","מחשבה"],["speech","דיבור"],["action","מעשה"]];
+const DEEP_LINES = ["בין הגירוי לתגובה יש רגע. אתה בתוכו עכשיו.","הדחף הוא לא אתה. אתה מי שבוחר מה לעשות איתו.","הבינוני לא מחכה שהלב יירגע. הוא בוחר את הצעד הבא.","אין צורך לנצח את כל היום. רק את הרגע הזה."];
+const QUIZ = [
+ {t:"מישהו קרוב מבקש עזרה ברגע לא נוח. מה הכי דומה לך?",o:[["chesed","מיד. לא חושב פעמיים"],["gevura","עוזר, אבל קובע גבול ברור"],["tiferet","מקשיב קודם, ואז מחליט מה נכון"],["yesod","נשאר איתו עד הסוף"]]},
+ {t:"על מה אנשים בדרך כלל מודים לך?",o:[["chesed","על הנדיבות והחום"],["netzach","על זה שאני לא מוותר"],["hod","על זה שאני יודע להקשיב ולהודות"],["malchut","על זה שאני לוקח אחריות"]]},
+ {t:"ויכוח בעבודה. מה אתה עושה?",o:[["gevura","עומד על העיקרון"],["tiferet","מחפש דרך שמכילה את שני הצדדים"],["hod","מוכן להודות אם טעיתי"],["malchut","מקבל החלטה ומתקדם"]]},
+ {t:"יום פנוי לגמרי. מה תעשה?",o:[["chesed","מארח אנשים"],["yesod","זמן איכות עם הקרובים לי"],["netzach","מקדם פרויקט אישי"],["tiferet","קצת מכל דבר, באיזון"]]},
+ {t:"איפה האוטומט תופס אותך הכי הרבה?",o:[["chesed","אומר כן כשהייתי צריך לומר לא"],["gevura","ביקורת חריפה, על אחרים או על עצמי"],["netzach","דוחף יותר מדי ולא יודע לעצור"],["yesod","נאחז באנשים או בהרגלים"]]},
+ {t:"מה זו הצלחה בשבילך?",o:[["malchut","השפעה ומשמעות"],["hod","הכרת תודה ושלווה"],["yesod","קשרים עמוקים"],["gevura","שליטה עצמית"]]}];
+const MIDDOT = {
+ chesed:{n:"הנותן",s:"חסד",st:"אתה נותן בלב שלם, ולידך אנשים מרגישים בבית.",sh:"כשהנתינה בלי גבולות, אתה נשחק."},
+ gevura:{n:"השומר",s:"גבורה",st:"יש לך משמעת וגבולות ברורים.",sh:"הביקורת יכולה להפוך לחריפה, בעיקר כלפי עצמך."},
+ tiferet:{n:"המאזן",s:"תפארת",st:"אתה רואה את שני הצדדים ומחבר ביניהם.",sh:"החיפוש אחרי איזון יכול להפוך להימנעות מהחלטה."},
+ netzach:{n:"המתמיד",s:"נצח",st:"אתה לא מוותר, ומוביל דברים עד הסוף.",sh:"קשה לך לעצור, גם כשהדלת סגורה."},
+ hod:{n:"המעריך",s:"הוד",st:"אתה יודע להודות, להקשיב ולהכיר בטעות.",sh:"הענווה יכולה להפוך להקטנה עצמית."},
+ yesod:{n:"המחבר",s:"יסוד",st:"אתה בונה קשרים עמוקים ונאמנים.",sh:"החיבור יכול להפוך להיאחזות."},
+ malchut:{n:"המוביל",s:"מלכות",st:"אתה לוקח אחריות והופך כוונות למעשים.",sh:"הצורך בהשפעה יכול להפוך לצורך בהכרה."}};
+const DISTRESS = ["להתאבד","התאבדות","לא רוצה לחיות","אין טעם לחיות","לפגוע בעצמי","רוצה למות","להיעלם מהעולם","אין לי בשביל מה לחיות","לשים סוף"];
+
+/* ---------- dates ---------- */
+const pad = n => String(n).padStart(2,"0");
+const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+function realNow(){ return new Date(); }
+let demoOffset = 0; // days, for previewing other weekdays
+function now(){ const d = realNow(); d.setDate(d.getDate()+demoOffset); return d; }
+function hebDate(d){ try{ return new Intl.DateTimeFormat("he-u-ca-hebrew",{day:"numeric",month:"long",year:"numeric"}).format(d); }catch(e){ return ""; } }
+function hebMonth(d){ try{ return new Intl.DateTimeFormat("he-u-ca-hebrew",{month:"long"}).format(d); }catch(e){ return ""; } }
+function monthTheme(d){
+  const m = hebMonth(d);
+  for(const [k,t] of MONTHS){ if(k==="אב" ? (m.trim()==="אב" || m.trim()==="מנחם אב") : m.includes(k)) return {m, t}; }
+  return {m, t:null};
+}
+function weekNum(d){ const a = new Date(d.getFullYear(),0,1); return Math.floor((d - a)/(7*864e5)); }
+function weekStart(d){ const s = new Date(d); s.setHours(0,0,0,0); s.setDate(s.getDate()-s.getDay()); return s; }
+
+/* ---------- storage: private per-viewer db, falling back to this device ---------- */
+const store = { mode:"memory", db:null, uid:null, mem:{profile:null, days:{}} };
+function lsGet(k){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } }
+function withTimeout(p, ms){ return Promise.race([p, new Promise(r => setTimeout(() => r(null), ms))]); }
+async function initStore(){
+  try{
+    if(window.claude && typeof window.claude.use === "function"){
+      const [db, user] = await withTimeout(Promise.all([window.claude.use("db"), window.claude.use("user")]), 6000) || [];
+      const uid = user ? await withTimeout(user.id(), 3000) : null;
+      if(db && uid){ store.db = db; store.uid = uid; store.mode = "cloud"; return; }
+    }
+  }catch(e){}
+  try{ localStorage.setItem("mh-probe","1"); localStorage.removeItem("mh-probe"); store.mode = "local"; }catch(e){ store.mode = "memory"; }
+}
+const profRef = () => store.db.doc("data/users/"+store.uid+"/profile");
+const daysCol = () => profRef().collection("days");
+async function fallback(){ store.mode = "local"; try{ localStorage.setItem("mh-probe","1"); }catch(e){ store.mode = "memory"; } }
+async function loadProfile(){
+  if(store.mode==="cloud"){ try{ const s = await profRef().get(); return s.exists ? {...s.data()} : null; }catch(e){ await fallback(); } }
+  if(store.mode==="local") return lsGet("mh-profile");
+  return store.mem.profile;
+}
+async function saveProfile(p){
+  if(store.mode==="cloud"){ try{ await profRef().set(p); return; }catch(e){ await fallback(); } }
+  if(store.mode==="local"){ lsSet("mh-profile", p); return; }
+  store.mem.profile = p;
+}
+async function loadDays(){
+  if(store.mode==="cloud"){
+    try{ const snap = await daysCol().orderBy("date","desc").limit(400).get(); const out = {}; snap.docs.forEach(d => { out[d.id] = JSON.parse(JSON.stringify(d.data())); }); return out; }
+    catch(e){ await fallback(); }
+  }
+  if(store.mode==="local") return lsGet("mh-days") || {};
+  return store.mem.days;
+}
+async function saveDay(key, day){
+  if(store.mode==="cloud"){ try{ await daysCol().doc(key).set(day); return; }catch(e){ await fallback(); } }
+  if(store.mode==="local"){ const all = lsGet("mh-days") || {}; all[key] = day; lsSet("mh-days", all); return; }
+  store.mem.days[key] = day;
+}
+
+/* ---------- state ---------- */
+const S = { profile:null, days:{}, tab:"today", demo:null, ob:{step:0, quiz:[], agreed:false}, welcomeBack:false };
+const app = document.getElementById("app"), nav = document.getElementById("nav"), ov = document.getElementById("overlay");
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function toast(msg){ const t = document.getElementById("toast"); t.innerHTML = `<span>${esc(msg)}</span>`; clearTimeout(toast._t); toast._t = setTimeout(() => t.innerHTML = "", 2600); }
+function days(){ return S.demo || S.days; }
+function today(){ const k = keyOf(now()); return days()[k] || {date:k, done:false, moments:[], debrief:null}; }
+async function putToday(day){
+  const k = keyOf(now()); day.date = k;
+  if(S.demo){ S.demo[k] = day; return; }
+  S.days[k] = day; await saveDay(k, day);
+  if(S.profile){ const t = new Date().toISOString(); S.profile.lastActive = t; await saveProfile(S.profile); }
+}
+function activeDays(){ return Object.values(days()).filter(d => d.done || (d.moments||[]).length || d.debrief).length; }
+function level(){
+  const n = activeDays(); let i = 0; LEVELS.forEach((l,j) => { if(n >= l.from) i = j; });
+  const next = LEVELS[i+1]; const pct = next ? Math.round((n - LEVELS[i].from) / (next.from - LEVELS[i].from) * 100) : 100;
+  return {i, n, next, pct};
+}
+function isDistress(texts){ const all = texts.join(" "); return DISTRESS.some(w => all.includes(w)); }
+
+/* ---------- onboarding ---------- */
+function renderOnboarding(){
+  nav.hidden = true;
+  const o = S.ob;
+  if(o.step === 0){
+    app.innerHTML = `<div class="top"><span class="brand">מנגינת החיים</span></div>
+    <div class="card accent"><p class="eyebrow">שיטה לעבודה פנימית, מבוססת על ספר התניא</p>
+      <h1 style="font-size:2rem;font-weight:900">כשטוב לך עם עצמך, טוב לך עם כולם.</h1>
+      <p>החיים הם תזמורת: בית, עבודה, אנשים, ואתה עצמך. כדי שהכול יישמע מדויק, מתחילים מהשורש, מהעבודה שלך עם עצמך.</p>
+      <p class="muted">כל יום: רעיון אחד, מעשה אחד, ותחקיר קצר בערב. בלי מצוות, בלי סגולות ובלי הלקאה עצמית.</p>
+      <div><button class="btn" data-act="ob-next" type="button">להתחיל</button></div></div>`;
+  } else if(o.step === 1){
+    app.innerHTML = `<div class="top"><span class="brand">לפני שמתחילים</span></div>
+    <div class="card"><h2 style="font-size:1.4rem">חשוב שתדע</h2>
+      <p>האפליקציה היא כלי לליווי ולהתפתחות אישית. <b>היא אינה מחליפה טיפול פסיכולוגי, נפשי או רפואי</b>, ואינה מיועדת לטיפול במצבי חירום.</p>
+      <p>השימוש באפליקציה הוא על דעתך ובאחריותך.</p>
+      <p>אם עובר עליך משהו קשה מאוד, פנה לעזרה: ער״ן, עזרה ראשונה נפשית, בטלפון <span class="phone">1201</span>. במצב של סכנה מיידית: מד״א <span class="phone">101</span>.</p>
+      <label class="check" for="agree"><input id="agree" type="checkbox" ${o.agreed?"checked":""}><span>קראתי, הבנתי ואני מסכים לתנאי השימוש</span></label>
+      <div><button class="btn" data-act="ob-next" type="button" ${o.agreed?"":"disabled"} id="agree-next">המשך</button></div></div>`;
+    document.getElementById("agree").addEventListener("change", e => { o.agreed = e.target.checked; document.getElementById("agree-next").disabled = !o.agreed; });
+  } else if(o.step === 2){
+    const qi = o.quiz.length;
+    if(qi < QUIZ.length){
+      const q = QUIZ[qi];
+      app.innerHTML = `<div class="top"><span class="brand">איזה בינוני אתה?</span><span class="hdate">שאלה ${qi+1} מתוך ${QUIZ.length}</span></div>
+      <div class="card"><p class="q">${esc(q.t)}</p><div style="display:grid;gap:10px">
+        ${q.o.map(([k,l]) => `<button class="opt" type="button" data-act="quiz" data-k="${k}">${esc(l)}</button>`).join("")}</div>
+        ${qi>0?`<div><button class="link" data-act="quiz-back" type="button">חזרה</button></div>`:""}</div>`;
+    } else {
+      const k = topMiddah(o.quiz), m = MIDDOT[k];
+      app.innerHTML = `<div class="top"><span class="brand">התוצאה שלך</span></div>
+      <div class="card accent"><p class="eyebrow">המידה שמובילה אותך</p><h1 style="font-size:2.3rem;font-weight:900;color:var(--lamp)">${esc(m.n)}</h1>
+        <p class="src">${esc(m.s)}</p><p><b>הכוח שלך:</b> ${esc(m.st)}</p><p><b>הצל:</b> ${esc(m.sh)}</p>
+        <p class="muted">מכאן מתחילים בדרגת <b>נפש</b>: ללמוד לזהות את האוטומט. הדרגות עולות לפי עקביות ועומק, לא לפי שלמות.</p>
+        <div><button class="btn" data-act="ob-finish" type="button">לעבודה של היום</button></div></div>`;
+    }
+  }
+}
+function topMiddah(ans){ const s = {}; ans.forEach(k => s[k] = (s[k]||0)+1); return Object.keys(MIDDOT).reduce((a,b) => (s[b]||0) > (s[a]||0) ? b : a, "chesed"); }
+
+/* ---------- main tabs ---------- */
+function header(){
+  const d = now(), th = monthTheme(d);
+  return `<div class="top"><div><div class="brand">מנגינת החיים</div><div class="hdate">יום ${DAY_LABEL[d.getDay()]} · ${esc(hebDate(d))}</div>
+    ${th.t?`<span class="theme-chip">חודש ${esc(th.m)}: ${esc(th.t)}</span>`:""}</div>
+    <button class="iconbtn" data-act="settings" type="button">הדגמה</button></div>
+    ${S.demo?`<div class="demo-banner">מוצגים נתוני הדגמה. הנתונים שלך לא השתנו.</div>`:""}
+    ${demoOffset?`<div class="demo-banner">תצוגה של יום ${DAY_LABEL[d.getDay()]}. <button class="link" style="color:inherit" data-act="real-day" type="button">חזרה להיום</button></div>`:""}`;
+}
+function levelCard(){
+  const L = level(), cur = LEVELS[L.i];
+  return `<div class="card level"><div class="lvl-head"><span class="label">הדרגה שלך</span><span class="small muted">${L.n} ימי עבודה</span></div>
+    <div class="lvl-head"><span class="lvl-name">${esc(cur.n)}</span><span class="small">${esc(cur.d)}</span></div>
+    <div class="bar" role="progressbar" aria-valuenow="${L.pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${L.pct}%"></i></div>
+    <div class="steps">${LEVELS.map((l,j) => j===L.i?`<b>${l.n}</b>`:`<span>${l.n}</span>`).join("")}</div>
+    ${L.next?`<p class="small muted">עוד ${L.next.from - L.n} ימי עבודה לדרגת ${esc(L.next.n)}.</p>`:""}</div>`;
+}
+function renderToday(){
+  const d = now(), dow = d.getDay(), day = today();
+  let body = "";
+  if(S.welcomeBack) body += `<div class="card accent"><p class="eyebrow">ברוך שובך</p><p>החזרה עצמה היא חלק מהעבודה. אין כאן רצף שנשבר, יש מנגינה שממשיכה.</p></div>`;
+  if(dow === 6){
+    body += `<div class="card accent center"><p class="eyebrow">שבת</p><h2 style="font-size:1.8rem;font-weight:900">שבת שלום</h2>
+      <p>היום אין משימות ואין התראות. השקט הוא חלק מהמנגינה.</p><p class="muted">במוצאי שבת מחכה לך מפת השבוע.</p>
+      <div><button class="btn ghost" data-tab-go="map" type="button">לצפות במפת השבוע</button></div></div>`;
+  } else {
+    const P = POWERS[dow], it = P.items[weekNum(d) % P.items.length];
+    const wins = (day.moments||[]).filter(m => m.result==="win").length;
+    body += `<div class="card"><p class="eyebrow">הכוח של היום: ${esc(P.name)}</p>
+      <h2 class="insight-title">${esc(it.t)}</h2><p>${esc(it.x)}</p><p class="src">${esc(it.s)}</p>
+      <div class="action"><span class="label">המעשה של היום</span><p>${esc(it.a)}</p>
+        <div class="row">${day.done?`<button class="btn done" data-act="undo-done" type="button">✓ עשיתי</button>`:`<button class="btn" data-act="done" type="button">עשיתי</button>`}</div></div></div>
+    <div class="card"><div class="row" style="justify-content:space-between"><div><span class="label">ניצחונות היום</span><div class="big">${wins}</div></div>
+      <button class="btn ghost" data-act="quick-win" type="button">ניצחתי עכשיו</button></div>
+      <p class="small muted">כל פעם שעצרת ובחרת אחרת, גם בדבר קטן. לרגע קשה: הכפתור ״אני באוטומט״ למטה.</p></div>
+    <div class="card"><span class="label">בערב</span>${day.debrief?`<p>✓ התחקיר של היום הושלם. <button class="link" data-tab-go="debrief" type="button">לצפייה</button></p>`
+      :`<p>תחקיר של דקה: מה תכננת, מה קרה, מה אתה לוקח למחר.</p><div><button class="btn ghost" data-tab-go="debrief" type="button">לתחקיר</button></div>`}</div>`;
+  }
+  body += levelCard();
+  app.innerHTML = header() + body + footer();
+}
+let D = null; // debrief draft
+function renderDebrief(){
+  const day = today();
+  if(now().getDay() === 6){ app.innerHTML = header() + `<div class="card center"><p class="eyebrow">שבת</p><p>אין תחקיר בשבת. נתראה במוצאי שבת.</p></div>` + footer(); return; }
+  if(day.debrief && !D){
+    const b = day.debrief, lab = (arr,k) => (arr.find(a => a[0]===k)||[,""])[1];
+    app.innerHTML = header() + `<div class="card accent"><p class="eyebrow">התחקיר של היום</p><h2 style="font-size:1.4rem">ראית, למדת, ממשיכים.</h2></div>
+      <div class="card"><span class="label">מתי האוטומט ניהל אותך${b.autoChannel?` · ${esc(lab(CHANNELS,b.autoChannel))}`:""}${b.autoArena?` · ${esc(lab(ARENAS,b.autoArena))}`:""}</span><p>${esc(b.autoText)||"<span class='muted'>לא נכתב</span>"}</p>
+        <span class="label">מתי אתה ניצחת${b.winArena?` · ${esc(lab(ARENAS,b.winArena))}`:""}</span><p>${esc(b.winText)||"<span class='muted'>לא נכתב</span>"}</p>
+        <span class="label">מה לוקחים למחר</span><p>${esc(b.tomorrow)||"<span class='muted'>לא נכתב</span>"}</p>
+        <div><button class="link" data-act="edit-debrief" type="button">עריכה</button></div></div>` + footer();
+    return;
+  }
+  D = D || {autoText:"",autoChannel:null,autoArena:null,winText:"",winArena:null,tomorrow:""};
+  const chips = (arr, field) => `<div class="chips">${arr.map(([k,l]) => `<button class="chip" type="button" data-chip="${field}" data-k="${k}" aria-pressed="${D[field]===k}">${esc(l)}</button>`).join("")}</div>`;
+  app.innerHTML = header() + `<div class="card"><p class="eyebrow">תחקיר ערב</p><p class="muted">בלי האשמה. רק מה היה ומה לומדים.</p></div>
+  <div class="card"><label class="q" for="d-auto">מתי היום האוטומט ניהל אותך?</label>
+    <textarea id="d-auto" rows="2" placeholder="רגע אחד מספיק">${esc(D.autoText)}</textarea>
+    <span class="label">באיזה לבוש?</span>${chips(CHANNELS,"autoChannel")}
+    <span class="label">באיזו זירה?</span>${chips(ARENAS,"autoArena")}</div>
+  <div class="card"><label class="q" for="d-win">מתי אתה ניצחת?</label>
+    <textarea id="d-win" rows="2" placeholder="גם דבר קטן נחשב">${esc(D.winText)}</textarea>
+    <span class="label">באיזו זירה?</span>${chips(ARENAS,"winArena")}</div>
+  <div class="card"><label class="q" for="d-tom">מה תיקח למחר?</label>
+    <input id="d-tom" type="text" placeholder="החלטה קטנה אחת" value="${esc(D.tomorrow)}"></div>
+  <div><button class="btn" data-act="save-debrief" type="button">סיום התחקיר</button></div>` + footer();
+  ["d-auto","d-win","d-tom"].forEach(id => document.getElementById(id).addEventListener("input", e => {
+    const f = {"d-auto":"autoText","d-win":"winText","d-tom":"tomorrow"}[id]; D[f] = e.target.value; }));
+}
+function renderMap(){
+  const d = now(), ws = weekStart(d), all = days();
+  const week = []; for(let i=0;i<7;i++){ const x = new Date(ws); x.setDate(ws.getDate()+i); week.push(x); }
+  let wins=0, autos=0, done=0; const byArena = {}, byChannel = {}, winArenas = new Set();
+  ARENAS.forEach(([k]) => byArena[k] = {win:0, auto:0}); CHANNELS.forEach(([k]) => byChannel[k] = 0);
+  week.forEach(x => { const day = all[keyOf(x)]; if(!day) return; if(day.done) done++;
+    (day.moments||[]).forEach(m => { if(m.result==="win"){ wins++; if(m.arena){ byArena[m.arena].win++; winArenas.add(m.arena);} } else { autos++; if(m.arena) byArena[m.arena].auto++; if(m.channel) byChannel[m.channel]++; } });
+    const b = day.debrief; if(b){ if(b.autoText||b.autoArena){ autos++; if(b.autoArena) byArena[b.autoArena].auto++; if(b.autoChannel) byChannel[b.autoChannel]++; }
+      if(b.winText||b.winArena){ wins++; if(b.winArena){ byArena[b.winArena].win++; winArenas.add(b.winArena);} } } });
+  const empty = !wins && !autos && !done;
+  const maxA = Math.max(1, ...Object.values(byArena).map(v => v.win+v.auto)), maxC = Math.max(1, ...Object.values(byChannel));
+  const weakest = Object.entries(byChannel).sort((a,b) => b[1]-a[1])[0];
+  app.innerHTML = header() + `<div class="card"><p class="eyebrow">מפת השבוע</p>
+    <div class="week">${week.map(x => { const day = all[keyOf(x)]||{}; const ms = day.moments||[]; const b = day.debrief;
+      const w = ms.filter(m=>m.result==="win").length + (b&&(b.winText||b.winArena)?1:0), a = ms.filter(m=>m.result!=="win").length + (b&&(b.autoText||b.autoArena)?1:0);
+      return `<div class="wd ${keyOf(x)===keyOf(d)?"today":""}"><span class="n">${["א׳","ב׳","ג׳","ד׳","ה׳","ו׳","שבת"][x.getDay()]}</span>
+        <div class="dots">${day.done?'<i class="dot done"></i>':""}${'<i class="dot win"></i>'.repeat(Math.min(w,4))}${'<i class="dot auto"></i>'.repeat(Math.min(a,4))}</div></div>`; }).join("")}</div>
+    <div class="legend"><span><i class="dot done"></i>מעשה היום</span><span><i class="dot win"></i>ניצחון</span><span><i class="dot auto"></i>האוטומט ניהל</span></div></div>`
+  + (empty ? `<div class="card center"><p class="q">המפה תתמלא מהעבודה שלך</p><p class="muted">כל ״עשיתי״, כל ״ניצחתי״ וכל תחקיר ערב מוסיפים לה צבע. אחרי כמה ימים תראה איפה האוטומט תופס אותך, ואיך העבודה הפנימית מגיעה לכל הזירות.</p>
+      <div>${S.demo?"":`<button class="btn ghost" data-act="demo-on" type="button">להציג נתוני הדגמה</button>`}</div></div>`
+   : `<div class="card"><div class="stats"><div><div class="big" style="color:var(--good)">${wins}</div><span class="small muted">ניצחונות</span></div>
+      <div><div class="big" style="color:var(--auto)">${autos}</div><span class="small muted">רגעי אוטומט</span></div>
+      <div><div class="big" style="color:var(--lamp)">${done}</div><span class="small muted">מעשים</span></div></div>
+      ${winArenas.size>1?`<p>השבוע ניצחת ב-${winArenas.size} זירות שונות. עבודה פנימית אחת, והיא מגיעה לכל המנגינה.</p>`:""}</div>
+    <div class="card"><span class="label">השורש והענפים: איפה זה קרה השבוע</span><div class="hbars">
+      ${ARENAS.map(([k,l]) => { const v = byArena[k]; return `<div class="hb"><span>${esc(l)}</span><div class="track" aria-label="${v.win} ניצחונות, ${v.auto} רגעי אוטומט"><i style="width:${v.win/maxA*100}%;background:var(--good)"></i><i style="width:${v.auto/maxA*100}%;background:var(--auto)"></i></div><span class="num">${v.win+v.auto}</span></div>`; }).join("")}</div></div>
+    <div class="card"><span class="label">באיזה לבוש האוטומט תפס אותך</span><div class="hbars">
+      ${CHANNELS.map(([k,l]) => `<div class="hb"><span>${esc(l)}</span><div class="track"><i style="width:${byChannel[k]/maxC*100}%;background:var(--auto)"></i></div><span class="num">${byChannel[k]}</span></div>`).join("")}</div>
+      ${weakest && weakest[1] ? `<p class="small">השבוע הבא כדאי לשים לב במיוחד ל${esc(CHANNELS.find(c=>c[0]===weakest[0])[1])}.</p>`:""}</div>`)
+  + levelCard() + (S.demo?`<div><button class="btn ghost" data-act="demo-off" type="button">הסתרת נתוני ההדגמה</button></div>`:"") + footer();
+}
+function footer(){
+  const m = {cloud:"הנתונים שלך שמורים באופן פרטי בחשבון שלך.", local:"הנתונים נשמרים במכשיר הזה בלבד.", memory:"הנתונים נשמרים רק עד סגירת הדף."}[store.mode];
+  return `<div class="foot"><span>${m}</span><span>האפליקציה אינה מחליפה טיפול נפשי. <button class="link" data-act="help" type="button">צריך עזרה עכשיו?</button></span></div>`;
+}
+function render(){
+  if(!S.profile){ renderOnboarding(); return; }
+  nav.hidden = false;
+  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-current", t.dataset.tab===S.tab ? "page" : "false"));
+  ({today:renderToday, debrief:renderDebrief, map:renderMap})[S.tab]();
+}
+
+/* ---------- overlays ---------- */
+function closeOv(){ ov.innerHTML = ""; clearTimeout(breathT); }
+function helpCard(lead){
+  return `<div class="card help"><p class="eyebrow">עזרה עכשיו</p>${lead?`<p>${esc(lead)}</p>`:""}
+    <p>האפליקציה לא יכולה להחליף אדם שמקשיב. אפשר לפנות עכשיו, בחינם ובאנונימיות:</p>
+    <p><b>ער״ן, עזרה ראשונה נפשית:</b> <span class="phone">1201</span></p>
+    <p><b>סה״ר, תמיכה בצ׳אט:</b> <span class="phone">sahar.org.il</span></p>
+    <p><b>במצב של סכנה מיידית:</b> מד״א <span class="phone">101</span>, משטרה <span class="phone">100</span></p></div>`;
+}
+function openHelp(lead){ ov.innerHTML = `<div class="overlay"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>${helpCard(lead)}</div></div>`; }
+let M = null, breathT = null;
+function openMoment(){ M = {step:0, cycle:0, phase:"in", line:DEEP_LINES[Math.floor(Math.random()*DEEP_LINES.length)], result:null, arena:null, channel:null}; drawMoment(); }
+function drawMoment(){
+  let inner = "";
+  if(M.step === 0){
+    inner = `<p class="eyebrow center">שלוש נשימות</p><p class="center muted">עוד לא עושים כלום. רק נושמים.</p>
+      <div class="breath ${M.phase}" id="breath">${M.phase==="in"?"שאיפה":"נשיפה"}</div>
+      <p class="center small muted">נשימה ${M.cycle+1} מתוך 3</p><div class="center"><button class="link" data-act="m-next" type="button">דילוג</button></div>`;
+    clearTimeout(breathT);
+    breathT = setTimeout(() => { if(!M || M.step!==0) return; if(M.phase==="in"){ M.phase="out"; } else { M.phase="in"; M.cycle++; if(M.cycle>=3){ M.step=1; } } drawMoment(); }, 4000);
+  } else if(M.step === 1){
+    inner = `<div class="card accent center"><p class="q" style="font-size:1.5rem">מה האני העמוק רוצה כאן?</p><p class="muted">לא מה האוטומט רוצה עכשיו. מה אתה רוצה שיהיה, אחרי שהרגע הזה יעבור.</p></div>
+      <p class="center src" style="font-size:1.05rem">${esc(M.line)}</p>
+      <div class="center"><button class="btn" data-act="m-next" type="button">אני מוכן להמשיך</button></div>`;
+  } else if(M.step === 2){
+    const chips = (arr, field) => `<div class="chips">${arr.map(([k,l]) => `<button class="chip" type="button" data-mchip="${field}" data-k="${k}" aria-pressed="${M[field]===k}">${esc(l)}</button>`).join("")}</div>`;
+    inner = `<div class="card"><p class="q">ומה בחרת?</p><div class="chips">
+        <button class="chip" type="button" data-mchip="result" data-k="win" aria-pressed="${M.result==="win"}">בחרתי אחרת</button>
+        <button class="chip" type="button" data-mchip="result" data-k="auto" aria-pressed="${M.result==="auto"}">האוטומט ניצח הפעם</button></div>
+      <span class="label">באיזו זירה?</span>${chips(ARENAS,"arena")}
+      <span class="label">באיזה לבוש?</span>${chips(CHANNELS,"channel")}</div>
+      <div><button class="btn" data-act="m-save" type="button" ${M.result?"":"disabled"}>שמירה</button></div>`;
+  } else {
+    inner = `<div class="card accent center"><h2 style="font-size:1.6rem">${M.result==="win"?"ניצחת את הרגע.":"ראית את זה. זה כבר הרבה."}</h2>
+      <p>${M.result==="win"?"כל ניצחון קטן נחשב. זה בדיוק מה שהבינוני עושה.":"לפי התניא, עצבות רק מכבידה. ראית, למדת, ממשיכים."}</p></div>
+      <div class="center"><button class="btn" data-act="close" type="button">חזרה ליום</button></div>`;
+  }
+  ov.innerHTML = `<div class="overlay" role="dialog" aria-label="אני באוטומט"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>${inner}</div></div>`;
+}
+function openSettings(){
+  ov.innerHTML = `<div class="overlay"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>
+    <div class="card"><p class="eyebrow">מצב הדגמה</p><p class="muted small">להצגת האפליקציה למשקיעים ולשותפים: אפשר לראות כל יום בשבוע, ולהציג נתונים לדוגמה במפה.</p>
+      <span class="label">תצוגה של יום</span><div class="chips">${DAY_LABEL.map((l,i) => { const cur = now().getDay(); return `<button class="chip" type="button" data-act="pick-day" data-d="${i}" aria-pressed="${cur===i}">${l}</button>`; }).join("")}</div>
+      <div class="row">${S.demo?`<button class="btn ghost" data-act="demo-off" type="button">הסתרת נתוני הדגמה</button>`:`<button class="btn ghost" data-act="demo-on" type="button">הצגת נתוני הדגמה</button>`}</div></div>
+    <div class="card"><p class="eyebrow">הפרופיל</p><p>המידה שמובילה אותך: <b>${esc((MIDDOT[S.profile.middah]||{}).n||"")}</b></p>
+      <div><button class="link" data-act="redo-quiz" type="button">לעשות שוב את השאלון</button></div></div>
+    ${helpCard("")}</div></div>`;
+}
+function makeDemo(){
+  const out = {}, d = now(), ws = weekStart(d), ar = ARENAS.map(a=>a[0]), ch = CHANNELS.map(c=>c[0]);
+  let seed = 7; const rnd = n => { seed = (seed*9301+49297)%233280; return Math.floor(seed/233280*n); };
+  for(let i=0;i<=Math.min(5, d.getDay()===6?5:d.getDay());i++){
+    const x = new Date(ws); x.setDate(ws.getDate()+i); const k = keyOf(x);
+    const moments = []; for(let j=0;j<2+rnd(3);j++) moments.push({result: rnd(3)?"win":"auto", arena: ar[rnd(5)], channel: ch[rnd(3)]});
+    out[k] = {date:k, done: rnd(4)>0, moments, debrief: rnd(3)?{autoText:"הגבתי בחוסר סבלנות", autoChannel: ch[rnd(2)+1], autoArena: ar[rnd(5)], winText:"עצרתי לפני שעניתי", winArena: ar[rnd(5)], tomorrow:"נשימה לפני שאני עונה"}:null};
+  }
+  for(let i=1;i<=40;i++){ const x = new Date(ws); x.setDate(ws.getDate()-i); if(x.getDay()===6) continue; const k = keyOf(x); out[k] = {date:k, done:true, moments:[], debrief:null}; }
+  return out;
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click", async e => {
+  const t = e.target.closest("button"); if(!t) return;
+  if(t.dataset.tab){ S.tab = t.dataset.tab; D = null; render(); window.scrollTo(0,0); return; }
+  if(t.dataset.tabGo){ S.tab = t.dataset.tabGo; render(); window.scrollTo(0,0); return; }
+  if(t.dataset.chip){ const f = t.dataset.chip; D[f] = D[f]===t.dataset.k ? null : t.dataset.k; t.parentElement.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(D[f]===c.dataset.k))); return; }
+  if(t.dataset.mchip){ const f = t.dataset.mchip; M[f] = (f!=="result" && M[f]===t.dataset.k) ? null : t.dataset.k; drawMoment(); return; }
+  const a = t.dataset.act; if(!a) return;
+  if(a==="ob-next"){ S.ob.step++; renderOnboarding(); }
+  else if(a==="quiz"){ S.ob.quiz.push(t.dataset.k); renderOnboarding(); }
+  else if(a==="quiz-back"){ S.ob.quiz.pop(); renderOnboarding(); }
+  else if(a==="ob-finish"){ const p = {middah: topMiddah(S.ob.quiz), startedAt: new Date().toISOString(), agreedAt: new Date().toISOString(), lastActive: new Date().toISOString()};
+    S.profile = p; await saveProfile(p); S.tab = "today"; render(); }
+  else if(a==="done"||a==="undo-done"){ const day = today(); day.done = a==="done"; await putToday(day); render(); if(a==="done") toast("מעשה אחד. זה מה שמשנה."); }
+  else if(a==="quick-win"){ const day = today(); day.moments = [...(day.moments||[]), {result:"win", at:new Date().toISOString()}]; await putToday(day); render(); toast("ניצחון נרשם."); }
+  else if(a==="save-debrief"){ const texts = [D.autoText, D.winText, D.tomorrow]; const day = today(); day.debrief = {...D, at:new Date().toISOString()}; D = null; await putToday(day); render(); window.scrollTo(0,0);
+    if(isDistress(texts)) openHelp("נשמע שעובר עליך משהו כבד. מגיע לך שמישהו יקשיב עכשיו."); else toast("ראית, למדת, ממשיכים."); }
+  else if(a==="edit-debrief"){ D = {...today().debrief}; render(); }
+  else if(a==="moment"){ openMoment(); }
+  else if(a==="m-next"){ clearTimeout(breathT); M.step++; drawMoment(); }
+  else if(a==="m-save"){ const day = today(); day.moments = [...(day.moments||[]), {result:M.result, arena:M.arena, channel:M.channel, at:new Date().toISOString()}]; await putToday(day); M.step = 3; drawMoment(); render(); }
+  else if(a==="close"){ M = null; closeOv(); }
+  else if(a==="help"){ openHelp(""); }
+  else if(a==="settings"){ openSettings(); }
+  else if(a==="pick-day"){ const want = Number(t.dataset.d), cur = realNow().getDay(); demoOffset = want - cur; closeOv(); render(); }
+  else if(a==="real-day"){ demoOffset = 0; render(); }
+  else if(a==="demo-on"){ S.demo = makeDemo(); closeOv(); S.tab = "map"; render(); }
+  else if(a==="demo-off"){ S.demo = null; closeOv(); render(); }
+  else if(a==="redo-quiz"){ closeOv(); S.ob = {step:2, quiz:[], agreed:true}; S.profile = null; render(); }
+});
+
+/* ---------- boot ---------- */
+(async function boot(){
+  await initStore();
+  S.profile = await loadProfile();
+  S.days = await loadDays() || {};
+  if(S.profile && S.profile.lastActive){ const gap = (Date.now() - Date.parse(S.profile.lastActive)) / 864e5; S.welcomeBack = gap > 3; }
+  render();
+})();
+})();
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+</script>
+</body>
+</html>
