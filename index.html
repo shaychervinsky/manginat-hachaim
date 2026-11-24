@@ -1309,14 +1309,40 @@ function weekOpeningCard(d, intent){
     <div><button class="btn" data-act="save-intent" type="button">לשמור לשבוע</button></div></div>`;
 }
 /* Listening: Claude's voice when the page runs on claude.ai, else the device's own voice. */
-function speakText(it){ return `${it.t}. ${it.x} המעשה של היום: ${it.a}`; }
+/* Voices for listening. Claude's voices on claude.ai (tts capability); elsewhere the device's own Hebrew voice.
+   Read line by line, a little slower than normal, so each part gets its own pause. */
+const VOICES = [["airy","אוורירי"],["rounded","עגול"],["buttery","חם"],["glassy","צלול"]];
+const RATES = [[0.85,"איטי"],[0.95,"רגיל"],[1.05,"מהיר"]];
+function voicePref(){ const v = (S.profile && S.profile.voice) || {}; return {voice: v.voice || "airy", rate: v.rate || 0.85}; }
+function speakLines(it){ return [it.t, it.x, `המעשה של היום. ${it.a}`]; }
+function deviceVoice(){ try{ const vs = speechSynthesis.getVoices(); return vs.find(v => /^he|^iw/i.test(v.lang)) || null; }catch(e){ return null; } }
+async function speakNow(lines, onDone){
+  const {voice, rate} = voicePref();
+  if(S.tts){
+    try{ await S.tts.speak(lines.map(text => ({text, voice, rate, language:"he"}))); }catch(e){}
+    onDone(); return;
+  }
+  try{
+    speechSynthesis.cancel();
+    const dv = deviceVoice();
+    lines.forEach((text, i) => { const u = new SpeechSynthesisUtterance(text); u.lang = "he-IL"; if(dv) u.voice = dv; u.rate = rate;
+      if(i === lines.length-1){ u.onend = onDone; u.onerror = onDone; } speechSynthesis.speak(u); });
+  }catch(e){ onDone(); }
+}
 async function toggleListen(){
   const it = S.todayItem; if(!it) return;
   if(S.speaking){ S.speaking = false; try{ S.tts ? S.tts.stop() : speechSynthesis.cancel(); }catch(e){} render(); return; }
   S.speaking = true; render();
-  const done = () => { S.speaking = false; render(); };
-  if(S.tts){ try{ await S.tts.speak(speakText(it), {language:"he"}); }catch(e){} done(); return; }
-  try{ const u = new SpeechSynthesisUtterance(speakText(it)); u.lang = "he-IL"; u.onend = done; u.onerror = done; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){ done(); }
+  speakNow(speakLines(it), () => { S.speaking = false; render(); });
+}
+function voiceCard(){
+  if(!S.canSpeak) return "";
+  const {voice, rate} = voicePref();
+  const chips = (arr, act, cur) => `<div class="chips">${arr.map(([k,l]) => `<button class="chip" type="button" data-act="${act}" data-k="${k}" aria-pressed="${String(cur)===String(k)}">${esc(l)}</button>`).join("")}</div>`;
+  return `<div class="card"><p class="eyebrow">קול ההקראה</p>
+    ${S.tts ? `<span class="label">הקול</span>${chips(VOICES, "set-voice", voice)}` : `<p class="small muted">כאן ההקראה בקול של המכשיר. ב-claude.ai יש ארבעה קולות לבחירה.</p>`}
+    <span class="label">הקצב</span>${chips(RATES, "set-rate", rate)}
+    <div><button class="quiet-win" data-act="voice-sample" type="button">לשמוע דוגמה</button></div></div>`;
 }
 let D = null; // debrief draft
 function renderDebrief(){
@@ -1510,6 +1536,7 @@ function openSettings(){
   ov.innerHTML = `<div class="overlay"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>
     <div class="card"><p class="eyebrow">הפרופיל</p><p>המידה שמובילה אותך: <b>${esc((MIDDOT[S.profile.middah]||{}).n||"")}</b></p>
       <div><button class="link" data-act="redo-quiz" type="button">לעשות שוב את השאלון</button></div></div>
+    ${voiceCard()}
     ${shareCard()}
     ${S.isGuide ? `<div class="card"><p class="eyebrow">אתה מלווה</p><p class="small">רואים כאן את מי שבחר לשתף איתך את הסיכום השבועי.</p><div><button class="btn ghost" data-act="guide" type="button">למסך הליווי</button></div></div>` : ""}
     ${helpCard("")}
@@ -1606,6 +1633,9 @@ document.addEventListener("click", async e => {
   else if(a==="save-mission"){ const v = (document.getElementById("mission").value || "").trim(); S.profile.mission = v; await saveProfile(S.profile); closeOv(); render(); toast(v ? "השליחות נשמרה." : "השליחות נמחקה."); }
   else if(a==="preview-chanukah"){ for(let i=0;i<400;i++){ const x = realNow(); x.setDate(x.getDate()+i); if(chanukahDay(x)===3 && x.getDay()!==6){ demoOffset = i; break; } } closeOv(); S.tab = "today"; render(); }
   else if(a==="listen"){ toggleListen(); }
+  else if(a==="set-voice" || a==="set-rate"){ const v = {...voicePref()}; if(a==="set-voice") v.voice = t.dataset.k; else v.rate = Number(t.dataset.k);
+    S.profile.voice = v; await saveProfile(S.profile); openSettings(); }
+  else if(a==="voice-sample"){ speakNow(["בין הגירוי לתגובה יש רגע.", "אתה בתוכו עכשיו."], () => {}); }
   else if(a==="save-intent"){ const v = ((document.getElementById("wk-intent")||{}).value || "").trim(); if(!v){ toast("כתוב קודם משפט אחד."); return; }
     S.profile.intents = {...(S.profile.intents||{}), [keyOf(weekStart(now()))]: v}; await saveProfile(S.profile); render(); toast("נשמר לשבוע הזה."); }
   else if(a==="demo-on"){ S.demo = makeDemo(); closeOv(); S.tab = "map"; render(); }
