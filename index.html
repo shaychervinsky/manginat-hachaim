@@ -178,6 +178,15 @@ textarea,input[type=text]{background:none;border:none;border-bottom:1px solid va
 .dots5{display:flex;gap:10px;align-items:center;justify-content:center}
 .dots5 i{width:7px;height:7px;border-radius:50%;background:var(--line)}
 .dots5 i.on{background:var(--pen);width:9px;height:9px}
+/* logo: the note and the flame */
+.mark{display:inline-block;vertical-align:-.2em;width:1.05em;height:1.22em;margin-inline-end:.35em}
+.mark .fl{fill:var(--pen)} .mark .nt{fill:var(--ink)} .mark .st{stroke:var(--ink);stroke-width:5;stroke-linecap:round}
+.mark.big{display:block;width:56px;height:66px;margin:0 0 6px}
+.demo-banner{background:none;color:var(--muted);border:1px dashed var(--line);border-radius:999px;font-weight:400;text-align:center;padding:4px 14px}
+textarea{resize:none}
+.team summary{cursor:pointer;color:var(--muted);font-size:.9rem;list-style:none}
+.team summary::-webkit-details-marker{display:none}
+.team[open] summary{margin-bottom:14px}
 /* slow light: sections settle in, from an almost-visible resting state */
 @media (prefers-reduced-motion:no-preference){
   #app > *{animation:settle 1.4s ease-out both}
@@ -302,7 +311,27 @@ const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())
 function realNow(){ return new Date(); }
 let demoOffset = 0; // days, for previewing other weekdays
 function now(){ const d = realNow(); d.setDate(d.getDate()+demoOffset); return d; }
-function hebDate(d){ try{ return new Intl.DateTimeFormat("he-u-ca-hebrew",{day:"numeric",month:"long",year:"numeric"}).format(d); }catch(e){ return ""; } }
+/* Hebrew numerals: 14 -> י״ד, 5787 -> תשפ״ז */
+function gematria(n){
+  n = n % 1000; let s = "";
+  const H = ["","ק","ר","ש","ת"], T = ["","י","כ","ל","מ","נ","ס","ע","פ","צ"], U = ["","א","ב","ג","ד","ה","ו","ז","ח","ט"];
+  while(n >= 400){ s += "ת"; n -= 400; }
+  if(n >= 100){ s += H[Math.floor(n/100)]; n %= 100; }
+  if(n === 15){ s += "טו"; n = 0; } else if(n === 16){ s += "טז"; n = 0; }
+  if(n >= 10){ s += T[Math.floor(n/10)]; n %= 10; }
+  s += U[n];
+  return s.length === 1 ? s + "׳" : s.slice(0,-1) + "״" + s.slice(-1);
+}
+function hebDate(d){
+  try{
+    const parts = new Intl.DateTimeFormat("he-u-ca-hebrew-nu-latn",{day:"numeric",month:"long",year:"numeric"}).formatToParts(d);
+    const get = k => (parts.find(x => x.type===k)||{}).value || "";
+    const day = parseInt(get("day"),10), year = parseInt(get("year"),10), month = get("month");
+    if(!day || !year || !month) throw 0;
+    return `${gematria(day)} ב${month.replace(/^ב/,"")} ${gematria(year)}`;
+  }catch(e){ try{ return new Intl.DateTimeFormat("he-u-ca-hebrew",{day:"numeric",month:"long",year:"numeric"}).format(d); }catch(e2){ return ""; } }
+}
+const MARK = cls => `<svg class="mark ${cls||""}" viewBox="0 0 120 140" aria-hidden="true"><path class="fl" d="M74 8 C82 20 86 30 74 44 C62 30 66 20 74 8 Z"/><line class="st" x1="74" y1="50" x2="74" y2="112"/><ellipse class="nt" cx="54" cy="116" rx="22" ry="15" transform="rotate(-20 54 116)"/></svg>`;
 function hebMonth(d){ try{ return new Intl.DateTimeFormat("he-u-ca-hebrew",{month:"long"}).format(d); }catch(e){ return ""; } }
 function monthTheme(d){
   const m = hebMonth(d);
@@ -440,8 +469,8 @@ function renderOnboarding(){
   nav.hidden = true;
   const o = S.ob;
   if(o.step === 0){
-    app.innerHTML = `<div class="top"><span class="brand">מנגינת החיים</span></div>
-    <div class="card"><p class="eyebrow">שיטה לעבודה פנימית, מבוססת על ספר התניא</p>
+    app.innerHTML = `<div class="top"><span class="brand">${MARK()}מנגינת החיים</span></div>
+    <div class="card">${MARK("big")}<p class="eyebrow">שיטה לעבודה פנימית, מבוססת על ספר התניא</p>
       <h1 class="hero-title">כשטוב לך עם עצמך, טוב לך עם כולם.</h1>
       <p>החיים הם תזמורת: בית, עבודה, אנשים, ואתה עצמך. כדי שהכול יישמע מדויק, מתחילים מהשורש, מהעבודה שלך עם עצמך.</p>
       <p class="muted">כל יום: רעיון אחד, מעשה אחד, והתבוננות קצרה בערב. בלי סגולות ובלי הלקאה עצמית.</p>
@@ -478,7 +507,7 @@ function topMiddah(ans){ const s = {}; ans.forEach(k => s[k] = (s[k]||0)+1); ret
 /* ---------- main tabs ---------- */
 function header(){
   const d = now(), th = monthTheme(d);
-  return `<div class="top"><div><div class="brand">מנגינת החיים</div><div class="hdate">יום ${DAY_LABEL[d.getDay()]} · ${esc(hebDate(d))}</div>
+  return `<div class="top"><div><div class="brand">${MARK()}מנגינת החיים</div><div class="hdate">יום ${DAY_LABEL[d.getDay()]} · ${esc(hebDate(d))}</div>
     ${th.t?`<span class="theme-chip">חודש ${esc(th.m)}: ${esc(th.t)}</span>`:""}</div>
     <div class="row" style="flex-wrap:nowrap">${S.isGuide?`<button class="iconbtn" data-act="guide" type="button">הליווי</button>`:""}<button class="iconbtn" data-act="settings" type="button">הגדרות</button></div></div>
     ${S.demo?`<div class="demo-banner">מוצגים נתוני הדגמה. הנתונים שלך לא השתנו.</div>`:""}
@@ -505,8 +534,7 @@ function renderToday(){
     const P = POWERS[dow], it = P.items[weekNum(d) % P.items.length];
     const wins = (day.moments||[]).filter(m => m.result==="win").length;
     body += `<div class="card"><p class="eyebrow">הכוח של היום: ${esc(P.name)}</p>
-      <div class="daf"><div class="main"><h2 class="insight-title">${esc(it.t)}</h2><p>${esc(it.x)}</p></div>
-        <aside class="margin"><span><b>מקור</b>${esc(it.s)}</span><span><b>הכוח</b>${esc(P.name)}</span></aside></div>
+      <h2 class="insight-title">${esc(it.t)}</h2><p>${esc(it.x)}</p><p class="src">${esc(it.s)}</p>
       <div class="action"><span class="label">המעשה של היום</span><p>${esc(it.a)}</p>
         <div class="row">${day.done?`<button class="btn done" data-act="undo-done" type="button">✓ עשיתי</button>`:`<button class="btn" data-act="done" type="button">עשיתי</button>`}</div></div></div>
     <div class="card center"><p class="muted">עצרת היום ובחרת אחרת, גם בדבר קטן?</p>
@@ -696,7 +724,7 @@ function drawMoment(){
         <button class="chip" type="button" data-mchip="result" data-k="auto" aria-pressed="${M.result==="auto"}">האוטומט ניצח הפעם</button></div>
       <span class="label">באיזו זירה?</span>${chips(ARENAS,"arena")}
       <span class="label">באיזה לבוש?</span>${chips(CHANNELS,"channel")}</div>
-      <div><button class="btn" data-act="m-save" type="button" ${M.result?"":"disabled"}>שמירה</button></div>`;
+      <div class="row"><button class="btn" data-act="m-save" type="button" ${M.result?"":"disabled"}>שמירה</button>${M.result?"":`<span class="small muted">קודם לבחור: בחרתי אחרת, או האוטומט ניצח.</span>`}</div>`;
   } else {
     inner = `<div class="card accent center"><h2 style="font-size:1.9rem">${M.result==="win"?"ניצחת את הרגע.":"ראית את זה. זה כבר הרבה."}</h2>
       <p>${M.result==="win"?"כל ניצחון קטן נחשב. זה בדיוק מה שהבינוני עושה.":"לפי התניא, עצבות רק מכבידה. ראית, למדת, ממשיכים."}</p></div>
@@ -706,15 +734,16 @@ function drawMoment(){
 }
 function openSettings(){
   ov.innerHTML = `<div class="overlay"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>
-    <div class="card"><p class="eyebrow">מצב הדגמה</p><p class="muted small">להצגת האפליקציה למשקיעים ולשותפים: אפשר לראות כל יום בשבוע, ולהציג נתונים לדוגמה במפה.</p>
-      <span class="label">תצוגה של יום</span><div class="chips">${DAY_LABEL.map((l,i) => { const cur = now().getDay(); return `<button class="chip" type="button" data-act="pick-day" data-d="${i}" aria-pressed="${cur===i}">${l}</button>`; }).join("")}</div>
-      <div class="row">${S.demo?`<button class="btn ghost" data-act="demo-off" type="button">הסתרת נתוני הדגמה</button>`:`<button class="btn ghost" data-act="demo-on" type="button">הצגת נתוני הדגמה</button>`}</div>
-      <span class="label">הדרגות ושאלות ההתבוננות שלהן</span><div class="chips">${LEVELS.map((l,i) => `<button class="chip" type="button" data-act="preview-level" data-i="${i}">${esc(l.n)}</button>`).join("")}</div></div>
     <div class="card"><p class="eyebrow">הפרופיל</p><p>המידה שמובילה אותך: <b>${esc((MIDDOT[S.profile.middah]||{}).n||"")}</b></p>
       <div><button class="link" data-act="redo-quiz" type="button">לעשות שוב את השאלון</button></div></div>
     ${shareCard()}
     ${S.isGuide ? `<div class="card"><p class="eyebrow">אתה מלווה</p><p class="small">רואים כאן את מי שבחר לשתף איתך את הסיכום השבועי.</p><div><button class="btn ghost" data-act="guide" type="button">למסך הליווי</button></div></div>` : ""}
-    ${helpCard("")}</div></div>`;
+    ${helpCard("")}
+    <details class="card team"><summary>לצוות: מצב הדגמה</summary><p class="muted small">להצגת האפליקציה למשקיעים ולשותפים: אפשר לראות כל יום בשבוע, ולהציג נתונים לדוגמה במפה.</p>
+      <span class="label">תצוגה של יום</span><div class="chips">${DAY_LABEL.map((l,i) => { const cur = now().getDay(); return `<button class="chip" type="button" data-act="pick-day" data-d="${i}" aria-pressed="${cur===i}">${l}</button>`; }).join("")}</div>
+      <div class="row">${S.demo?`<button class="btn ghost" data-act="demo-off" type="button">הסתרת נתוני הדגמה</button>`:`<button class="btn ghost" data-act="demo-on" type="button">הצגת נתוני הדגמה</button>`}</div>
+      <span class="label">הדרגות ושאלות ההתבוננות שלהן</span><div class="chips">${LEVELS.map((l,i) => `<button class="chip" type="button" data-act="preview-level" data-i="${i}">${esc(l.n)}</button>`).join("")}</div></details>
+    </div></div>`;
 }
 function shareCard(){
   const on = !!(S.profile && S.profile.shareWithGuide);
