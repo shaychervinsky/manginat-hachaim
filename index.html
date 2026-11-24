@@ -1504,6 +1504,20 @@ function helpCard(lead){
     <p><b>סה״ר, תמיכה בצ׳אט:</b> <span class="phone">sahar.org.il</span></p>
     <p><b>במצב של סכנה מיידית:</b> מד״א <span class="phone">101</span>, משטרה <span class="phone">100</span></p></div>`;
 }
+/* The end of the day: after the evening reflection, a quiet closing screen instead of a toast. */
+function openClosing(day){
+  const fri = now().getDay() === 5, tom = day.debrief && day.debrief.tomorrow;
+  ov.innerHTML = `<div class="overlay" role="dialog" aria-label="סוף היום"><div class="ov-in">
+    <div class="staff-card">${weekStaff()}</div>
+    <div class="card accent center"><p class="eyebrow">סוף היום</p>
+      <h2 style="font-size:2.2rem">ראית, למדת, ממשיכים.</h2>
+      <p class="muted">${fri ? "התו של היום נכנס למנגינה של השבוע. עכשיו שבת: פאוזה." : "התו של היום נכנס למנגינה של השבוע."}</p></div>
+    ${tom ? `<div class="card center"><span class="label">${fri ? "לשבוע הבא" : "למחר"}</span><p class="q">${esc(tom)}</p></div>` : ""}
+    <div class="center" style="display:grid;gap:14px;justify-items:center">
+      <button class="btn" data-act="close-day" type="button">${fri ? "שבת שלום" : "לילה טוב"}</button>
+      <button class="quiet-win" data-act="closing-map" type="button">לצפות במפת השבוע</button></div>
+  </div></div>`;
+}
 function openHelp(lead){ ov.innerHTML = `<div class="overlay"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>${helpCard(lead)}</div></div>`; }
 let M = null, breathT = null;
 function openMoment(){ M = {step:0, cycle:0, phase:"in", line:DEEP_LINES[Math.floor(Math.random()*DEEP_LINES.length)], result:null, arena:null, channel:null}; drawMoment(); }
@@ -1615,7 +1629,9 @@ document.addEventListener("click", async e => {
   else if(a==="done"||a==="undo-done"){ const day = today(); day.done = a==="done"; await putToday(day); render(); if(a==="done") toast("מעשה אחד. זה מה שמשנה."); }
   else if(a==="quick-win"){ const day = today(); day.moments = [...(day.moments||[]), {result:"win", at:new Date().toISOString()}]; await putToday(day); render(); toast("ניצחון נרשם."); }
   else if(a==="save-debrief"){ const texts = [...CHANNELS.map(([c]) => D.g[c].text), D.tomorrow, (D.guideQ && D.guideQ.text) || ""]; const day = today(); day.debrief = {...D, at:new Date().toISOString()}; D = null; await putToday(day); render(); window.scrollTo(0,0);
-    if(isDistress(texts)) openHelp("נשמע שעובר עליך משהו כבד. מגיע לך שמישהו יקשיב עכשיו."); else toast("ראית, למדת, ממשיכים."); }
+    if(isDistress(texts)) openHelp("נשמע שעובר עליך משהו כבד. מגיע לך שמישהו יקשיב עכשיו."); else openClosing(day); }
+  else if(a==="close-day"){ closeOv(); S.tab = "today"; render(); window.scrollTo(0,0); }
+  else if(a==="closing-map"){ closeOv(); S.tab = "map"; render(); window.scrollTo(0,0); }
   else if(a==="edit-debrief"){ const b = today().debrief; D = b.g ? JSON.parse(JSON.stringify(b)) : {...blankDraft(), tomorrow: b.tomorrow||""}; render(); }
   else if(a==="moment"){ openMoment(); }
   else if(a==="m-next"){ clearTimeout(breathT); M.step++; drawMoment(); }
