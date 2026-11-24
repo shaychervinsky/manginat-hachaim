@@ -512,14 +512,14 @@ function renderToday(){
     <div class="card center"><p class="muted">עצרת היום ובחרת אחרת, גם בדבר קטן?</p>
       <div><button class="quiet-win" data-act="quick-win" type="button">לסמן רגע של בחירה</button></div></div>
     <div class="card"><span class="label">בערב</span>${day.debrief?`<p>✓ ההתבוננות של היום הושלמה. <button class="link" data-tab-go="debrief" type="button">לצפייה</button></p>`
-      :`<p>התבוננות של דקה: מה תכננת, מה קרה, מה אתה לוקח למחר.</p><div><button class="btn ghost" data-tab-go="debrief" type="button">להתבוננות</button></div>`}</div>`;
+      :`<p>התבוננות של דקה: מה היה היום במחשבה, בדיבור ובמעשה.</p><div><button class="btn ghost" data-tab-go="debrief" type="button">להתבוננות</button></div>`}</div>`;
   }
   app.innerHTML = header() + body + footer();
 }
 let D = null; // debrief draft
 function renderDebrief(){
   const day = today();
-  if(now().getDay() === 6){ app.innerHTML = header() + `<div class="card center">${restMark()}<p class="eyebrow">שבת</p><p>אין התבוננות בשבת. נתראה במוצאי שבת.</p></div>` + footer(); return; }
+  if(now().getDay() === 6){ app.innerHTML = header() + `<div class="card center">${restMark()}<p class="eyebrow">שבת</p><p>בשבת לא כותבים. נתראה במוצאי שבת.</p></div>` + footer(); return; }
   const lab = (arr,k) => (arr.find(a => a[0]===k)||[,""])[1];
   if(day.debrief && !D){
     const b = day.debrief;
