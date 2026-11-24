@@ -3,19 +3,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@300;400;500&family=Assistant:wght@300;400;600&display=swap">
 <style>
-/* Layout: "Score" — a phone-width column on manuscript paper; the week is a staff of notes, Shabbat is a rest, the conductor's blue pencil marks today. */
-:root{
-  --bg:#F2F4F1; --surface:#FAFBF9; --sunk:#E7EBEA; --ink:#172433; --muted:#566273; --line:#D0D7DE;
-  --staff:#B4BFCA; --pen:#2B4FD8; --pen-soft:#E4E9F7; --on-pen:#FFFFFF; --good:#2E7D5B; --auto:#A0603A; --warn:#B3261E;
-  --display:"Bellefair","Frank Ruhl Libre",Georgia,"Times New Roman",serif;
-  --body:"IBM Plex Sans Hebrew","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#11161F; --surface:#18202B; --sunk:#212A37; --ink:#E6EAF0; --muted:#9AA5B4; --line:#2C3645;
-  --staff:#3F4A5B; --pen:#8EA4FF; --pen-soft:#1F2A4A; --on-pen:#0B1020; --good:#6BC79A; --auto:#E0A17A; --warn:#FF8A80; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#11161F; --surface:#18202B; --sunk:#212A37; --ink:#E6EAF0; --muted:#9AA5B4; --line:#2C3645;
-  --staff:#3F4A5B; --pen:#8EA4FF; --pen-soft:#1F2A4A; --on-pen:#0B1020; --good:#6BC79A; --auto:#E0A17A; --warn:#FF8A80; color-scheme:dark}
+/* Layout: a phone-width column. The week is a staff of notes, Shabbat is a rest. Colour and type tokens: the calm block below. */
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;

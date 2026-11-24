@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140" role="img" aria-label="מנגינת החיים: התו והנר">
+  <path d="M74 8 C82 20 86 30 74 44 C62 30 66 20 74 8 Z" fill="#a06b1c"/>
+  <line x1="74" y1="50" x2="74" y2="112" stroke="#22302c" stroke-width="5" stroke-linecap="round"/>
+  <ellipse cx="54" cy="116" rx="22" ry="15" fill="#22302c" transform="rotate(-20 54 116)"/>
+</svg>
