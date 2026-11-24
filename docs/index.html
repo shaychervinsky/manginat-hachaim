@@ -143,8 +143,8 @@ textarea:focus,input[type=text]:focus{border-color:var(--pen);outline:none}
    Still water at dawn: misty sage ground, deep slate ink, one warm candle-gold accent (נר ה׳ נשמת אדם).
    No boxes, no counters, wide air, slow light motion. */
 :root{
-  --bg:#EDF1EE; --surface:#F4F7F5; --sunk:#E1E8E3; --ink:#22302C; --muted:#64726D; --line:#D3DCD6;
-  --staff:#C3CEC7; --pen:#A06B1C; --pen-soft:rgba(196,140,52,.13); --on-pen:#FFFFFF; --good:#4E7D62; --auto:#8C6A84; --warn:#A33A2C;
+  --bg:#EDF1EE; --surface:#F4F7F5; --sunk:#E1E8E3; --ink:#22302C; --muted:#5D6A65; --line:#D3DCD6;
+  --staff:#C3CEC7; --pen:#8F5E18; --pen-soft:rgba(196,140,52,.13); --on-pen:#FFFFFF; --good:#446F57; --auto:#7D5E76; --warn:#A33A2C;
   --display:"Noto Serif Hebrew","Frank Ruhl Libre",Georgia,serif;
   --body:"Assistant","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
   --glow:radial-gradient(120% 80% at 50% 0%, rgba(214,160,72,.16), transparent 70%);
@@ -195,6 +195,13 @@ textarea,input[type=text]{background:none;border:none;border-bottom:1px solid va
 .dots5 i{width:7px;height:7px;border-radius:50%;background:var(--line)}
 .dots5 i.on{background:var(--pen);width:9px;height:9px}
 /* logo: the note and the flame */
+.candles{display:block;max-width:100%}
+.candles .base{stroke:var(--staff);stroke-width:1.5}
+.candles .wax{fill:var(--surface);stroke:var(--staff);stroke-width:1.2}
+.candles .fl{fill:var(--pen)}
+.candles text{fill:var(--muted);font-size:11px;font-family:var(--body)}
+.intent{color:var(--muted);font-size:.95rem;text-align:center}
+.intent b{color:var(--ink);font-weight:400}
 /* logo: the pause (fermata). Stop on the note. */
 .mark{display:inline-block;vertical-align:-.05em;width:1.5em;height:.88em;margin-inline-end:.4em}
 .mark .arc{fill:none;stroke:var(--pen);stroke-width:9;stroke-linecap:round} .mark .dot{fill:var(--ink)}
@@ -267,6 +274,37 @@ const POWERS = [
   {t:"עצבות מכבידה", x:"התניא משווה את המאבק הפנימי להיאבקות עם יריב. מי שנאבק בעצלות ובכבדות, מפסיד גם מול יריב חלש. עצבות והלקאה עצמית לא מקדמות. הן רק מכבידות.", s:"תניא, פרק כ״ו", a:"כשתתפוס את עצמך היום מלקה את עצמך, החלף את זה במשפט: ״ראיתי, למדתי, ממשיכים״."},
   {t:"כל ניצחון קטן נחשב", x:"לפי התניא, בכל פעם שאדם דוחה מחשבה או דחף שלא רצה בהם, יש בזה ערך גדול, גם אם הם חוזרים שוב ושוב. החזרה של הדחף איננה כישלון. הדחייה שלו היא הניצחון.", s:"תניא, פרק כ״ז", a:"ספור היום את הניצחונות הקטנים, ולחץ ״ניצחתי״ בכל פעם."}]}
 ];
+/* Kislev content round: more items per power, so the cycle repeats every 4 weeks, not 2.
+   DRAFT for the founder's review: wording is ours, sources are Tanya chapters. */
+const MORE = {
+ thought:[
+  {t:"גם ברגע הכי טוב", x:"התניא מתאר שדווקא ברגעים החשובים, כשאדם מנסה להתרכז במשהו עמוק, צצות מחשבות זרות. זה לא סימן שמשהו לא בסדר. להפך: זה סימן שאתה עושה משהו אמיתי, והאוטומט מנסה למשוך אותך ממנו.", s:"תניא, פרק כ״ח", a:"כשמחשבה מסיחה עולה היום באמצע משהו חשוב, חייך אליה, ותחזור למה שעשית."},
+  {t:"המוח שליט על הלב", x:"לפי התניא, המוח בנוי כך שהוא יכול לשלוט על הלב. הרגש עולה מעצמו, אבל ההחלטה מה לעשות איתו נמצאת בידיים שלך. זה לא דיכוי של הרגש, אלא מי מחזיק בהגה.", s:"תניא, פרק י״ב", a:"כשרגש חזק עולה היום, אמור לעצמך מחשבה אחת שאתה בוחר בה במקומו."}],
+ speech:[
+  {t:"לראות את האדם", x:"התניא מלמד לראות באדם אחר את הנפש שלו, ולא רק את המעשים או את הדיבורים שמפריעים לך. מי שמסתכל כך, מדבר אחרת.", s:"תניא, פרק ל״ב", a:"אמור היום משהו טוב על אדם, לאדם אחר, כשהוא לא שומע."},
+  {t:"לדבר עם עצמך", x:"כשהלב כבד ואטום, התניא מציע לא לחכות שזה יעבור, אלא לדבר עם עצמך: לומר לעצמך בבירור מה אתה רוצה באמת. לפעמים המילים שאומרים לעצמנו פותחות את מה שנסגר.", s:"תניא, פרק כ״ט", a:"כשאתה נתקע היום, אמור לעצמך בקול משפט אחד: מה אני באמת רוצה עכשיו."}],
+ action:[
+  {t:"נגד ההרגל", x:"התניא מבחין בין מי שעושה את הדבר הטוב מתוך הרגל, לבין מי שעושה אותו מתוך מאמץ, נגד הנטייה שלו. דווקא המאמץ הקטן נגד ההרגל הוא העבודה עצמה.", s:"תניא, פרק ט״ו", a:"עשה היום דבר אחד קטן בדרך שונה מההרגל שלך."},
+  {t:"גם מחר מחדש", x:"לפי התניא, אצל הבינוני המאבק לא נגמר. גם אחרי יום טוב, מחר הוא יום חדש עם אותה עבודה. זה לא כישלון, זו הדרך.", s:"תניא, פרק י״ג", a:"בחר מעשה אחד שעשית אתמול, ועשה אותו שוב היום."}],
+ middot:[
+  {t:"אהבה מסותרת", x:"התניא מתאר אהבה עמוקה שקיימת בכל אדם, גם כשהוא לא מרגיש אותה. היא מסותרת, אבל ברגעי אמת היא מתגלה: יש דברים שאדם לא יוותר עליהם בשום מחיר.", s:"תניא, פרק י״ח", a:"שאל את עצמך היום: על מה לא הייתי מוותר בשום מחיר? כתוב את זה במילה אחת."},
+  {t:"מרירות שהופכת לשמחה", x:"התניא מבדיל בין עצבות שמכבידה, לבין רגע של מרירות כנה על מה שלא הצליח. הרגע הזה, כשהוא קצר ואמיתי, יכול להפוך לשמחה: ראיתי, ואני כבר במקום אחר.", s:"תניא, פרק ל״א", a:"כתוב היום דבר אחד שכאב לך, ומתחתיו דבר אחד שלמדת ממנו."}],
+ will:[
+  {t:"שתי נפשות", x:"התניא פותח בכך שבכל אדם יש שתי נפשות: אחת שרוצה את מה שנוח לה עכשיו, ואחת שרוצה משמעות. שתיהן אמיתיות, ושתיהן שלך. העבודה היא לדעת מי מדברת.", s:"תניא, פרקים א׳-ב׳", a:"תפוס היום רגע אחד של כל אחת מהן: מתי דיבר האוטומט, ומתי האני העמוק."}],
+ joy:[
+  {t:"שמחה מהבנה", x:"התניא מתאר שמחה שבאה מהתבוננות במשהו גדול, ולא ממה שקורה לך עכשיו. שמחה כזו לא תלויה ביום טוב או רע.", s:"תניא, פרק ל״ג", a:"לפני השינה, חשוב דקה על משהו גדול ממך שאתה חלק ממנו."}]};
+Object.entries(MORE).forEach(([k, xs]) => POWERS.find(p => p.key===k).items.push(...xs));
+/* Hanukkah: eight nights, one small light each, adding up (Beit Hillel: מוסיף והולך). */
+const HANUKKAH = [
+ {t:"מעט אור", x:"התניא משתמש בדימוי פשוט: מעט אור דוחה הרבה חושך. לא צריך לגרש את כל החושך. מספיק להדליק משהו קטן.", s:"תניא, פרק י״ב", a:"עשה היום מעשה אור אחד קטן, דווקא במקום שמרגיש לך חשוך."},
+ {t:"נר ה׳ נשמת אדם", x:"התניא מביא את הפסוק ״נר ה׳ נשמת אדם״: הנשמה היא כמו נר. היא לא צריכה להיות גדולה כדי להאיר, רק דולקת.", s:"תניא, פרק י״ט", a:"שים לב היום לרגע אחד שבו הרגשת את האני העמוק שלך דולק."},
+ {t:"מוסיף והולך", x:"בחנוכה מוסיפים נר בכל ערב. לא קופצים לשמונה, ולא נשארים באחד. עוד קצת, כל יום.", s:"תלמוד, שבת כ״א ע״ב", a:"קח משהו טוב שעשית אתמול, ותוסיף לו היום עוד דקה אחת."},
+ {t:"על פתח הבית", x:"את נר החנוכה מניחים בפתח, כלפי חוץ. האור שלך לא נועד רק לך. הוא יוצא אל הרחוב, אל מי שעובר.", s:"תלמוד, שבת כ״א ע״ב", a:"אמור היום מילה טובה למישהו מחוץ למעגל הקרוב שלך."},
+ {t:"הלהבה עולה למעלה", x:"התניא מתאר את הנשמה כמו להבת נר, שמתנועעת תמיד למעלה מעצמה, גם כשהיא קשורה לפתילה. יש בך משהו שתמיד רוצה לעלות.", s:"תניא, פרק י״ט", a:"עצור היום פעם אחת ושאל: לאן אני באמת רוצה לעלות?"},
+ {t:"מה שיש מספיק", x:"פך השמן הקטן הספיק לשמונה ימים. לא חיכו לשמן מושלם. התחילו עם מה שהיה.", s:"תלמוד, שבת כ״א ע״ב", a:"התחל היום משהו שדחית, עם מה שיש לך עכשיו, בלי לחכות לתנאים מושלמים."},
+ {t:"השמש", x:"השמש הוא הנר שמדליק את כל האחרים, ועומד בצד. הוא לא נספר, ובלעדיו אף נר לא דולק.", s:"מנהג נר השמש", a:"עזור היום למישהו להצליח, בשקט, בלי שיידעו שזה ממך."},
+ {t:"כל האורות יחד", x:"בערב השמיני כל הנרות דולקים יחד. כל ניצוץ קטן של השבוע הצטבר. זה לא נס של רגע, זו התמדה.", s:"תלמוד, שבת כ״א ע״ב", a:"הסתכל אחורה על שמונת הימים, וכתוב משפט אחד על מה שהדלקת."}];
+const ORD = ["הראשון","השני","השלישי","הרביעי","החמישי","השישי","השביעי","השמיני"];
 const DAY_LABEL = ["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"];
 const DAY_SHORT = ["א׳","ב׳","ג׳","ד׳","ה׳","ו׳","שבת"];
 const MONTHS = [
@@ -313,14 +351,16 @@ const QUIZ = [
  {t:"איפה האוטומט תופס אותך הכי הרבה?",o:[["chesed","אומר כן כשהייתי צריך לומר לא"],["gevura","ביקורת חריפה, על אחרים או על עצמי"],["netzach","דוחף יותר מדי ולא יודע לעצור"],["yesod","נאחז באנשים או בהרגלים"]]},
  {t:"מה זו הצלחה בשבילך?",o:[["malchut","השפעה ומשמעות"],["hod","הכרת תודה ושלווה"],["yesod","קשרים עמוקים"],["gevura","שליטה עצמית"]]}];
 const MIDDOT = {
- chesed:{n:"הנותן",s:"חסד",st:"אתה נותן בלב שלם, ולידך אנשים מרגישים בבית.",sh:"כשהנתינה בלי גבולות, אתה נשחק."},
- gevura:{n:"השומר",s:"גבורה",st:"יש לך משמעת וגבולות ברורים.",sh:"הביקורת יכולה להפוך לחריפה, בעיקר כלפי עצמך."},
- tiferet:{n:"המאזן",s:"תפארת",st:"אתה רואה את שני הצדדים ומחבר ביניהם.",sh:"החיפוש אחרי איזון יכול להפוך להימנעות מהחלטה."},
- netzach:{n:"המתמיד",s:"נצח",st:"אתה לא מוותר, ומוביל דברים עד הסוף.",sh:"קשה לך לעצור, גם כשהדלת סגורה."},
- hod:{n:"המעריך",s:"הוד",st:"אתה יודע להודות, להקשיב ולהכיר בטעות.",sh:"הענווה יכולה להפוך להקטנה עצמית."},
- yesod:{n:"המחבר",s:"יסוד",st:"אתה בונה קשרים עמוקים ונאמנים.",sh:"החיבור יכול להפוך להיאחזות."},
- malchut:{n:"המוביל",s:"מלכות",st:"אתה לוקח אחריות והופך כוונות למעשים.",sh:"הצורך בהשפעה יכול להפוך לצורך בהכרה."}};
-const DISTRESS = ["להתאבד","התאבדות","לא רוצה לחיות","אין טעם לחיות","לפגוע בעצמי","רוצה למות","להיעלם מהעולם","אין לי בשביל מה לחיות","לשים סוף"];
+ chesed:{n:"הנותן",s:"חסד",st:"אתה נותן בלב שלם, ולידך אנשים מרגישים בבית.",sh:"כשהנתינה בלי גבולות, אתה נשחק.",tip:"תן, וגם תשאיר משהו לעצמך."},
+ gevura:{n:"השומר",s:"גבורה",st:"יש לך משמעת וגבולות ברורים.",sh:"הביקורת יכולה להפוך לחריפה, בעיקר כלפי עצמך.",tip:"גם כאן, בלי ביקורת על עצמך."},
+ tiferet:{n:"המאזן",s:"תפארת",st:"אתה רואה את שני הצדדים ומחבר ביניהם.",sh:"החיפוש אחרי איזון יכול להפוך להימנעות מהחלטה.",tip:"לא צריך איזון מושלם. בחר ותתחיל."},
+ netzach:{n:"המתמיד",s:"נצח",st:"אתה לא מוותר, ומוביל דברים עד הסוף.",sh:"קשה לך לעצור, גם כשהדלת סגורה.",tip:"פעם אחת מספיקה. לא צריך להוכיח."},
+ hod:{n:"המעריך",s:"הוד",st:"אתה יודע להודות, להקשיב ולהכיר בטעות.",sh:"הענווה יכולה להפוך להקטנה עצמית.",tip:"זה שלך. מותר לך להצליח בזה."},
+ yesod:{n:"המחבר",s:"יסוד",st:"אתה בונה קשרים עמוקים ונאמנים.",sh:"החיבור יכול להפוך להיאחזות.",tip:"אפשר לעשות את זה גם לבד."},
+ malchut:{n:"המוביל",s:"מלכות",st:"אתה לוקח אחריות והופך כוונות למעשים.",sh:"הצורך בהשפעה יכול להפוך לצורך בהכרה.",tip:"תעשה את זה בשקט, בלי שמישהו יראה."}};
+/* Not a clinical tool. Needs review by a clinical advisor before launch. */
+const DISTRESS = ["להתאבד","התאבדות","לא רוצה לחיות","אין טעם לחיות","לפגוע בעצמי","רוצה למות","להיעלם מהעולם","אין לי בשביל מה לחיות","לשים סוף",
+ "להרוג את עצמי","לגמור עם הכל","לגמור עם הכול","נמאס לי לחיות","אין לי כוח לחיות","לישון ולא להתעורר","אף אחד לא יתגעגע","עדיף שלא אהיה","לא שווה לחיות","לחתוך את עצמי"];
 
 /* ---------- dates ---------- */
 const pad = n => String(n).padStart(2,"0");
@@ -354,6 +394,19 @@ function monthTheme(d){
   const m = hebMonth(d);
   for(const [k,t] of MONTHS){ if(k==="אב" ? (m.trim()==="אב" || m.trim()==="מנחם אב") : m.includes(k)) return {m, t}; }
   return {m, t:null};
+}
+function hebParts(d){ try{ const ps = new Intl.DateTimeFormat("he-u-ca-hebrew-nu-latn",{day:"numeric",month:"long"}).formatToParts(d);
+  return {day: parseInt((ps.find(x=>x.type==="day")||{}).value,10), month: (ps.find(x=>x.type==="month")||{}).value||""}; }catch(e){ return {day:0, month:""}; } }
+/* 1..8 during Hanukkah (day 1 = 25 Kislev), else 0 */
+function chanukahDay(d){ for(let i=0;i<8;i++){ const x = new Date(d); x.setDate(x.getDate()-i); const h = hebParts(x); if(h.day===25 && h.month.includes("כסלו")) return i+1; } return 0; }
+function candles(n){
+  /* eight candles and the shamash in the middle; the first candle is on the right */
+  const slots = [270,240,210,180,120,90,60,30];
+  let s = `<svg class="candles" viewBox="0 0 300 112" width="100%" role="img" aria-label="חנוכה: ${n} נרות דולקים"><line class="base" x1="12" y1="98" x2="288" y2="98"/>`;
+  const one = (x, top, lit) => `<rect class="wax" x="${x-4}" y="${top}" width="8" height="${98-top}" rx="2"/>` + (lit ? `<path class="fl" d="M${x} ${top-22} C${x+6} ${top-13} ${x+7} ${top-7} ${x} ${top-3} C${x-7} ${top-7} ${x-6} ${top-13} ${x} ${top-22} Z"/>` : "");
+  s += one(150, 44, n>0);
+  slots.forEach((x,i) => { s += one(x, 62, i < n); });
+  return s + `</svg>`;
 }
 function weekNum(d){ const a = new Date(d.getFullYear(),0,1); return Math.floor((d - a)/(7*864e5)); }
 function weekStart(d){ const s = new Date(d); s.setHours(0,0,0,0); s.setDate(s.getDate()-s.getDay()); return s; }
@@ -460,8 +513,8 @@ function isDistress(texts){ const all = texts.join(" "); return DISTRESS.some(w 
 function staffLines(x1, x2, ys){ return ys.map(y => `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}"/>`).join(""); }
 function note(cls, x, y, rx, ry){ return `<ellipse class="${cls}" cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" transform="rotate(-20 ${x} ${y})"/>`; }
 /* The week as one staff: Sunday at the right. Pitch rises with the day's work; today is in the conductor's blue; Shabbat is a rest. */
-function weekStaff(){
-  const d = now(), ws = weekStart(d), all = days(), tk = keyOf(d);
+function weekStaff(ref){
+  const d = ref || now(), ws = weekStart(d), all = days(), tk = keyOf(now());
   let s = `<svg class="stf" viewBox="0 -8 300 92" width="100%" role="img" aria-label="השבוע כשורת תווים">` + staffLines(0, 300, [14,24,34,44,54]);
   for(let i=0;i<7;i++){
     const x = 276 - i*42, xd = new Date(ws); xd.setDate(ws.getDate()+i);
@@ -541,18 +594,24 @@ function levelCard(){
 }
 function renderToday(){
   const d = now(), dow = d.getDay(), day = today();
-  let body = `<div class="staff-card">${weekStaff()}</div>` + missionNote() + guideWordCard();
+  const hn = chanukahDay(d), wk = keyOf(weekStart(d)), intent = S.profile && S.profile.intents && S.profile.intents[wk];
+  let body = (hn ? `<div class="staff-card">${candles(hn)}</div>` : `<div class="staff-card">${weekStaff()}</div>`)
+    + (intent && dow !== 0 ? `<p class="intent">השבוע: <b>${esc(intent)}</b></p>` : "")
+    + (dow === 0 ? weekOpeningCard(d, intent) : "") + missionNote() + guideWordCard();
   if(S.welcomeBack) body += `<div class="card accent"><p class="eyebrow">ברוך שובך</p><p>החזרה עצמה היא חלק מהעבודה. אין כאן רצף שנשבר, יש מנגינה שממשיכה.</p></div>`;
   if(dow === 6){
     body += `<div class="card accent center">${restMark()}<p class="eyebrow">שבת</p><h2 style="font-size:2.2rem">שבת שלום</h2>
       <p>שבת היא הפאוזה במנגינה. היום אין משימות ואין התראות.</p><p class="muted">במוצאי שבת מחכה לך מפת השבוע.</p>
       <div><button class="btn ghost" data-tab-go="map" type="button">לצפות במפת השבוע</button></div></div>`;
   } else {
-    const P = POWERS[dow], it = P.items[weekNum(d) % P.items.length];
-    const wins = (day.moments||[]).filter(m => m.result==="win").length;
-    body += `<div class="card"><p class="eyebrow">הכוח של היום: ${esc(P.name)}</p>
+    const P = POWERS[dow], it = hn ? HANUKKAH[hn-1] : P.items[weekNum(d) % P.items.length];
+    const md = S.profile && MIDDOT[S.profile.middah];
+    S.todayItem = it;
+    body += `<div class="card"><p class="eyebrow">${hn ? `חנוכה · הנר ${ORD[hn-1]}` : `הכוח של היום: ${esc(P.name)}`}</p>
       <h2 class="insight-title">${esc(it.t)}</h2><p>${esc(it.x)}</p><p class="src">${esc(it.s)}</p>
+      ${S.canSpeak ? `<div><button class="quiet-win" data-act="listen" type="button">${S.speaking ? "עצירה" : "להאזין"}</button></div>` : ""}
       <div class="action"><span class="label">המעשה של היום</span><p>${esc(it.a)}</p>
+        ${md && md.tip ? `<p class="small muted">${esc(md.n)}: ${esc(md.tip)}</p>` : ""}
         <div class="row">${day.done?`<button class="btn done" data-act="undo-done" type="button">✓ עשיתי</button>`:`<button class="btn" data-act="done" type="button">עשיתי</button>`}</div></div></div>
     <div class="card center"><p class="muted">עצרת היום ובחרת אחרת, גם בדבר קטן?</p>
       <div><button class="quiet-win" data-act="quick-win" type="button">לסמן רגע של בחירה</button></div></div>
@@ -560,6 +619,27 @@ function renderToday(){
       :`<p>התבוננות של דקה: מה היה היום במחשבה, בדיבור ובמעשה.</p><div><button class="btn ghost" data-tab-go="debrief" type="button">להתבוננות</button></div>`}</div>`;
   }
   app.innerHTML = header() + body + footer();
+}
+/* Sunday: open the week. Last week's melody, and one thing to take into this week. */
+function weekOpeningCard(d, intent){
+  if(intent) return `<p class="intent">השבוע: <b>${esc(intent)}</b></p>`;
+  const last = new Date(d); last.setDate(last.getDate()-7);
+  const w = weekStats(days(), last), had = w.wins || w.autos || w.done;
+  return `<div class="card accent"><p class="eyebrow">פתיחת שבוע</p>
+    ${had ? `<span class="label">המנגינה של השבוע שעבר</span>${weekStaff(last)}<p class="small muted">${w.wins} ניצחונות, ${w.autos} רגעי אוטומט, ${w.done} מעשים. ראית, למדת, ממשיכים.</p>` : `<p class="small muted">שבוע חדש מתחיל.</p>`}
+    <label class="q" for="wk-intent">מה לוקחים לשבוע הזה?</label>
+    <input id="wk-intent" type="text" placeholder="משפט אחד">
+    <div><button class="btn" data-act="save-intent" type="button">לשמור לשבוע</button></div></div>`;
+}
+/* Listening: Claude's voice when the page runs on claude.ai, else the device's own voice. */
+function speakText(it){ return `${it.t}. ${it.x} המעשה של היום: ${it.a}`; }
+async function toggleListen(){
+  const it = S.todayItem; if(!it) return;
+  if(S.speaking){ S.speaking = false; try{ S.tts ? S.tts.stop() : speechSynthesis.cancel(); }catch(e){} render(); return; }
+  S.speaking = true; render();
+  const done = () => { S.speaking = false; render(); };
+  if(S.tts){ try{ await S.tts.speak(speakText(it), {language:"he"}); }catch(e){} done(); return; }
+  try{ const u = new SpeechSynthesisUtterance(speakText(it)); u.lang = "he-IL"; u.onend = done; u.onerror = done; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){ done(); }
 }
 let D = null; // debrief draft
 function renderDebrief(){
@@ -757,6 +837,7 @@ function openSettings(){
     ${S.isGuide ? `<div class="card"><p class="eyebrow">אתה מלווה</p><p class="small">רואים כאן את מי שבחר לשתף איתך את הסיכום השבועי.</p><div><button class="btn ghost" data-act="guide" type="button">למסך הליווי</button></div></div>` : ""}
     ${helpCard("")}
     <details class="card team"><summary>לצוות: מצב הדגמה</summary><p class="muted small">להצגת האפליקציה למשקיעים ולשותפים: אפשר לראות כל יום בשבוע, ולהציג נתונים לדוגמה במפה.</p>
+      <div><button class="btn ghost" data-act="preview-chanukah" type="button">תצוגה של חנוכה</button></div>
       <span class="label">תצוגה של יום</span><div class="chips">${DAY_LABEL.map((l,i) => { const cur = now().getDay(); return `<button class="chip" type="button" data-act="pick-day" data-d="${i}" aria-pressed="${cur===i}">${l}</button>`; }).join("")}</div>
       <div class="row">${S.demo?`<button class="btn ghost" data-act="demo-off" type="button">הסתרת נתוני הדגמה</button>`:`<button class="btn ghost" data-act="demo-on" type="button">הצגת נתוני הדגמה</button>`}</div>
       <span class="label">הדרגות ושאלות ההתבוננות שלהן</span><div class="chips">${LEVELS.map((l,i) => `<button class="chip" type="button" data-act="preview-level" data-i="${i}">${esc(l.n)}</button>`).join("")}</div></details>
@@ -846,6 +927,10 @@ document.addEventListener("click", async e => {
     try{ await store.db.collection("shares/"+p.id+"/notes").doc("n"+Date.now()).set({kind:t.dataset.k, text, at:new Date().toISOString(), by:store.uid}); toast("נשלח."); openGuide(); }
     catch(e){ toast("השליחה לא הצליחה. נסה שוב."); } }
   else if(a==="save-mission"){ const v = (document.getElementById("mission").value || "").trim(); S.profile.mission = v; await saveProfile(S.profile); closeOv(); render(); toast(v ? "השליחות נשמרה." : "השליחות נמחקה."); }
+  else if(a==="preview-chanukah"){ for(let i=0;i<400;i++){ const x = realNow(); x.setDate(x.getDate()+i); if(chanukahDay(x)===3 && x.getDay()!==6){ demoOffset = i; break; } } closeOv(); S.tab = "today"; render(); }
+  else if(a==="listen"){ toggleListen(); }
+  else if(a==="save-intent"){ const v = ((document.getElementById("wk-intent")||{}).value || "").trim(); if(!v){ toast("כתוב קודם משפט אחד."); return; }
+    S.profile.intents = {...(S.profile.intents||{}), [keyOf(weekStart(now()))]: v}; await saveProfile(S.profile); render(); toast("נשמר לשבוע הזה."); }
   else if(a==="demo-on"){ S.demo = makeDemo(); closeOv(); S.tab = "map"; render(); }
   else if(a==="demo-off"){ S.demo = null; closeOv(); render(); }
   else if(a==="redo-quiz"){ closeOv(); S.ob = {step:2, quiz:[], agreed:true}; S.profile = null; render(); }
@@ -858,6 +943,8 @@ document.addEventListener("click", async e => {
   S.days = await loadDays() || {};
   await loadNotes();
   if(store.user){ try{ S.isGuide = await store.user.canEdit(); }catch(e){ S.isGuide = false; } }
+  try{ if(window.claude && typeof window.claude.use === "function") S.tts = await withTimeout(window.claude.use("tts"), 4000); }catch(e){ S.tts = null; }
+  S.canSpeak = !!S.tts || ("speechSynthesis" in window && typeof SpeechSynthesisUtterance === "function");
   if(S.profile && S.profile.lastActive){ const gap = (Date.now() - Date.parse(S.profile.lastActive)) / 864e5; S.welcomeBack = gap > 3; }
   render();
 })();
