@@ -1113,7 +1113,11 @@ async function initStore(){
     if(window.claude && typeof window.claude.use === "function"){
       const [db, user] = await withTimeout(Promise.all([window.claude.use("db"), window.claude.use("user")]), 6000) || [];
       const uid = user ? await withTimeout(user.id(), 3000) : null;
-      if(db && uid){ store.db = db; store.uid = uid; store.user = user; store.mode = "cloud"; return; }
+      /* A viewer who may not write (a Viewer, or anyone from outside the organization) keeps their data on this device. */
+      let canWrite = null;
+      try{ canWrite = user ? await withTimeout(user.can("data.write"), 3000) : null; }catch(e){ canWrite = null; }
+      if(db && uid && canWrite !== false){ store.db = db; store.uid = uid; store.user = user; store.mode = "cloud"; return; }
+      if(user) store.user = user;
     }
   }catch(e){}
   try{ localStorage.setItem("mh-probe","1"); localStorage.removeItem("mh-probe"); store.mode = "local"; }catch(e){ store.mode = "memory"; }
@@ -1122,7 +1126,12 @@ const profRef = () => store.db.doc("data/users/"+store.uid+"/profile");
 const daysCol = () => profRef().collection("days");
 async function fallback(){ store.mode = "local"; try{ localStorage.setItem("mh-probe","1"); }catch(e){ store.mode = "memory"; } }
 async function loadProfile(){
-  if(store.mode==="cloud"){ try{ const s = await profRef().get(); return s.exists ? {...s.data()} : null; }catch(e){ await fallback(); } }
+  if(store.mode==="cloud"){
+    try{ const s = await profRef().get(); if(s.exists) return {...s.data()}; }catch(e){}
+    /* nothing in the account: if an earlier visit had to save on this device, carry on from there */
+    if(lsGet("mh-profile")){ await fallback(); return lsGet("mh-profile"); }
+    return null;
+  }
   if(store.mode==="local") return lsGet("mh-profile");
   return store.mem.profile;
 }
