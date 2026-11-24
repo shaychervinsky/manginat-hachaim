@@ -1,118 +1,210 @@
 <title>מנגינת החיים</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Assistant:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@300;400;500&family=Assistant:wght@300;400;600&display=swap">
 <style>
-/* Layout: a phone-width app column; night indigo ground, one lamp-amber accent for the inner self. */
+/* Layout: "Score" — a phone-width column on manuscript paper; the week is a staff of notes, Shabbat is a rest, the conductor's blue pencil marks today. */
 :root{
-  --bg:#EDF0F6; --surface:#F8F9FC; --sunk:#E3E7F0; --ink:#1A2040; --muted:#565E7E; --line:#CDD3E3;
-  --lamp:#B36A10; --lamp-soft:rgba(214,140,40,.16); --on-lamp:#FFFFFF; --good:#2F7A55; --auto:#7A5AA6; --warn:#B3261E;
-  --display:"Frank Ruhl Libre","David Libre",Georgia,"Times New Roman",serif;
-  --body:"Assistant","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+  --bg:#F2F4F1; --surface:#FAFBF9; --sunk:#E7EBEA; --ink:#172433; --muted:#566273; --line:#D0D7DE;
+  --staff:#B4BFCA; --pen:#2B4FD8; --pen-soft:#E4E9F7; --on-pen:#FFFFFF; --good:#2E7D5B; --auto:#A0603A; --warn:#B3261E;
+  --display:"Bellefair","Frank Ruhl Libre",Georgia,"Times New Roman",serif;
+  --body:"IBM Plex Sans Hebrew","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0E1227; --surface:#161B36; --sunk:#1E2444; --ink:#E7E9F4; --muted:#9CA3C4; --line:#2A3158;
-  --lamp:#F0A93B; --lamp-soft:rgba(240,169,59,.15); --on-lamp:#1A1205; --good:#6BC79A; --auto:#B79BE3; --warn:#FF8A80; color-scheme:dark}}
+  --bg:#11161F; --surface:#18202B; --sunk:#212A37; --ink:#E6EAF0; --muted:#9AA5B4; --line:#2C3645;
+  --staff:#3F4A5B; --pen:#8EA4FF; --pen-soft:#1F2A4A; --on-pen:#0B1020; --good:#6BC79A; --auto:#E0A17A; --warn:#FF8A80; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0E1227; --surface:#161B36; --sunk:#1E2444; --ink:#E7E9F4; --muted:#9CA3C4; --line:#2A3158;
-  --lamp:#F0A93B; --lamp-soft:rgba(240,169,59,.15); --on-lamp:#1A1205; --good:#6BC79A; --auto:#B79BE3; --warn:#FF8A80; color-scheme:dark}
+  --bg:#11161F; --surface:#18202B; --sunk:#212A37; --ink:#E6EAF0; --muted:#9AA5B4; --line:#2C3645;
+  --staff:#3F4A5B; --pen:#8EA4FF; --pen-soft:#1F2A4A; --on-pen:#0B1020; --good:#6BC79A; --auto:#E0A17A; --warn:#FF8A80; color-scheme:dark}
 
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6;
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;
   padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
 .app{max-width:480px;margin:0 auto;padding-block:8px 110px;display:grid;gap:16px}
-h1,h2,h3{font-family:var(--display);line-height:1.2;margin:0;text-wrap:balance}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.15;margin:0;text-wrap:balance}
 p{margin:0}
 button,input,textarea{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--lamp);outline-offset:2px;border-radius:8px}
+:focus-visible{outline:2px solid var(--pen);outline-offset:2px;border-radius:4px}
 
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding-top:10px}
-.brand{font-family:var(--display);font-weight:900;font-size:1.35rem}
-.hdate{color:var(--muted);font-size:.9rem}
-.theme-chip{display:inline-block;background:var(--lamp-soft);color:var(--ink);border-radius:999px;padding:2px 12px;font-size:.85rem;margin-top:4px}
-.iconbtn{background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;font-size:.85rem;color:var(--muted);white-space:nowrap}
+.brand{font-family:var(--display);font-size:1.6rem;line-height:1.1}
+.hdate{color:var(--muted);font-size:.88rem}
+.theme-chip{display:inline-block;color:var(--pen);font-size:.85rem;margin-top:2px}
+.iconbtn{background:none;border:1px solid var(--line);border-radius:4px;padding:4px 12px;cursor:pointer;font-size:.85rem;color:var(--muted);white-space:nowrap}
 
-.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:10px}
-.card.accent{border-color:var(--lamp);background:linear-gradient(var(--lamp-soft),var(--lamp-soft)),var(--surface)}
-.eyebrow{font-size:.78rem;letter-spacing:.06em;font-weight:700;color:var(--lamp)}
-.label{font-size:.8rem;font-weight:700;color:var(--muted)}
-.insight-title{font-size:1.6rem;font-weight:900}
-.src{font-family:var(--display);color:var(--muted);font-size:.9rem}
-.action{background:var(--sunk);border-radius:12px;padding:12px 14px;display:grid;gap:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:18px;display:grid;gap:10px}
+.card.accent{border-color:var(--pen);background:var(--pen-soft)}
+.eyebrow{font-size:.78rem;letter-spacing:.06em;font-weight:600;color:var(--pen)}
+.label{font-size:.8rem;font-weight:600;color:var(--muted)}
+.insight-title{font-size:2rem}
+.src{font-family:var(--display);color:var(--pen);font-size:1rem}
+.action{border-inline-start:3px solid var(--pen);padding-inline-start:14px;display:grid;gap:8px}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.btn{border-radius:999px;padding:10px 20px;font-weight:700;cursor:pointer;border:1.5px solid var(--lamp);background:var(--lamp);color:var(--on-lamp)}
-.btn.ghost{background:none;color:var(--ink);border-color:var(--line)}
+.btn{border-radius:4px;padding:9px 20px;font-weight:600;cursor:pointer;border:1.5px solid var(--ink);background:var(--ink);color:var(--bg)}
+.btn.ghost{background:none;color:var(--ink);border-color:var(--ink)}
 .btn.done{background:none;color:var(--good);border-color:var(--good)}
-.btn[disabled]{opacity:.5;cursor:default}
-.link{background:none;border:none;color:var(--lamp);cursor:pointer;padding:0;font-weight:600;text-decoration:underline}
+.btn[disabled]{opacity:.45;cursor:default}
+.link{background:none;border:none;color:var(--pen);cursor:pointer;padding:0;font-weight:600;text-decoration:underline}
 .muted{color:var(--muted)}
 .small{font-size:.88rem}
 
+/* the day's text with the Tanya source as a margin note */
+.daf{display:grid;grid-template-columns:minmax(0,1fr) 5.6rem;gap:14px}
+.daf .main{display:grid;gap:8px;min-width:0}
+.margin{border-inline-start:1px solid var(--staff);padding-inline-start:10px;font-size:.8rem;line-height:1.5;color:var(--muted);display:grid;gap:12px;align-content:start}
+.margin b{display:block;color:var(--pen);font-weight:600;font-size:.75rem;letter-spacing:.04em}
+
+/* staff (SVG) */
+.staff-card{display:grid;gap:4px;padding-block:4px}
+.stf{display:block;overflow:visible}
+.stf line{stroke:var(--staff);stroke-width:1}
+.stf text{fill:var(--muted);font-size:11px;font-family:var(--body)}
+.stf .t-pen{fill:var(--pen);font-weight:700}
+.stf .n-ink{fill:var(--ink)}
+.stf .n-pen{fill:var(--pen)}
+.stf .n-hol{fill:none;stroke:var(--muted);stroke-width:1.3}
+.stf .n-win{fill:var(--good)}
+.stf .n-auto{fill:none;stroke:var(--auto);stroke-width:1.6}
+.stf .fut{opacity:.4}
+.stf line.stem-ink{stroke:var(--ink);stroke-width:1.4}
+.stf line.stem-pen{stroke:var(--pen);stroke-width:1.7}
+.key{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.kn{width:11px;height:8px;border-radius:50%;transform:rotate(-20deg);display:inline-block}
+.kn.ink{background:var(--ink)} .kn.pen{background:var(--pen)} .kn.win{background:var(--good)} .kn.auto{border:1.6px solid var(--auto)} .kn.hol{border:1.3px solid var(--muted)}
+
 .level{display:grid;gap:6px}
-.lvl-head{display:flex;justify-content:space-between;align-items:baseline}
-.lvl-name{font-family:var(--display);font-weight:900;font-size:1.25rem}
-.bar{height:8px;border-radius:4px;background:var(--sunk);overflow:hidden}
-.bar > i{display:block;height:100%;background:var(--lamp);border-radius:4px}
+.lvl-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.lvl-name{font-family:var(--display);font-size:1.5rem}
+.bar{height:6px;border-radius:3px;background:var(--sunk);overflow:hidden}
+.bar > i{display:block;height:100%;background:var(--pen);border-radius:3px}
 .steps{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted)}
-.steps b{color:var(--lamp)}
+.steps b{color:var(--pen)}
 
 /* chips */
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1.5px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer;background:var(--surface);font-size:.92rem}
-.chip[aria-pressed="true"]{border-color:var(--lamp);background:var(--lamp-soft);font-weight:700}
-textarea,input[type=text]{width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;resize:vertical;min-height:44px}
-textarea:focus,input[type=text]:focus{border-color:var(--lamp);outline:none}
-.q{font-family:var(--display);font-weight:700;font-size:1.15rem}
+.chip{border:1.5px solid var(--line);border-radius:4px;padding:6px 14px;cursor:pointer;background:var(--surface);font-size:.92rem}
+.chip[aria-pressed="true"]{border-color:var(--pen);background:var(--pen-soft);color:var(--pen);font-weight:600}
+textarea,input[type=text]{width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:4px;padding:10px 12px;resize:vertical;min-height:44px}
+textarea:focus,input[type=text]:focus{border-color:var(--pen);outline:none}
+.q{font-family:var(--display);font-size:1.35rem;line-height:1.25}
 
-/* map */
-.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;text-align:center}
-.wd{display:grid;gap:4px;justify-items:center;padding:8px 2px;border-radius:12px;background:var(--sunk);font-size:.78rem}
-.wd.today{outline:2px solid var(--lamp)}
-.wd .n{font-weight:700;font-size:.8rem}
-.dots{display:flex;gap:3px;flex-wrap:wrap;justify-content:center;min-height:10px}
-.dot{width:8px;height:8px;border-radius:50%}
-.dot.win{background:var(--good)} .dot.auto{background:var(--auto)} .dot.done{background:var(--lamp)}
-.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}
-.legend span{display:inline-flex;align-items:center;gap:5px}
+.big{font-family:var(--display);font-size:2.4rem;line-height:1;font-variant-numeric:tabular-nums}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;text-align:center}
+.wins{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .hbars{display:grid;gap:8px}
-.hb{display:grid;grid-template-columns:7.5em minmax(0,1fr) 2.2em;gap:8px;align-items:center;font-size:.9rem}
-.hb .track{height:12px;background:var(--sunk);border-radius:6px;overflow:hidden;display:flex}
+.hb{display:grid;grid-template-columns:5em minmax(0,1fr) 2.2em;gap:8px;align-items:center;font-size:.9rem}
+.hb .track{height:10px;background:var(--sunk);border-radius:2px;overflow:hidden;display:flex}
 .hb .track i{display:block;height:100%}
 .hb .num{font-variant-numeric:tabular-nums;color:var(--muted);text-align:end}
-.big{font-family:var(--display);font-size:2rem;font-weight:900;line-height:1}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;text-align:center}
-.demo-banner{background:var(--auto);color:var(--bg);border-radius:10px;padding:6px 12px;font-size:.85rem;font-weight:600}
+.demo-banner{background:var(--auto);color:var(--bg);border-radius:4px;padding:6px 12px;font-size:.85rem;font-weight:600}
 
 /* nav */
-.nav{position:fixed;inset:auto 0 0 0;background:var(--surface);border-top:1px solid var(--line);
+.nav{position:fixed;inset:auto 0 0 0;background:var(--bg);border-top:1px solid var(--staff);
   padding:8px max(16px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));z-index:5}
 .nav-in{max-width:480px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1.3fr 1fr;align-items:end;gap:4px}
 .tab{background:none;border:none;cursor:pointer;padding:6px 2px;display:grid;justify-items:center;gap:2px;color:var(--muted);font-size:.8rem}
 .tab svg{width:22px;height:22px}
-.tab[aria-current="page"]{color:var(--lamp);font-weight:700}
-.moment-btn{justify-self:center;background:var(--lamp);color:var(--on-lamp);border:none;border-radius:999px;padding:12px 16px;font-weight:700;cursor:pointer;font-size:.9rem;box-shadow:0 4px 14px var(--lamp-soft);transform:translateY(-10px);white-space:nowrap}
+.tab[aria-current="page"]{color:var(--pen);font-weight:600}
+.moment-btn{justify-self:center;background:var(--pen);color:var(--on-pen);border:none;border-radius:999px;padding:12px 16px;font-weight:600;cursor:pointer;font-size:.9rem;transform:translateY(-10px);white-space:nowrap}
 
 /* overlays */
 .overlay{position:fixed;inset:0;background:var(--bg);z-index:10;overflow:auto;
   padding:calc(16px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
 .ov-in{max-width:480px;margin:0 auto;display:grid;gap:18px}
 .close{justify-self:start;background:none;border:none;color:var(--muted);cursor:pointer;font-size:.95rem;padding:4px 0}
-.breath{width:180px;height:180px;margin:12px auto;border-radius:50%;background:radial-gradient(circle,var(--lamp-soft),transparent 70%);border:2px solid var(--lamp);display:grid;place-items:center;font-family:var(--display);font-size:1.3rem;font-weight:700}
-@media (prefers-reduced-motion:no-preference){.breath.in{animation:grow 4s ease-in-out forwards}.breath.out{animation:shrink 4s ease-in-out forwards}}
-@keyframes grow{from{transform:scale(.75)}to{transform:scale(1.05)}}
-@keyframes shrink{from{transform:scale(1.05)}to{transform:scale(.75)}}
+.ferm{width:200px;max-width:100%;display:block;margin:12px auto 0;transform-origin:center bottom}
+.ferm .arc{fill:none;stroke:var(--pen);stroke-width:7;stroke-linecap:round}
+.ferm .dotp{fill:var(--pen)}
+.ferm line{stroke:var(--staff)}
+@media (prefers-reduced-motion:no-preference){.ferm.in{animation:hold 4s ease-in-out forwards}.ferm.out{animation:release 4s ease-in-out forwards}}
+@keyframes hold{from{transform:scaleX(.75)}to{transform:scaleX(1.08)}}
+@keyframes release{from{transform:scaleX(1.08)}to{transform:scaleX(.75)}}
+.breath-word{font-family:var(--display);font-size:2.3rem;text-align:center}
 .center{text-align:center}
 .help{border-color:var(--warn)}
 .help .eyebrow{color:var(--warn)}
-.phone{font-family:var(--display);font-size:1.4rem;font-weight:900;direction:ltr;unicode-bidi:isolate}
+.phone{font-family:var(--display);font-size:1.4rem;direction:ltr;unicode-bidi:isolate}
 .toast{position:fixed;inset:auto 0 calc(96px + env(safe-area-inset-bottom, 0px)) 0;display:flex;justify-content:center;pointer-events:none;z-index:20}
-.toast span{background:var(--ink);color:var(--bg);border-radius:999px;padding:8px 18px;font-weight:600;font-size:.92rem}
-.opt{text-align:start;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:12px 16px;cursor:pointer;line-height:1.4}
-.opt:hover{border-color:var(--lamp)}
+.toast span{background:var(--ink);color:var(--bg);border-radius:4px;padding:8px 18px;font-weight:600;font-size:.92rem}
+.opt{text-align:start;background:var(--surface);border:1.5px solid var(--line);border-radius:4px;padding:12px 16px;cursor:pointer;line-height:1.4}
+.opt:hover{border-color:var(--pen)}
 .check{display:flex;gap:10px;align-items:flex-start}
-.check input{margin-top:5px;width:18px;height:18px;accent-color:var(--lamp)}
+.check input{margin-top:5px;width:18px;height:18px;accent-color:var(--pen)}
 .foot{font-size:.8rem;color:var(--muted);text-align:center;display:grid;gap:4px}
 .loading{padding:60px 0;text-align:center;color:var(--muted)}
+.hero-title{font-size:2.5rem}
+
+/* ===== Calm version: "an island of sanity in the race of life" =====
+   Still water at dawn: misty sage ground, deep slate ink, one warm candle-gold accent (נר ה׳ נשמת אדם).
+   No boxes, no counters, wide air, slow light motion. */
+:root{
+  --bg:#EDF1EE; --surface:#F4F7F5; --sunk:#E1E8E3; --ink:#22302C; --muted:#64726D; --line:#D3DCD6;
+  --staff:#C3CEC7; --pen:#A06B1C; --pen-soft:rgba(196,140,52,.13); --on-pen:#FFFFFF; --good:#4E7D62; --auto:#8C6A84; --warn:#A33A2C;
+  --display:"Noto Serif Hebrew","Frank Ruhl Libre",Georgia,serif;
+  --body:"Assistant","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+  --glow:radial-gradient(120% 80% at 50% 0%, rgba(214,160,72,.16), transparent 70%);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111816; --surface:#16201D; --sunk:#1D2925; --ink:#E3EAE6; --muted:#97A59F; --line:#26332F;
+  --staff:#33423D; --pen:#E2B15C; --pen-soft:rgba(226,177,92,.12); --on-pen:#1A1408; --good:#7DBB96; --auto:#C3A0BC; --warn:#F08A7C;
+  --glow:radial-gradient(120% 80% at 50% 0%, rgba(226,177,92,.10), transparent 70%); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111816; --surface:#16201D; --sunk:#1D2925; --ink:#E3EAE6; --muted:#97A59F; --line:#26332F;
+  --staff:#33423D; --pen:#E2B15C; --pen-soft:rgba(226,177,92,.12); --on-pen:#1A1408; --good:#7DBB96; --auto:#C3A0BC; --warn:#F08A7C;
+  --glow:radial-gradient(120% 80% at 50% 0%, rgba(226,177,92,.10), transparent 70%); color-scheme:dark}
+
+body{font-size:17.5px;line-height:1.85;font-weight:400;background:var(--bg)}
+.app{gap:44px;max-width:440px;padding-block:16px 140px}
+h1,h2,h3{font-weight:400;letter-spacing:-.005em}
+.brand{font-size:1.25rem;font-weight:400;color:var(--muted)}
+.theme-chip{color:var(--muted)}
+.iconbtn{border:none;color:var(--muted);padding:4px 6px;font-size:.88rem}
+/* no boxes: sections are separated by air and a short hairline */
+.card{background:none;border:none;border-radius:0;padding:0;gap:14px}
+.card + .card::before{content:"";display:block;width:36px;height:1px;background:var(--line);margin:0 auto 28px}
+.card.accent{background:var(--glow);border:none;border-radius:24px;padding:28px 20px}
+.card + .card.accent::before{display:none}
+.eyebrow{font-weight:400;letter-spacing:.08em;color:var(--pen);font-size:.82rem}
+.label{font-weight:400;color:var(--muted)}
+.insight-title{font-size:2.3rem;line-height:1.2}
+.q{font-size:1.45rem;line-height:1.45}
+.action{border-inline-start:none;padding:0;gap:14px}
+.btn{border-radius:999px;background:var(--pen);border-color:var(--pen);color:var(--on-pen);font-weight:400;padding:10px 26px}
+.btn.ghost{background:none;color:var(--ink);border-color:var(--line)}
+.btn.done{background:none}
+.chip{border-radius:999px;background:none;border-color:var(--line)}
+.chip[aria-pressed="true"]{color:var(--ink);font-weight:400}
+textarea,input[type=text]{background:none;border:none;border-bottom:1px solid var(--line);border-radius:0;padding:8px 2px}
+.opt{background:none;border-radius:16px}
+.margin{border-inline-start-color:var(--line)}
+.margin b{font-weight:400;color:var(--pen)}
+.nav{background:var(--bg);border-top:none}
+.tab[aria-current="page"]{font-weight:400}
+.moment-btn{background:none;color:var(--pen);border:1px solid var(--pen);font-weight:400;transform:translateY(-6px)}
+.toast span{border-radius:999px;font-weight:400}
+.foot{opacity:.8}
+.stf .n-ink{fill:var(--muted)}
+.stf line.stem-ink{stroke:var(--muted)}
+.quiet-win{background:none;border:none;color:var(--muted);cursor:pointer;padding:0;font-size:.95rem;text-decoration:underline;text-underline-offset:4px}
+.dots5{display:flex;gap:10px;align-items:center;justify-content:center}
+.dots5 i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.dots5 i.on{background:var(--pen);width:9px;height:9px}
+/* slow light: sections settle in, from an almost-visible resting state */
+@media (prefers-reduced-motion:no-preference){
+  #app > *{animation:settle 1.4s ease-out both}
+  #app > *:nth-child(2){animation-delay:.15s} #app > *:nth-child(3){animation-delay:.3s} #app > *:nth-child(4){animation-delay:.45s}
+}
+@keyframes settle{from{opacity:.35;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* the threshold: a short pause before entering */
+.threshold{position:fixed;inset:0;z-index:30;background:var(--bg);display:grid;place-items:center;text-align:center;cursor:pointer;
+  padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px));transition:opacity 1.2s ease}
+.threshold.gone{opacity:0;pointer-events:none}
+.threshold .orb{width:120px;height:120px;border-radius:50%;margin:0 auto 28px;background:radial-gradient(circle,var(--pen-soft),transparent 70%);border:1px solid var(--pen)}
+@media (prefers-reduced-motion:no-preference){.threshold .orb{animation:orb 4s ease-in-out infinite}}
+@keyframes orb{0%,100%{transform:scale(.8)}50%{transform:scale(1.05)}}
+.threshold p{font-family:var(--display);font-size:1.7rem;line-height:1.4}
+.threshold small{display:block;margin-top:14px;color:var(--muted);font-size:.85rem}
 </style>
 
 <div class="app" id="app" dir="rtl" lang="he"><div class="loading">טוען…</div></div>
@@ -121,11 +213,22 @@ textarea:focus,input[type=text]:focus{border-color:var(--lamp);outline:none}
     <button class="tab" data-tab="today" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>היום</button>
     <button class="tab" data-tab="debrief" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>תחקיר</button>
     <button class="moment-btn" data-act="moment" type="button">אני באוטומט</button>
-    <button class="tab" data-tab="map" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>המפה</button>
+    <button class="tab" data-tab="map" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 6h20M2 10h20M2 14h20M2 18h20"/><ellipse cx="9" cy="16" rx="2.6" ry="2" fill="currentColor"/></svg>המפה</button>
   </div>
 </nav>
 <div id="overlay" dir="rtl" lang="he"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="threshold" id="threshold" dir="rtl" lang="he" role="button" tabindex="0" aria-label="כניסה">
+  <div><div class="orb"></div><p>עצור רגע.<br>נשימה אחת, ואז נכנסים.</p><small>נגיעה כדי להיכנס</small></div>
+</div>
+<script>
+(function(){
+  const t = document.getElementById("threshold"); let done = false;
+  const enter = () => { if(done) return; done = true; t.classList.add("gone"); setTimeout(() => t.remove(), 1300); };
+  t.addEventListener("click", enter); t.addEventListener("keydown", e => { if(e.key==="Enter"||e.key===" ") enter(); });
+  setTimeout(enter, 4200);
+})();
+</script>
 
 <script>
 (function(){
@@ -151,17 +254,41 @@ const POWERS = [
   {t:"כל ניצחון קטן נחשב", x:"לפי התניא, בכל פעם שאדם דוחה מחשבה או דחף שלא רצה בהם, יש בזה ערך גדול, גם אם הם חוזרים שוב ושוב. החזרה של הדחף איננה כישלון. הדחייה שלו היא הניצחון.", s:"תניא, פרק כ״ז", a:"ספור היום את הניצחונות הקטנים, ולחץ ״ניצחתי״ בכל פעם."}]}
 ];
 const DAY_LABEL = ["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"];
+const DAY_SHORT = ["א׳","ב׳","ג׳","ד׳","ה׳","ו׳","שבת"];
 const MONTHS = [
  ["תשרי","התחדשות והצבת כוונה לשנה"],["חשו","התמדה ביומיום, החודש בלי חגים"],["כסלו","אור בתוך חושך"],["טבת","להחזיק מעמד בימים הקרים"],
  ["שבט","צמיחה ושורשים"],["אדר","שמחה כעבודה"],["ניסן","חירות: יציאה משעבוד האוטומט"],["אייר","עבודה על המידות, ימי הספירה"],
  ["סיו","מחויבות וקבלה"],["תמוז","התמודדות עם שבר"],["אלול","חשבון נפש והתבוננות במה שהיה"],["אב","נחמה ותיקון"]];
+/* Five levels. At every level the evening debrief asks about the same three garments of the soul
+   (thought, speech, action), and the questions deepen as the level rises. */
 const LEVELS = [
- {n:"נפש", d:"מודעות: לזהות את האוטומט", from:0},
- {n:"רוח", d:"רגש: לעבוד עם המידות", from:30},
- {n:"נשמה", d:"הבנה: התבוננות עמוקה", from:90},
- {n:"חיה", d:"רצון: מה באמת מניע אותי", from:180},
- {n:"יחידה", d:"שליחות: ללוות אחרים", from:300}];
+ {n:"נפש", d:"מודעות: לזהות את האוטומט", from:0,
+  focus:"לשים לב מתי האוטומט מנהל את המחשבה, הדיבור והמעשה.",
+  g:{thought:"איזו מחשבה עלתה היום מעצמה ומשכה אותך אחריה?",
+     speech:"איזו מילה יצאה לך היום מהאוטומט, בלי שבחרת בה?",
+     action:"מה עשית היום מתוך הרגל, ולא מתוך בחירה?"}},
+ {n:"רוח", d:"רגש: לעבוד עם המידות", from:30,
+  focus:"לזהות איזו מידה, איזה רגש, מפעילה את המחשבה, הדיבור והמעשה.",
+  g:{thought:"איזה רגש צבע היום את המחשבות שלך, ומה עשית איתו?",
+     speech:"היה רגע שבו הרגש רצה לצאת בדיבור? מה יצא בסוף?",
+     action:"איזה מעשה היום נבע ממידה טובה, כמו נתינה או סבלנות?"}},
+ {n:"נשמה", d:"הבנה: התבוננות עמוקה", from:90,
+  focus:"להביא את ההבנה וההתבוננות אל תוך המחשבה, הדיבור והמעשה.",
+  g:{thought:"איזה רעיון ליווה היום את המחשבה שלך, ומה הוא שינה?",
+     speech:"מתי היום דיברת מתוך הבנה, ולא מתוך תגובה?",
+     action:"איזה מעשה עשית היום כי הבנת שהוא נכון, גם בלי חשק?"}},
+ {n:"חיה", d:"רצון: מה באמת מניע אותי", from:180,
+  focus:"שהמחשבה, הדיבור והמעשה ישרתו את מה שאתה באמת רוצה.",
+  g:{thought:"מה באמת רצית היום, מתחת לכל הרצונות הקטנים?",
+     speech:"האם הדיבור שלך היום שירת את מה שאתה באמת רוצה?",
+     action:"איזה מעשה היום קירב אותך למה שחשוב לך באמת?"}},
+ {n:"יחידה", d:"שליחות: ללוות אחרים", from:300,
+  focus:"המחשבה, הדיבור והמעשה בשירות של משהו גדול ממך.",
+  g:{thought:"על מי חשבת היום, מעבר לעצמך?",
+     speech:"איזו מילה שלך היום חיזקה מישהו אחר?",
+     action:"איפה היית היום שליח, ועשית משהו בשביל אחר?"}}];
 const ARENAS = [["self","עם עצמי"],["home","בבית ובזוגיות"],["kids","עם הילדים"],["work","בעבודה ובפרנסה"],["people","עם אנשים"]];
+const ARENA_SHORT = {self:"עצמי", home:"בית", kids:"ילדים", work:"עבודה", people:"אנשים"};
 const CHANNELS = [["thought","מחשבה"],["speech","דיבור"],["action","מעשה"]];
 const DEEP_LINES = ["בין הגירוי לתגובה יש רגע. אתה בתוכו עכשיו.","הדחף הוא לא אתה. אתה מי שבוחר מה לעשות איתו.","הבינוני לא מחכה שהלב יירגע. הוא בוחר את הצעד הבא.","אין צורך לנצח את כל היום. רק את הרגע הזה."];
 const QUIZ = [
@@ -207,7 +334,7 @@ async function initStore(){
     if(window.claude && typeof window.claude.use === "function"){
       const [db, user] = await withTimeout(Promise.all([window.claude.use("db"), window.claude.use("user")]), 6000) || [];
       const uid = user ? await withTimeout(user.id(), 3000) : null;
-      if(db && uid){ store.db = db; store.uid = uid; store.mode = "cloud"; return; }
+      if(db && uid){ store.db = db; store.uid = uid; store.user = user; store.mode = "cloud"; return; }
     }
   }catch(e){}
   try{ localStorage.setItem("mh-probe","1"); localStorage.removeItem("mh-probe"); store.mode = "local"; }catch(e){ store.mode = "memory"; }
@@ -239,8 +366,42 @@ async function saveDay(key, day){
   store.mem.days[key] = day;
 }
 
+/* ---------- guiding: a weekly summary the person chooses to share, and notes from their guide ----------
+   shares/<id>              the summary (only guides, the artifact's Editors, can read it; each person writes only their own)
+   shares/<id>/notes/<n>    a good word or a weekly question from a guide (the person reads their own) */
+const DAY = 864e5;
+async function syncShare(){
+  if(store.mode!=="cloud" || S.demo || !S.profile) return;
+  const ref = store.db.doc("shares/"+store.uid);
+  try{
+    if(!S.profile.shareWithGuide){ await ref.set({optIn:false, updatedAt:new Date().toISOString()}); return; }
+    const w = weekStats(S.days, realNow()), L = level(), garments = {};
+    CHANNELS.forEach(([c]) => garments[c] = {w:w.chW[c], a:w.chA[c]});
+    await ref.set({optIn:true, level:L.i, activeDays:L.n, workDays:w.workDays, wins:w.wins, autos:w.autos, garments,
+      weekStart:keyOf(weekStart(realNow())), updatedAt:new Date().toISOString()});
+  }catch(e){}
+}
+async function loadNotes(){
+  S.notes = []; S.names = {};
+  if(store.mode!=="cloud") return;
+  try{
+    const snap = await store.db.collection("shares/"+store.uid+"/notes").orderBy("at","desc").limit(20).get();
+    S.notes = snap.docs.map(d => ({id:d.id, ...d.data()}));
+    await resolveNames(S.notes.map(n => n.by));
+  }catch(e){ S.notes = []; }
+}
+async function resolveNames(ids){
+  ids = [...new Set(ids.filter(Boolean))]; if(!ids.length || !store.user) return;
+  try{ const ps = await store.user.profiles(ids); ids.forEach(i => { S.names[i] = (ps && ps[i] && ps[i].name) || ""; }); }catch(e){}
+}
+const recentNote = (kind, days) => (S.notes||[]).find(n => n.kind===kind && Date.now() - Date.parse(n.at) < days*DAY);
+function guideWordCard(){
+  const n = recentNote("word", 14); if(!n) return "";
+  return `<div class="card"><p class="eyebrow">מילה טובה מהמלווה שלך</p><p class="q">${esc(n.text)}</p>${S.names[n.by]?`<p class="small muted">${esc(S.names[n.by])}</p>`:""}</div>`;
+}
+
 /* ---------- state ---------- */
-const S = { profile:null, days:{}, tab:"today", demo:null, ob:{step:0, quiz:[], agreed:false}, welcomeBack:false };
+const S = { profile:null, days:{}, tab:"today", demo:null, ob:{step:0, quiz:[], agreed:false}, welcomeBack:false, notes:[], names:{}, isGuide:false };
 const app = document.getElementById("app"), nav = document.getElementById("nav"), ov = document.getElementById("overlay");
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function toast(msg){ const t = document.getElementById("toast"); t.innerHTML = `<span>${esc(msg)}</span>`; clearTimeout(toast._t); toast._t = setTimeout(() => t.innerHTML = "", 2600); }
@@ -251,6 +412,7 @@ async function putToday(day){
   if(S.demo){ S.demo[k] = day; return; }
   S.days[k] = day; await saveDay(k, day);
   if(S.profile){ const t = new Date().toISOString(); S.profile.lastActive = t; await saveProfile(S.profile); }
+  if(S.profile && S.profile.shareWithGuide) syncShare();
 }
 function activeDays(){ return Object.values(days()).filter(d => d.done || (d.moments||[]).length || d.debrief).length; }
 function level(){
@@ -260,20 +422,45 @@ function level(){
 }
 function isDistress(texts){ const all = texts.join(" "); return DISTRESS.some(w => all.includes(w)); }
 
+/* ---------- the score: SVG helpers ---------- */
+function staffLines(x1, x2, ys){ return ys.map(y => `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}"/>`).join(""); }
+function note(cls, x, y, rx, ry){ return `<ellipse class="${cls}" cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" transform="rotate(-20 ${x} ${y})"/>`; }
+/* The week as one staff: Sunday at the right. Pitch rises with the day's work; today is in the conductor's blue; Shabbat is a rest. */
+function weekStaff(){
+  const d = now(), ws = weekStart(d), all = days(), tk = keyOf(d);
+  let s = `<svg class="stf" viewBox="0 -8 300 92" width="100%" role="img" aria-label="השבוע כשורת תווים">` + staffLines(0, 300, [14,24,34,44,54]);
+  for(let i=0;i<7;i++){
+    const x = 276 - i*42, xd = new Date(ws); xd.setDate(ws.getDate()+i);
+    const k = keyOf(xd), day = all[k] || {}, isT = k===tk, fut = !isT && xd > d;
+    const act = (day.done?1:0) + (day.moments||[]).filter(m => m.result==="win").length + (day.debrief?1:0);
+    if(i===6){ s += `<rect class="${isT?"n-pen":"n-ink"}" x="${x-7}" y="24" width="14" height="5"/>`; }
+    else {
+      const y = fut ? 44 : 49 - Math.min(act,4)*5, rx = isT?8.5:7, ry = isT?6:5;
+      s += note((isT?"n-pen":(act?"n-ink":"n-hol")) + (fut?" fut":""), x, y, rx, ry);
+      if(act || isT) s += `<line class="${isT?"stem-pen":"stem-ink"}" x1="${x+rx-1}" y1="${y-1}" x2="${x+rx-1}" y2="${y-30}"/>`;
+    }
+    s += `<text x="${x}" y="78" text-anchor="middle" class="${isT?"t-pen":""}">${DAY_SHORT[i]}</text>`;
+  }
+  return s + `</svg>`;
+}
+function restMark(){
+  return `<svg class="stf" viewBox="0 0 90 44" width="110" style="margin:0 auto" aria-hidden="true">${staffLines(0,90,[4,12,20,28,36])}<rect class="n-pen" x="36" y="12" width="18" height="6"/></svg>`;
+}
+
 /* ---------- onboarding ---------- */
 function renderOnboarding(){
   nav.hidden = true;
   const o = S.ob;
   if(o.step === 0){
     app.innerHTML = `<div class="top"><span class="brand">מנגינת החיים</span></div>
-    <div class="card accent"><p class="eyebrow">שיטה לעבודה פנימית, מבוססת על ספר התניא</p>
-      <h1 style="font-size:2rem;font-weight:900">כשטוב לך עם עצמך, טוב לך עם כולם.</h1>
+    <div class="card"><p class="eyebrow">שיטה לעבודה פנימית, מבוססת על ספר התניא</p>
+      <h1 class="hero-title">כשטוב לך עם עצמך, טוב לך עם כולם.</h1>
       <p>החיים הם תזמורת: בית, עבודה, אנשים, ואתה עצמך. כדי שהכול יישמע מדויק, מתחילים מהשורש, מהעבודה שלך עם עצמך.</p>
-      <p class="muted">כל יום: רעיון אחד, מעשה אחד, ותחקיר קצר בערב. בלי מצוות, בלי סגולות ובלי הלקאה עצמית.</p>
+      <p class="muted">כל יום: רעיון אחד, מעשה אחד, ותחקיר קצר בערב. בלי סגולות ובלי הלקאה עצמית.</p>
       <div><button class="btn" data-act="ob-next" type="button">להתחיל</button></div></div>`;
   } else if(o.step === 1){
     app.innerHTML = `<div class="top"><span class="brand">לפני שמתחילים</span></div>
-    <div class="card"><h2 style="font-size:1.4rem">חשוב שתדע</h2>
+    <div class="card"><h2 style="font-size:1.6rem">חשוב שתדע</h2>
       <p>האפליקציה היא כלי לליווי ולהתפתחות אישית. <b>היא אינה מחליפה טיפול פסיכולוגי, נפשי או רפואי</b>, ואינה מיועדת לטיפול במצבי חירום.</p>
       <p>השימוש באפליקציה הוא על דעתך ובאחריותך.</p>
       <p>אם עובר עליך משהו קשה מאוד, פנה לעזרה: ער״ן, עזרה ראשונה נפשית, בטלפון <span class="phone">1201</span>. במצב של סכנה מיידית: מד״א <span class="phone">101</span>.</p>
@@ -291,7 +478,7 @@ function renderOnboarding(){
     } else {
       const k = topMiddah(o.quiz), m = MIDDOT[k];
       app.innerHTML = `<div class="top"><span class="brand">התוצאה שלך</span></div>
-      <div class="card accent"><p class="eyebrow">המידה שמובילה אותך</p><h1 style="font-size:2.3rem;font-weight:900;color:var(--lamp)">${esc(m.n)}</h1>
+      <div class="card accent"><p class="eyebrow">המידה שמובילה אותך</p><h1 style="font-size:2.8rem;color:var(--pen)">${esc(m.n)}</h1>
         <p class="src">${esc(m.s)}</p><p><b>הכוח שלך:</b> ${esc(m.st)}</p><p><b>הצל:</b> ${esc(m.sh)}</p>
         <p class="muted">מכאן מתחילים בדרגת <b>נפש</b>: ללמוד לזהות את האוטומט. הדרגות עולות לפי עקביות ועומק, לא לפי שלמות.</p>
         <div><button class="btn" data-act="ob-finish" type="button">לעבודה של היום</button></div></div>`;
@@ -305,100 +492,144 @@ function header(){
   const d = now(), th = monthTheme(d);
   return `<div class="top"><div><div class="brand">מנגינת החיים</div><div class="hdate">יום ${DAY_LABEL[d.getDay()]} · ${esc(hebDate(d))}</div>
     ${th.t?`<span class="theme-chip">חודש ${esc(th.m)}: ${esc(th.t)}</span>`:""}</div>
-    <button class="iconbtn" data-act="settings" type="button">הדגמה</button></div>
+    <div class="row" style="flex-wrap:nowrap">${S.isGuide?`<button class="iconbtn" data-act="guide" type="button">הליווי</button>`:""}<button class="iconbtn" data-act="settings" type="button">הגדרות</button></div></div>
     ${S.demo?`<div class="demo-banner">מוצגים נתוני הדגמה. הנתונים שלך לא השתנו.</div>`:""}
     ${demoOffset?`<div class="demo-banner">תצוגה של יום ${DAY_LABEL[d.getDay()]}. <button class="link" style="color:inherit" data-act="real-day" type="button">חזרה להיום</button></div>`:""}`;
 }
 function levelCard(){
   const L = level(), cur = LEVELS[L.i];
-  return `<div class="card level"><div class="lvl-head"><span class="label">הדרגה שלך</span><span class="small muted">${L.n} ימי עבודה</span></div>
-    <div class="lvl-head"><span class="lvl-name">${esc(cur.n)}</span><span class="small">${esc(cur.d)}</span></div>
-    <div class="bar" role="progressbar" aria-valuenow="${L.pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${L.pct}%"></i></div>
-    <div class="steps">${LEVELS.map((l,j) => j===L.i?`<b>${l.n}</b>`:`<span>${l.n}</span>`).join("")}</div>
-    ${L.next?`<p class="small muted">עוד ${L.next.from - L.n} ימי עבודה לדרגת ${esc(L.next.n)}.</p>`:""}</div>`;
+  /* calm version: no day counts, no bar. Where you are on the way, and what this stage asks of you. */
+  return `<div class="card level center"><span class="label">הדרגה שלך</span>
+    <span class="lvl-name">${esc(cur.n)}</span>
+    <div class="dots5" aria-label="דרגה ${L.i+1} מתוך ${LEVELS.length}">${LEVELS.map((l,j) => `<i class="${j<=L.i?"on":""}" title="${l.n}"></i>`).join("")}</div>
+    <p class="small muted">${esc(cur.focus)}</p>
+    ${!L.next && !(S.profile && S.profile.mission) ? `<div><button class="link" data-act="edit-mission" type="button">לכתוב את השליחות שלך</button></div>` : ""}</div>`;
 }
 function renderToday(){
   const d = now(), dow = d.getDay(), day = today();
-  let body = "";
+  let body = `<div class="staff-card">${weekStaff()}</div>` + missionNote() + guideWordCard();
   if(S.welcomeBack) body += `<div class="card accent"><p class="eyebrow">ברוך שובך</p><p>החזרה עצמה היא חלק מהעבודה. אין כאן רצף שנשבר, יש מנגינה שממשיכה.</p></div>`;
   if(dow === 6){
-    body += `<div class="card accent center"><p class="eyebrow">שבת</p><h2 style="font-size:1.8rem;font-weight:900">שבת שלום</h2>
-      <p>היום אין משימות ואין התראות. השקט הוא חלק מהמנגינה.</p><p class="muted">במוצאי שבת מחכה לך מפת השבוע.</p>
+    body += `<div class="card accent center">${restMark()}<p class="eyebrow">שבת</p><h2 style="font-size:2.2rem">שבת שלום</h2>
+      <p>שבת היא הפאוזה במנגינה. היום אין משימות ואין התראות.</p><p class="muted">במוצאי שבת מחכה לך מפת השבוע.</p>
       <div><button class="btn ghost" data-tab-go="map" type="button">לצפות במפת השבוע</button></div></div>`;
   } else {
     const P = POWERS[dow], it = P.items[weekNum(d) % P.items.length];
     const wins = (day.moments||[]).filter(m => m.result==="win").length;
     body += `<div class="card"><p class="eyebrow">הכוח של היום: ${esc(P.name)}</p>
-      <h2 class="insight-title">${esc(it.t)}</h2><p>${esc(it.x)}</p><p class="src">${esc(it.s)}</p>
+      <div class="daf"><div class="main"><h2 class="insight-title">${esc(it.t)}</h2><p>${esc(it.x)}</p></div>
+        <aside class="margin"><span><b>מקור</b>${esc(it.s)}</span><span><b>הכוח</b>${esc(P.name)}</span></aside></div>
       <div class="action"><span class="label">המעשה של היום</span><p>${esc(it.a)}</p>
         <div class="row">${day.done?`<button class="btn done" data-act="undo-done" type="button">✓ עשיתי</button>`:`<button class="btn" data-act="done" type="button">עשיתי</button>`}</div></div></div>
-    <div class="card"><div class="row" style="justify-content:space-between"><div><span class="label">ניצחונות היום</span><div class="big">${wins}</div></div>
-      <button class="btn ghost" data-act="quick-win" type="button">ניצחתי עכשיו</button></div>
-      <p class="small muted">כל פעם שעצרת ובחרת אחרת, גם בדבר קטן. לרגע קשה: הכפתור ״אני באוטומט״ למטה.</p></div>
+    <div class="card center"><p class="muted">עצרת היום ובחרת אחרת, גם בדבר קטן?</p>
+      <div><button class="quiet-win" data-act="quick-win" type="button">לסמן רגע של בחירה</button></div></div>
     <div class="card"><span class="label">בערב</span>${day.debrief?`<p>✓ התחקיר של היום הושלם. <button class="link" data-tab-go="debrief" type="button">לצפייה</button></p>`
       :`<p>תחקיר של דקה: מה תכננת, מה קרה, מה אתה לוקח למחר.</p><div><button class="btn ghost" data-tab-go="debrief" type="button">לתחקיר</button></div>`}</div>`;
   }
-  body += levelCard();
   app.innerHTML = header() + body + footer();
 }
 let D = null; // debrief draft
 function renderDebrief(){
   const day = today();
-  if(now().getDay() === 6){ app.innerHTML = header() + `<div class="card center"><p class="eyebrow">שבת</p><p>אין תחקיר בשבת. נתראה במוצאי שבת.</p></div>` + footer(); return; }
+  if(now().getDay() === 6){ app.innerHTML = header() + `<div class="card center">${restMark()}<p class="eyebrow">שבת</p><p>אין תחקיר בשבת. נתראה במוצאי שבת.</p></div>` + footer(); return; }
+  const lab = (arr,k) => (arr.find(a => a[0]===k)||[,""])[1];
   if(day.debrief && !D){
-    const b = day.debrief, lab = (arr,k) => (arr.find(a => a[0]===k)||[,""])[1];
-    app.innerHTML = header() + `<div class="card accent"><p class="eyebrow">התחקיר של היום</p><h2 style="font-size:1.4rem">ראית, למדת, ממשיכים.</h2></div>
+    const b = day.debrief;
+    if(b.g){
+      const L = LEVELS[b.lvl||0];
+      const rows = CHANNELS.filter(([c]) => b.g[c] && (b.g[c].text || b.g[c].result)).map(([c,name]) => { const o = b.g[c];
+        return `<div class="card"><p class="eyebrow">${esc(name)}${o.result?` · <span style="color:var(--${o.result==="win"?"good":"auto"})">${o.result==="win"?"ניצחתי":"האוטומט ניהל"}</span>`:""}${o.arena?` · ${esc(lab(ARENAS,o.arena))}`:""}</p>
+          <p class="small muted">${esc(L.g[c])}</p><p>${esc(o.text)||"<span class='muted'>לא נכתב</span>"}</p></div>`; }).join("");
+      app.innerHTML = header() + `<div class="card accent"><p class="eyebrow">התחקיר של היום · דרגת ${esc(L.n)}</p><h2 style="font-size:1.6rem">ראית, למדת, ממשיכים.</h2></div>`
+        + (rows || `<div class="card"><p class="muted">לא נכתב על אף לבוש.</p></div>`)
+        + (b.guideQ && b.guideQ.text ? `<div class="card"><p class="eyebrow">שאלה מהמלווה</p><p class="small muted">${esc(b.guideQ.q)}</p><p>${esc(b.guideQ.text)}</p></div>` : "")
+        + `<div class="card"><span class="label">מה לוקחים למחר</span><p>${esc(b.tomorrow)||"<span class='muted'>לא נכתב</span>"}</p>
+          <div><button class="link" data-act="edit-debrief" type="button">עריכה</button></div></div>` + footer();
+      return;
+    }
+    app.innerHTML = header() + `<div class="card accent"><p class="eyebrow">התחקיר של היום</p><h2 style="font-size:1.6rem">ראית, למדת, ממשיכים.</h2></div>
       <div class="card"><span class="label">מתי האוטומט ניהל אותך${b.autoChannel?` · ${esc(lab(CHANNELS,b.autoChannel))}`:""}${b.autoArena?` · ${esc(lab(ARENAS,b.autoArena))}`:""}</span><p>${esc(b.autoText)||"<span class='muted'>לא נכתב</span>"}</p>
         <span class="label">מתי אתה ניצחת${b.winArena?` · ${esc(lab(ARENAS,b.winArena))}`:""}</span><p>${esc(b.winText)||"<span class='muted'>לא נכתב</span>"}</p>
         <span class="label">מה לוקחים למחר</span><p>${esc(b.tomorrow)||"<span class='muted'>לא נכתב</span>"}</p>
         <div><button class="link" data-act="edit-debrief" type="button">עריכה</button></div></div>` + footer();
     return;
   }
-  D = D || {autoText:"",autoChannel:null,autoArena:null,winText:"",winArena:null,tomorrow:""};
-  const chips = (arr, field) => `<div class="chips">${arr.map(([k,l]) => `<button class="chip" type="button" data-chip="${field}" data-k="${k}" aria-pressed="${D[field]===k}">${esc(l)}</button>`).join("")}</div>`;
-  app.innerHTML = header() + `<div class="card"><p class="eyebrow">תחקיר ערב</p><p class="muted">בלי האשמה. רק מה היה ומה לומדים.</p></div>
-  <div class="card"><label class="q" for="d-auto">מתי היום האוטומט ניהל אותך?</label>
-    <textarea id="d-auto" rows="2" placeholder="רגע אחד מספיק">${esc(D.autoText)}</textarea>
-    <span class="label">באיזה לבוש?</span>${chips(CHANNELS,"autoChannel")}
-    <span class="label">באיזו זירה?</span>${chips(ARENAS,"autoArena")}</div>
-  <div class="card"><label class="q" for="d-win">מתי אתה ניצחת?</label>
-    <textarea id="d-win" rows="2" placeholder="גם דבר קטן נחשב">${esc(D.winText)}</textarea>
-    <span class="label">באיזו זירה?</span>${chips(ARENAS,"winArena")}</div>
-  <div class="card"><label class="q" for="d-tom">מה תיקח למחר?</label>
+  D = D || blankDraft();
+  const L = LEVELS[D.lvl], gq = recentNote("question", 7);
+  const chips = (arr, field, val) => `<div class="chips">${arr.map(([k,l]) => `<button class="chip" type="button" data-chip="${field}" data-k="${k}" aria-pressed="${val===k}">${esc(l)}</button>`).join("")}</div>`;
+  const RESULTS = [["win","ניצחתי"],["auto","האוטומט ניהל"]];
+  app.innerHTML = header() + `<div class="card"><p class="eyebrow">תחקיר ערב · דרגת ${esc(L.n)}</p><p>${esc(L.focus)}</p>${S.profile && S.profile.mission ? `<p class="small"><b>השליחות שלך:</b> ${esc(S.profile.mission)}</p>` : ""}<p class="small muted">ענה על לבוש אחד לפחות. בלי האשמה, רק מה היה ומה לומדים.</p></div>`
+  + CHANNELS.map(([c,name]) => { const o = D.g[c]; return `<div class="card"><p class="eyebrow">${esc(name)}</p>
+    <label class="q" for="d-${c}">${esc(L.g[c])}</label>
+    <textarea id="d-${c}" rows="2" placeholder="רגע אחד מספיק">${esc(o.text)}</textarea>
+    ${chips(RESULTS, c+".result", o.result)}
+    <span class="label">באיזו זירה?</span>${chips(ARENAS, c+".arena", o.arena)}</div>`; }).join("")
+  + (gq ? `<div class="card accent"><p class="eyebrow">שאלה מהמלווה שלך לשבוע הזה</p><label class="q" for="d-gq">${esc(gq.text)}</label>
+    <textarea id="d-gq" rows="2" placeholder="התשובה נשארת אצלך">${esc((D.guideQ && D.guideQ.text) || "")}</textarea>
+    <p class="small muted">המלווה לא רואה את מה שכתבת. אפשר לספר לו בשיחה, אם תרצה.</p></div>` : "")
+  + `<div class="card"><label class="q" for="d-tom">על איזה לבוש תעבוד מחר, ואיך?</label>
     <input id="d-tom" type="text" placeholder="החלטה קטנה אחת" value="${esc(D.tomorrow)}"></div>
   <div><button class="btn" data-act="save-debrief" type="button">סיום התחקיר</button></div>` + footer();
-  ["d-auto","d-win","d-tom"].forEach(id => document.getElementById(id).addEventListener("input", e => {
-    const f = {"d-auto":"autoText","d-win":"winText","d-tom":"tomorrow"}[id]; D[f] = e.target.value; }));
+  CHANNELS.forEach(([c]) => document.getElementById("d-"+c).addEventListener("input", e => { D.g[c].text = e.target.value; }));
+  document.getElementById("d-tom").addEventListener("input", e => { D.tomorrow = e.target.value; });
+  const gqEl = document.getElementById("d-gq");
+  if(gqEl) gqEl.addEventListener("input", e => { D.guideQ = {q: gq.text, text: e.target.value}; });
+}
+function blankDraft(){ const g = {}; CHANNELS.forEach(([c]) => g[c] = {text:"", result:null, arena:null}); return {lvl: level().i, g, tomorrow:""}; }
+/* Five arenas = the five lines of a staff. Each day, a filled green note per arena where you won, a hollow note where autopilot led. */
+function arenaScore(grid, d){
+  const ys = [12,28,44,60,76], tk = keyOf(d);
+  let s = `<svg class="stf" viewBox="0 0 300 104" width="100%" role="img" aria-label="התווים של השבוע לפי זירות">` + staffLines(8, 252, ys);
+  ARENAS.forEach(([k],j) => { s += `<text x="276" y="${ys[j]+4}" text-anchor="middle">${ARENA_SHORT[k]}</text>`; });
+  grid.forEach((col,i) => {
+    const x = 232 - i*34;
+    if(i===6){ s += `<rect class="n-ink" x="${x-6}" y="${ys[2]-6}" width="12" height="5"/>`; }
+    else ARENAS.forEach(([k],j) => { const c = col.arenas[k]; const y = ys[j];
+      if(c.win && c.auto){ s += note("n-win", x-6, y, 5.5, 4) + note("n-auto", x+6, y, 5.5, 4); }
+      else if(c.win){ s += note("n-win", x, y, 6, 4.3); }
+      else if(c.auto){ s += note("n-auto", x, y, 6, 4.3); } });
+    s += `<text x="${x}" y="98" text-anchor="middle" class="${col.key===tk?"t-pen":""}">${DAY_SHORT[i]}</text>`;
+  });
+  return s + `</svg>`;
+}
+function weekStats(all, d){
+  const ws = weekStart(d), week = []; for(let i=0;i<7;i++){ const x = new Date(ws); x.setDate(ws.getDate()+i); week.push(x); }
+  let wins=0, autos=0, done=0, workDays=0; const chW = {}, chA = {}, winArenas = new Set();
+  CHANNELS.forEach(([k]) => { chW[k] = 0; chA[k] = 0; });
+  const grid = week.map(x => { const col = {key:keyOf(x), arenas:{}}; ARENAS.forEach(([k]) => col.arenas[k] = {win:0, auto:0}); return col; });
+  const addWin = (A, arena, ch) => { wins++; if(arena){ A[arena].win++; winArenas.add(arena); } if(ch) chW[ch]++; };
+  const addAuto = (A, arena, ch) => { autos++; if(arena) A[arena].auto++; if(ch) chA[ch]++; };
+  week.forEach((x,i) => { const day = all[keyOf(x)]; if(!day) return; const A = grid[i].arenas; if(day.done) done++;
+    if(day.done || (day.moments||[]).length || day.debrief) workDays++;
+    (day.moments||[]).forEach(m => m.result==="win" ? addWin(A, m.arena, m.channel) : addAuto(A, m.arena, m.channel));
+    const b = day.debrief; if(!b) return;
+    if(b.g){ CHANNELS.forEach(([c]) => { const o = b.g[c]; if(!o || !o.result) return; o.result==="win" ? addWin(A, o.arena, c) : addAuto(A, o.arena, c); }); }
+    else { if(b.autoText||b.autoArena) addAuto(A, b.autoArena, b.autoChannel); if(b.winText||b.winArena) addWin(A, b.winArena, null); } });
+  return {wins, autos, done, workDays, chW, chA, grid, winArenas};
 }
 function renderMap(){
   const d = now(), ws = weekStart(d), all = days();
   const week = []; for(let i=0;i<7;i++){ const x = new Date(ws); x.setDate(ws.getDate()+i); week.push(x); }
-  let wins=0, autos=0, done=0; const byArena = {}, byChannel = {}, winArenas = new Set();
-  ARENAS.forEach(([k]) => byArena[k] = {win:0, auto:0}); CHANNELS.forEach(([k]) => byChannel[k] = 0);
-  week.forEach(x => { const day = all[keyOf(x)]; if(!day) return; if(day.done) done++;
-    (day.moments||[]).forEach(m => { if(m.result==="win"){ wins++; if(m.arena){ byArena[m.arena].win++; winArenas.add(m.arena);} } else { autos++; if(m.arena) byArena[m.arena].auto++; if(m.channel) byChannel[m.channel]++; } });
-    const b = day.debrief; if(b){ if(b.autoText||b.autoArena){ autos++; if(b.autoArena) byArena[b.autoArena].auto++; if(b.autoChannel) byChannel[b.autoChannel]++; }
-      if(b.winText||b.winArena){ wins++; if(b.winArena){ byArena[b.winArena].win++; winArenas.add(b.winArena);} } } });
+  const {wins, autos, done, chW, chA, grid, winArenas} = weekStats(all, d);
   const empty = !wins && !autos && !done;
-  const maxA = Math.max(1, ...Object.values(byArena).map(v => v.win+v.auto)), maxC = Math.max(1, ...Object.values(byChannel));
-  const weakest = Object.entries(byChannel).sort((a,b) => b[1]-a[1])[0];
-  app.innerHTML = header() + `<div class="card"><p class="eyebrow">מפת השבוע</p>
-    <div class="week">${week.map(x => { const day = all[keyOf(x)]||{}; const ms = day.moments||[]; const b = day.debrief;
-      const w = ms.filter(m=>m.result==="win").length + (b&&(b.winText||b.winArena)?1:0), a = ms.filter(m=>m.result!=="win").length + (b&&(b.autoText||b.autoArena)?1:0);
-      return `<div class="wd ${keyOf(x)===keyOf(d)?"today":""}"><span class="n">${["א׳","ב׳","ג׳","ד׳","ה׳","ו׳","שבת"][x.getDay()]}</span>
-        <div class="dots">${day.done?'<i class="dot done"></i>':""}${'<i class="dot win"></i>'.repeat(Math.min(w,4))}${'<i class="dot auto"></i>'.repeat(Math.min(a,4))}</div></div>`; }).join("")}</div>
-    <div class="legend"><span><i class="dot done"></i>מעשה היום</span><span><i class="dot win"></i>ניצחון</span><span><i class="dot auto"></i>האוטומט ניהל</span></div></div>`
-  + (empty ? `<div class="card center"><p class="q">המפה תתמלא מהעבודה שלך</p><p class="muted">כל ״עשיתי״, כל ״ניצחתי״ וכל תחקיר ערב מוסיפים לה צבע. אחרי כמה ימים תראה איפה האוטומט תופס אותך, ואיך העבודה הפנימית מגיעה לכל הזירות.</p>
+  const maxC = Math.max(1, ...CHANNELS.map(([k]) => chW[k] + chA[k]));
+  const weakest = CHANNELS.map(([k]) => [k, chA[k]]).sort((a,b) => b[1]-a[1])[0];
+  const strongest = CHANNELS.map(([k]) => [k, chW[k]]).sort((a,b) => b[1]-a[1])[0];
+  app.innerHTML = header() + `<div class="card"><p class="eyebrow">מפת השבוע</p>${weekStaff()}
+    <div class="key"><span><i class="kn ink"></i>יום עבודה</span><span><i class="kn hol"></i>יום שקט</span><span><i class="kn pen"></i>היום</span><span>ככל שהתו גבוה יותר, עשית יותר</span></div></div>`
+  + (empty ? `<div class="card center"><p class="q">המפה תתמלא מהעבודה שלך</p><p class="muted">כל ״עשיתי״, כל ״ניצחתי״ וכל תחקיר ערב מוסיפים לה תו. אחרי כמה ימים תראה איפה האוטומט תופס אותך, ואיך העבודה הפנימית מגיעה לכל הזירות.</p>
       <div>${S.demo?"":`<button class="btn ghost" data-act="demo-on" type="button">להציג נתוני הדגמה</button>`}</div></div>`
    : `<div class="card"><div class="stats"><div><div class="big" style="color:var(--good)">${wins}</div><span class="small muted">ניצחונות</span></div>
       <div><div class="big" style="color:var(--auto)">${autos}</div><span class="small muted">רגעי אוטומט</span></div>
-      <div><div class="big" style="color:var(--lamp)">${done}</div><span class="small muted">מעשים</span></div></div>
+      <div><div class="big" style="color:var(--pen)">${done}</div><span class="small muted">מעשים</span></div></div>
       ${winArenas.size>1?`<p>השבוע ניצחת ב-${winArenas.size} זירות שונות. עבודה פנימית אחת, והיא מגיעה לכל המנגינה.</p>`:""}</div>
-    <div class="card"><span class="label">השורש והענפים: איפה זה קרה השבוע</span><div class="hbars">
-      ${ARENAS.map(([k,l]) => { const v = byArena[k]; return `<div class="hb"><span>${esc(l)}</span><div class="track" aria-label="${v.win} ניצחונות, ${v.auto} רגעי אוטומט"><i style="width:${v.win/maxA*100}%;background:var(--good)"></i><i style="width:${v.auto/maxA*100}%;background:var(--auto)"></i></div><span class="num">${v.win+v.auto}</span></div>`; }).join("")}</div></div>
-    <div class="card"><span class="label">באיזה לבוש האוטומט תפס אותך</span><div class="hbars">
-      ${CHANNELS.map(([k,l]) => `<div class="hb"><span>${esc(l)}</span><div class="track"><i style="width:${byChannel[k]/maxC*100}%;background:var(--auto)"></i></div><span class="num">${byChannel[k]}</span></div>`).join("")}</div>
-      ${weakest && weakest[1] ? `<p class="small">השבוע הבא כדאי לשים לב במיוחד ל${esc(CHANNELS.find(c=>c[0]===weakest[0])[1])}.</p>`:""}</div>`)
+    <div class="card"><span class="label">התווים של השבוע: שורה לכל זירה</span>${arenaScore(grid, d)}
+      <div class="key"><span><i class="kn win"></i>ניצחון</span><span><i class="kn auto"></i>האוטומט ניהל</span></div></div>
+    <div class="card"><span class="label">שלושת הלבושים השבוע</span><div class="hbars">
+      ${CHANNELS.map(([k,l]) => `<div class="hb"><span>${esc(l)}</span><div class="track" aria-label="${chW[k]} ניצחונות, ${chA[k]} רגעי אוטומט"><i style="width:${chW[k]/maxC*100}%;background:var(--good)"></i><i style="width:${chA[k]/maxC*100}%;background:var(--auto)"></i></div><span class="num">${chW[k]+chA[k]}</span></div>`).join("")}</div>
+      <div class="key"><span><i class="kn win"></i>ניצחון</span><span><i class="kn auto"></i>האוטומט ניהל</span></div>
+      ${strongest && strongest[1] ? `<p class="small">הכי הרבה ניצחונות השבוע: ב${esc(CHANNELS.find(c=>c[0]===strongest[0])[1])}.</p>`:""}
+      ${weakest && weakest[1] ? `<p class="small">בשבוע הבא כדאי לשים לב במיוחד ל${esc(CHANNELS.find(c=>c[0]===weakest[0])[1])}.</p>`:""}</div>`)
   + levelCard() + (S.demo?`<div><button class="btn ghost" data-act="demo-off" type="button">הסתרת נתוני ההדגמה</button></div>`:"") + footer();
 }
 function footer(){
@@ -410,6 +641,39 @@ function render(){
   nav.hidden = false;
   document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-current", t.dataset.tab===S.tab ? "page" : "false"));
   ({today:renderToday, debrief:renderDebrief, map:renderMap})[S.tab]();
+  checkLevelUp();
+}
+/* A short moment when a new level opens: what it means, and how the three garments are asked about from now on. */
+function checkLevelUp(){
+  if(S.demo || !S.profile) return;
+  const i = level().i;
+  if(S.profile.lvlSeen == null){ S.profile.lvlSeen = i; saveProfile(S.profile); return; }
+  if(i > S.profile.lvlSeen && !ov.innerHTML){ S.profile.lvlSeen = i; saveProfile(S.profile); openLevelUp(i, false); }
+}
+function openLevelUp(i, preview){
+  const L = LEVELS[i];
+  ov.innerHTML = `<div class="overlay" role="dialog" aria-label="דרגה חדשה"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>
+    ${preview?`<div class="demo-banner">תצוגה בלבד. הדרגה שלך לא השתנתה.</div>`:""}
+    <div class="card accent center"><p class="eyebrow">${i===0?"הדרגה הראשונה":"עלית דרגה"}</p><h2 style="font-size:2.8rem;color:var(--pen)">${esc(L.n)}</h2>
+      <p class="src">${esc(L.d)}</p><p>${esc(L.focus)}</p></div>
+    <div class="card"><span class="label">מעכשיו, בתחקיר הערב</span>
+      ${CHANNELS.map(([c,name]) => `<p><b>${esc(name)}:</b> ${esc(L.g[c])}</p>`).join("")}
+      <p class="small muted">אותם שלושה לבושים, שאלה עמוקה יותר. העבודה לא מתחילה מחדש, היא ממשיכה לעומק.</p></div>
+    ${i===LEVELS.length-1 ? missionCard(preview) : ""}
+    <div class="center"><button class="btn${i===LEVELS.length-1?" ghost":""}" data-act="close" type="button">ממשיכים</button></div></div></div>`;
+}
+/* At Yechida the journey turns outward: you put your own mission into words. The work never ends; the mission gives it direction. */
+const REBBE = "יום ההולדת של האדם הוא היום שבו הקב״ה החליט שהעולם לא יכול בלעדיך.";
+function missionNote(){ const m = S.profile && S.profile.mission;
+  return m ? `<div class="card"><p class="eyebrow">השליחות שלך</p><p class="q">${esc(m)}</p><div><button class="link" data-act="edit-mission" type="button">עריכה</button></div></div>` : ""; }
+function missionCard(preview){
+  const m = (S.profile && S.profile.mission) || "";
+  return `<div class="card"><p class="eyebrow">השליחות שלך</p>
+    <p class="q">${esc(REBBE)}</p><p class="src">הרבי מליובאוויטש</p>
+    <p>כל הדרגות הובילו לכאן. מי שמוצא את השליחות שלו, מוצא את התכלית שלשמה הבורא הביא אותו לעולם. העבודה לא נגמרת, ומעכשיו יש לה כיוון. חלק מהשליחות הוא ללוות אחרים בדרך שעברת. אם תרצה ללוות, פנה לצוות של מנגינת החיים.</p>
+    <label class="label" for="mission">במשפט אחד או שניים: מה השליחות שלך בעולם?</label>
+    <textarea id="mission" rows="3" placeholder="בשביל מה אני כאן">${esc(m)}</textarea>
+    ${preview ? `<p class="small muted">בתצוגה הזו השליחות לא נשמרת.</p>` : `<div><button class="btn" data-act="save-mission" type="button">שמירת השליחות</button></div>`}</div>`;
 }
 
 /* ---------- overlays ---------- */
@@ -427,14 +691,15 @@ function openMoment(){ M = {step:0, cycle:0, phase:"in", line:DEEP_LINES[Math.fl
 function drawMoment(){
   let inner = "";
   if(M.step === 0){
-    inner = `<p class="eyebrow center">שלוש נשימות</p><p class="center muted">עוד לא עושים כלום. רק נושמים.</p>
-      <div class="breath ${M.phase}" id="breath">${M.phase==="in"?"שאיפה":"נשיפה"}</div>
+    inner = `<p class="eyebrow center">שלוש נשימות</p><p class="center muted">עוד לא עושים כלום. רק מחזיקים את התו.</p>
+      <svg class="ferm ${M.phase}" viewBox="0 0 160 110" aria-hidden="true"><path class="arc" d="M20 70 A60 60 0 0 1 140 70"/><circle class="dotp" cx="80" cy="56" r="8"/><line x1="0" y1="100" x2="160" y2="100"/></svg>
+      <div class="breath-word">${M.phase==="in"?"שאיפה":"נשיפה"}</div>
       <p class="center small muted">נשימה ${M.cycle+1} מתוך 3</p><div class="center"><button class="link" data-act="m-next" type="button">דילוג</button></div>`;
     clearTimeout(breathT);
     breathT = setTimeout(() => { if(!M || M.step!==0) return; if(M.phase==="in"){ M.phase="out"; } else { M.phase="in"; M.cycle++; if(M.cycle>=3){ M.step=1; } } drawMoment(); }, 4000);
   } else if(M.step === 1){
-    inner = `<div class="card accent center"><p class="q" style="font-size:1.5rem">מה האני העמוק רוצה כאן?</p><p class="muted">לא מה האוטומט רוצה עכשיו. מה אתה רוצה שיהיה, אחרי שהרגע הזה יעבור.</p></div>
-      <p class="center src" style="font-size:1.05rem">${esc(M.line)}</p>
+    inner = `<div class="card accent center"><p class="q" style="font-size:1.8rem">מה האני העמוק רוצה כאן?</p><p class="muted">לא מה האוטומט רוצה עכשיו. מה אתה רוצה שיהיה, אחרי שהרגע הזה יעבור.</p></div>
+      <p class="center src" style="font-size:1.2rem">${esc(M.line)}</p>
       <div class="center"><button class="btn" data-act="m-next" type="button">אני מוכן להמשיך</button></div>`;
   } else if(M.step === 2){
     const chips = (arr, field) => `<div class="chips">${arr.map(([k,l]) => `<button class="chip" type="button" data-mchip="${field}" data-k="${k}" aria-pressed="${M[field]===k}">${esc(l)}</button>`).join("")}</div>`;
@@ -445,7 +710,7 @@ function drawMoment(){
       <span class="label">באיזה לבוש?</span>${chips(CHANNELS,"channel")}</div>
       <div><button class="btn" data-act="m-save" type="button" ${M.result?"":"disabled"}>שמירה</button></div>`;
   } else {
-    inner = `<div class="card accent center"><h2 style="font-size:1.6rem">${M.result==="win"?"ניצחת את הרגע.":"ראית את זה. זה כבר הרבה."}</h2>
+    inner = `<div class="card accent center"><h2 style="font-size:1.9rem">${M.result==="win"?"ניצחת את הרגע.":"ראית את זה. זה כבר הרבה."}</h2>
       <p>${M.result==="win"?"כל ניצחון קטן נחשב. זה בדיוק מה שהבינוני עושה.":"לפי התניא, עצבות רק מכבידה. ראית, למדת, ממשיכים."}</p></div>
       <div class="center"><button class="btn" data-act="close" type="button">חזרה ליום</button></div>`;
   }
@@ -455,10 +720,48 @@ function openSettings(){
   ov.innerHTML = `<div class="overlay"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>
     <div class="card"><p class="eyebrow">מצב הדגמה</p><p class="muted small">להצגת האפליקציה למשקיעים ולשותפים: אפשר לראות כל יום בשבוע, ולהציג נתונים לדוגמה במפה.</p>
       <span class="label">תצוגה של יום</span><div class="chips">${DAY_LABEL.map((l,i) => { const cur = now().getDay(); return `<button class="chip" type="button" data-act="pick-day" data-d="${i}" aria-pressed="${cur===i}">${l}</button>`; }).join("")}</div>
-      <div class="row">${S.demo?`<button class="btn ghost" data-act="demo-off" type="button">הסתרת נתוני הדגמה</button>`:`<button class="btn ghost" data-act="demo-on" type="button">הצגת נתוני הדגמה</button>`}</div></div>
+      <div class="row">${S.demo?`<button class="btn ghost" data-act="demo-off" type="button">הסתרת נתוני הדגמה</button>`:`<button class="btn ghost" data-act="demo-on" type="button">הצגת נתוני הדגמה</button>`}</div>
+      <span class="label">הדרגות ושאלות התחקיר שלהן</span><div class="chips">${LEVELS.map((l,i) => `<button class="chip" type="button" data-act="preview-level" data-i="${i}">${esc(l.n)}</button>`).join("")}</div></div>
     <div class="card"><p class="eyebrow">הפרופיל</p><p>המידה שמובילה אותך: <b>${esc((MIDDOT[S.profile.middah]||{}).n||"")}</b></p>
       <div><button class="link" data-act="redo-quiz" type="button">לעשות שוב את השאלון</button></div></div>
+    ${shareCard()}
+    ${S.isGuide ? `<div class="card"><p class="eyebrow">אתה מלווה</p><p class="small">רואים כאן את מי שבחר לשתף איתך את הסיכום השבועי.</p><div><button class="btn ghost" data-act="guide" type="button">למסך הליווי</button></div></div>` : ""}
     ${helpCard("")}</div></div>`;
+}
+function shareCard(){
+  const on = !!(S.profile && S.profile.shareWithGuide);
+  if(store.mode!=="cloud") return `<div class="card"><p class="eyebrow">ליווי</p><p class="small muted">שיתוף עם מלווה זמין רק כשהנתונים שמורים בחשבון שלך.</p></div>`;
+  return `<div class="card"><p class="eyebrow">ליווי</p>
+    <p>${on ? "אתה משתף סיכום שבועי עם המלווה שלך." : "אפשר לשתף סיכום שבועי עם מלווה."}</p>
+    <p class="small muted">המלווה רואה רק את הדרגה, את ימי העבודה, ואת מספר הניצחונות ורגעי האוטומט בכל לבוש. מה שאתה כותב בתחקיר נשאר רק אצלך.</p>
+    <div><button class="btn${on?" ghost":""}" data-act="toggle-share" type="button">${on ? "הפסקת השיתוף" : "שיתוף עם המלווה"}</button></div></div>`;
+}
+/* The guide's screen: one card per person who shares, with their week by garment, and a place to send a good word or a weekly question. */
+async function openGuide(){
+  ov.innerHTML = `<div class="overlay"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button><div class="loading">טוען…</div></div></div>`;
+  let people = [];
+  try{
+    const snap = await store.db.collection("shares").get();
+    people = snap.docs.filter(d => d.id !== store.uid).map(d => ({id:d.id, ...d.data()})).filter(p => p.optIn);
+    await Promise.all(people.map(async p => { try{ const s = await store.db.collection("shares/"+p.id+"/notes").orderBy("at","desc").limit(1).get(); p.last = s.docs[0] ? s.docs[0].data() : null; }catch(e){ p.last = null; } }));
+    await resolveNames(people.map(p => p.id));
+  }catch(e){ people = null; }
+  S.guidePeople = people || [];
+  const thisWeek = keyOf(weekStart(realNow()));
+  const body = people === null ? `<div class="card"><p>לא הצלחתי לטעון את הרשימה. נסה שוב בעוד רגע.</p></div>`
+    : !people.length ? `<div class="card center"><p class="q">עוד אין כאן אף אחד</p><p class="muted">כשמישהו שאתה מלווה יבחר ״שיתוף עם המלווה״ בהגדרות, הוא יופיע כאן.</p></div>`
+    : people.map((p,i) => { const L = LEVELS[p.level||0], cur = p.weekStart===thisWeek, g = p.garments || {};
+        const max = Math.max(1, ...CHANNELS.map(([c]) => ((g[c]||{}).w||0) + ((g[c]||{}).a||0)));
+        return `<div class="card"><div class="lvl-head"><span class="lvl-name">${esc(S.names[p.id] || "משתתף")}</span><span class="small muted">דרגת ${esc(L.n)} · ${p.activeDays||0} ימי עבודה</span></div>
+          <p class="small">${cur ? `השבוע: ${p.workDays||0} ימי עבודה, ${p.wins||0} ניצחונות, ${p.autos||0} רגעי אוטומט.` : "לא היה פעיל השבוע."}</p>
+          ${cur ? `<div class="hbars">${CHANNELS.map(([c,l]) => { const v = g[c] || {w:0,a:0}; return `<div class="hb"><span>${esc(l)}</span><div class="track"><i style="width:${v.w/max*100}%;background:var(--good)"></i><i style="width:${v.a/max*100}%;background:var(--auto)"></i></div><span class="num">${v.w+v.a}</span></div>`; }).join("")}</div>` : ""}
+          ${p.last ? `<p class="small muted">נשלח לאחרונה (${p.last.kind==="word"?"מילה טובה":"שאלה לשבוע"}): ${esc(p.last.text)}</p>` : ""}
+          <label class="label" for="gt-${i}">מה לשלוח?</label><textarea id="gt-${i}" rows="2" placeholder="משפט קצר אחד"></textarea>
+          <div class="row"><button class="btn" data-act="guide-send" data-i="${i}" data-k="word" type="button">שליחה כמילה טובה</button>
+            <button class="btn ghost" data-act="guide-send" data-i="${i}" data-k="question" type="button">שליחה כשאלה לשבוע</button></div></div>`; }).join("");
+  ov.innerHTML = `<div class="overlay" role="dialog" aria-label="מסך הליווי"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>
+    <div class="card accent"><p class="eyebrow">הליווי שלך</p><p>מלווים לא מתקנים ולא שופטים. מילה טובה אחת ושאלה אחת לשבוע מספיקות.</p>
+      <p class="small muted">מילה טובה מופיעה אצלו במסך ״היום״ לשבועיים. שאלה לשבוע מצטרפת לתחקיר הערב שלו לשבוע.</p></div>${body}</div></div>`;
 }
 function makeDemo(){
   const out = {}, d = now(), ws = weekStart(d), ar = ARENAS.map(a=>a[0]), ch = CHANNELS.map(c=>c[0]);
@@ -466,7 +769,9 @@ function makeDemo(){
   for(let i=0;i<=Math.min(5, d.getDay()===6?5:d.getDay());i++){
     const x = new Date(ws); x.setDate(ws.getDate()+i); const k = keyOf(x);
     const moments = []; for(let j=0;j<2+rnd(3);j++) moments.push({result: rnd(3)?"win":"auto", arena: ar[rnd(5)], channel: ch[rnd(3)]});
-    out[k] = {date:k, done: rnd(4)>0, moments, debrief: rnd(3)?{autoText:"הגבתי בחוסר סבלנות", autoChannel: ch[rnd(2)+1], autoArena: ar[rnd(5)], winText:"עצרתי לפני שעניתי", winArena: ar[rnd(5)], tomorrow:"נשימה לפני שאני עונה"}:null};
+    const sample = {thought:"תפסתי את עצמי מתעסק בטינה, ועברתי לדבר אחר", speech:"עצרתי לפני שעניתי בחוסר סבלנות", action:"סידרתי משהו שדחיתי שבוע"};
+    const g = {}; ch.forEach(c => { g[c] = rnd(3) ? {text: sample[c], result: rnd(3)?"win":"auto", arena: ar[rnd(5)]} : {text:"", result:null, arena:null}; });
+    out[k] = {date:k, done: rnd(4)>0, moments, debrief: rnd(3)?{lvl:1, g, tomorrow:"נשימה אחת לפני שאני עונה"}:null};
   }
   for(let i=1;i<=40;i++){ const x = new Date(ws); x.setDate(ws.getDate()-i); if(x.getDay()===6) continue; const k = keyOf(x); out[k] = {date:k, done:true, moments:[], debrief:null}; }
   return out;
@@ -477,7 +782,7 @@ document.addEventListener("click", async e => {
   const t = e.target.closest("button"); if(!t) return;
   if(t.dataset.tab){ S.tab = t.dataset.tab; D = null; render(); window.scrollTo(0,0); return; }
   if(t.dataset.tabGo){ S.tab = t.dataset.tabGo; render(); window.scrollTo(0,0); return; }
-  if(t.dataset.chip){ const f = t.dataset.chip; D[f] = D[f]===t.dataset.k ? null : t.dataset.k; t.parentElement.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(D[f]===c.dataset.k))); return; }
+  if(t.dataset.chip){ const [g,f] = t.dataset.chip.split("."), o = D.g[g]; o[f] = o[f]===t.dataset.k ? null : t.dataset.k; t.parentElement.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(o[f]===c.dataset.k))); return; }
   if(t.dataset.mchip){ const f = t.dataset.mchip; M[f] = (f!=="result" && M[f]===t.dataset.k) ? null : t.dataset.k; drawMoment(); return; }
   const a = t.dataset.act; if(!a) return;
   if(a==="ob-next"){ S.ob.step++; renderOnboarding(); }
@@ -487,9 +792,9 @@ document.addEventListener("click", async e => {
     S.profile = p; await saveProfile(p); S.tab = "today"; render(); }
   else if(a==="done"||a==="undo-done"){ const day = today(); day.done = a==="done"; await putToday(day); render(); if(a==="done") toast("מעשה אחד. זה מה שמשנה."); }
   else if(a==="quick-win"){ const day = today(); day.moments = [...(day.moments||[]), {result:"win", at:new Date().toISOString()}]; await putToday(day); render(); toast("ניצחון נרשם."); }
-  else if(a==="save-debrief"){ const texts = [D.autoText, D.winText, D.tomorrow]; const day = today(); day.debrief = {...D, at:new Date().toISOString()}; D = null; await putToday(day); render(); window.scrollTo(0,0);
+  else if(a==="save-debrief"){ const texts = [...CHANNELS.map(([c]) => D.g[c].text), D.tomorrow, (D.guideQ && D.guideQ.text) || ""]; const day = today(); day.debrief = {...D, at:new Date().toISOString()}; D = null; await putToday(day); render(); window.scrollTo(0,0);
     if(isDistress(texts)) openHelp("נשמע שעובר עליך משהו כבד. מגיע לך שמישהו יקשיב עכשיו."); else toast("ראית, למדת, ממשיכים."); }
-  else if(a==="edit-debrief"){ D = {...today().debrief}; render(); }
+  else if(a==="edit-debrief"){ const b = today().debrief; D = b.g ? JSON.parse(JSON.stringify(b)) : {...blankDraft(), tomorrow: b.tomorrow||""}; render(); }
   else if(a==="moment"){ openMoment(); }
   else if(a==="m-next"){ clearTimeout(breathT); M.step++; drawMoment(); }
   else if(a==="m-save"){ const day = today(); day.moments = [...(day.moments||[]), {result:M.result, arena:M.arena, channel:M.channel, at:new Date().toISOString()}]; await putToday(day); M.step = 3; drawMoment(); render(); }
@@ -498,6 +803,15 @@ document.addEventListener("click", async e => {
   else if(a==="settings"){ openSettings(); }
   else if(a==="pick-day"){ const want = Number(t.dataset.d), cur = realNow().getDay(); demoOffset = want - cur; closeOv(); render(); }
   else if(a==="real-day"){ demoOffset = 0; render(); }
+  else if(a==="preview-level"){ openLevelUp(Number(t.dataset.i), true); }
+  else if(a==="edit-mission"){ ov.innerHTML = `<div class="overlay"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>${missionCard(false)}</div></div>`; }
+  else if(a==="toggle-share"){ S.profile.shareWithGuide = !S.profile.shareWithGuide; await saveProfile(S.profile); await syncShare(); openSettings(); toast(S.profile.shareWithGuide ? "הסיכום השבועי משותף עם המלווה." : "השיתוף הופסק."); }
+  else if(a==="guide"){ openGuide(); }
+  else if(a==="guide-send"){ const i = Number(t.dataset.i), p = (S.guidePeople||[])[i], ta = document.getElementById("gt-"+i), text = ((ta && ta.value) || "").trim();
+    if(!p) return; if(!text){ toast("כתוב קודם משפט קצר."); return; }
+    try{ await store.db.collection("shares/"+p.id+"/notes").doc("n"+Date.now()).set({kind:t.dataset.k, text, at:new Date().toISOString(), by:store.uid}); toast("נשלח."); openGuide(); }
+    catch(e){ toast("השליחה לא הצליחה. נסה שוב."); } }
+  else if(a==="save-mission"){ const v = (document.getElementById("mission").value || "").trim(); S.profile.mission = v; await saveProfile(S.profile); closeOv(); render(); toast(v ? "השליחות נשמרה." : "השליחות נמחקה."); }
   else if(a==="demo-on"){ S.demo = makeDemo(); closeOv(); S.tab = "map"; render(); }
   else if(a==="demo-off"){ S.demo = null; closeOv(); render(); }
   else if(a==="redo-quiz"){ closeOv(); S.ob = {step:2, quiz:[], agreed:true}; S.profile = null; render(); }
@@ -508,6 +822,8 @@ document.addEventListener("click", async e => {
   await initStore();
   S.profile = await loadProfile();
   S.days = await loadDays() || {};
+  await loadNotes();
+  if(store.user){ try{ S.isGuide = await store.user.canEdit(); }catch(e){ S.isGuide = false; } }
   if(S.profile && S.profile.lastActive){ const gap = (Date.now() - Date.parse(S.profile.lastActive)) / 864e5; S.welcomeBack = gap > 3; }
   render();
 })();

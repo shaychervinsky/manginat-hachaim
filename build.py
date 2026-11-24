@@ -23,7 +23,7 @@ head = f"""<!doctype html>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>{title}</title>
 <meta name="description" content="עבודה פנימית יומית לפי מודל הנפש של ספר התניא">
-<meta name="theme-color" content="#0E1227">
+<meta name="theme-color" content="#EDF1EE">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -56,8 +56,8 @@ manifest = {
     "start_url": "./",
     "scope": "./",
     "display": "standalone",
-    "background_color": "#0E1227",
-    "theme_color": "#0E1227",
+    "background_color": "#EDF1EE",
+    "theme_color": "#EDF1EE",
     "icons": [
         {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
         {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png"},
