@@ -7,7 +7,7 @@ A Hebrew-first (RTL) personal-growth web app built on the Tanya's model of the s
 - `SPEC.md` — product spec.
 
 ## Rules
-- Content source is the Tanya text only. Never copy wording from commentaries or other authors' books. Every insight cites a Tanya chapter.
+- The Tanya is the backbone of the content, but not the only source: other sources (e.g. the Lubavitcher Rebbe) are welcome. Every insight and quote names its source (a Tanya chapter, or the author). Keep quotes short and attributed; otherwise write in the brand's own words rather than copying long passages.
 - Tone: no commandments, no charms, no self-blame ("ראית, למדת, ממשיכים").
 - No tasks or notifications on Shabbat.
 - Keep the "not a substitute for therapy" consent and the help card (ERAN 1201, Sahar, MDA 101, Police 100).
