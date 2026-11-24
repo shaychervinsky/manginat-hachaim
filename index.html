@@ -1313,12 +1313,13 @@ function weekOpeningCard(d, intent){
    Read line by line, a little slower than normal, so each part gets its own pause. */
 const VOICES = [["airy","אוורירי"],["rounded","עגול"],["buttery","חם"],["glassy","צלול"]];
 const RATES = [[0.85,"איטי"],[0.95,"רגיל"],[1.05,"מהיר"]];
-function voicePref(){ const v = (S.profile && S.profile.voice) || {}; return {voice: v.voice || "airy", rate: v.rate || 0.85}; }
+/* Default: the device's own Hebrew voice when there is one (a native accent); Claude's voices are an option. */
+function voicePref(){ const v = (S.profile && S.profile.voice) || {}; return {voice: v.voice || (deviceVoice() || !S.tts ? "device" : "airy"), rate: v.rate || 0.9}; }
 function speakLines(it){ return [it.t, it.x, `המעשה של היום. ${it.a}`]; }
 function deviceVoice(){ try{ const vs = speechSynthesis.getVoices(); return vs.find(v => /^he|^iw/i.test(v.lang)) || null; }catch(e){ return null; } }
 async function speakNow(lines, onDone){
   const {voice, rate} = voicePref();
-  if(S.tts){
+  if(S.tts && voice !== "device"){
     try{ await S.tts.speak(lines.map(text => ({text, voice, rate, language:"he"}))); }catch(e){}
     onDone(); return;
   }
@@ -1331,7 +1332,7 @@ async function speakNow(lines, onDone){
 }
 async function toggleListen(){
   const it = S.todayItem; if(!it) return;
-  if(S.speaking){ S.speaking = false; try{ S.tts ? S.tts.stop() : speechSynthesis.cancel(); }catch(e){} render(); return; }
+  if(S.speaking){ S.speaking = false; try{ if(S.tts) S.tts.stop(); }catch(e){} try{ speechSynthesis.cancel(); }catch(e){} render(); return; }
   S.speaking = true; render();
   speakNow(speakLines(it), () => { S.speaking = false; render(); });
 }
@@ -1340,7 +1341,9 @@ function voiceCard(){
   const {voice, rate} = voicePref();
   const chips = (arr, act, cur) => `<div class="chips">${arr.map(([k,l]) => `<button class="chip" type="button" data-act="${act}" data-k="${k}" aria-pressed="${String(cur)===String(k)}">${esc(l)}</button>`).join("")}</div>`;
   return `<div class="card"><p class="eyebrow">קול ההקראה</p>
-    ${S.tts ? `<span class="label">הקול</span>${chips(VOICES, "set-voice", voice)}` : `<p class="small muted">כאן ההקראה בקול של המכשיר. ב-claude.ai יש ארבעה קולות לבחירה.</p>`}
+    ${S.tts ? `<span class="label">הקול</span>${chips([["device", deviceVoice() ? "עברי של המכשיר" : "של המכשיר"], ...VOICES], "set-voice", voice)}
+      <p class="small muted">הקול העברי של המכשיר נשמע הכי טבעי. הקולות האחרים הם של Claude, עם מבטא זר.</p>` : `<p class="small muted">ההקראה בקול העברי של המכשיר.</p>`}
+    ${!deviceVoice() ? `<p class="small muted">לא נמצא במכשיר הזה קול עברי. אפשר להוסיף אותו בהגדרות ההקראה של המכשיר (באייפון ובמק: ״כרמית״).</p>` : ""}
     <span class="label">הקצב</span>${chips(RATES, "set-rate", rate)}
     <div><button class="quiet-win" data-act="voice-sample" type="button">לשמוע דוגמה</button></div></div>`;
 }
@@ -1652,6 +1655,7 @@ document.addEventListener("click", async e => {
   if(store.user){ try{ S.isGuide = await store.user.canEdit(); }catch(e){ S.isGuide = false; } }
   try{ if(window.claude && typeof window.claude.use === "function") S.tts = await withTimeout(window.claude.use("tts"), 4000); }catch(e){ S.tts = null; }
   S.canSpeak = !!S.tts || ("speechSynthesis" in window && typeof SpeechSynthesisUtterance === "function");
+  try{ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => { if(ov.innerHTML.includes("קול ההקראה")) openSettings(); }; }catch(e){}
   if(S.profile && S.profile.lastActive){ const gap = (Date.now() - Date.parse(S.profile.lastActive)) / 864e5; S.welcomeBack = gap > 3; }
   render();
 })();
