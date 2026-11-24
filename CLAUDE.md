@@ -5,7 +5,7 @@ A Hebrew-first (RTL) personal-growth web app built on the Tanya's model of the s
 ## Layout
 - `index.html` — the app source: one self-contained page (HTML + CSS + vanilla JS). Content lives in the constants at the top of the script (`POWERS`, `MONTHS`, `LEVELS`, `QUIZ`, `MIDDOT`, `DISTRESS`). This is the single source of truth; everything else is built or copied from it.
 - `build.py` — builds the installable PWA into `docs/` (served by GitHub Pages). Run `python3 build.py` after every change to `index.html` and commit both.
-- `brand/` — the logo ("התו והנר": a note whose stem becomes a candle flame) as SVG; `docs/icons/*.png` are rendered from `brand/app-icon*.svg`.
+- `brand/` — the logo ("הפאוזה": a fermata, an arc over a dot — stop on the note; works in Hebrew and English) as SVG; `docs/icons/*.png` are rendered from `brand/app-icon*.svg`.
 - `SPEC.md` — product spec (Hebrew).
 
 ## Where things live (one name each)
