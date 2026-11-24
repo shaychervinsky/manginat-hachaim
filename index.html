@@ -1654,7 +1654,10 @@ document.addEventListener("click", async e => {
   await loadNotes();
   if(store.user){ try{ S.isGuide = await store.user.canEdit(); }catch(e){ S.isGuide = false; } }
   try{ if(window.claude && typeof window.claude.use === "function") S.tts = await withTimeout(window.claude.use("tts"), 4000); }catch(e){ S.tts = null; }
-  S.canSpeak = !!S.tts || ("speechSynthesis" in window && typeof SpeechSynthesisUtterance === "function");
+  /* Listening is hidden for now: Claude's voices read Hebrew with a foreign accent, and the device's voice is blocked on claude.ai.
+     Turn it back on (true) once there are pre-made Hebrew audio files or human recordings. */
+  const LISTEN_ENABLED = false;
+  S.canSpeak = LISTEN_ENABLED && (!!S.tts || ("speechSynthesis" in window && typeof SpeechSynthesisUtterance === "function"));
   try{ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => { if(ov.innerHTML.includes("קול ההקראה")) openSettings(); }; }catch(e){}
   if(S.profile && S.profile.lastActive){ const gap = (Date.now() - Date.parse(S.profile.lastActive)) / 864e5; S.welcomeBack = gap > 3; }
   render();
