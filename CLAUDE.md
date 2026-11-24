@@ -16,6 +16,7 @@ A Hebrew-first (RTL) personal-growth web app built on the Tanya's model of the s
 
 ## Vocabulary
 - The evening practice is **התבוננות ערב** (never "תחקיר"). In code it is still `debrief` internally.
+- English name, for now: **Melody of Life** (not final).
 - The look is the calm version ("נוסח שקט"); there is no other palette.
 
 ## Rules
