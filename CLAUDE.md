@@ -12,6 +12,7 @@ A Hebrew-first (RTL) personal-growth web app built on the Tanya's model of the s
 - App, installable: GitHub Pages from `docs/` on `main`.
 - App on claude.ai: https://claude.ai/artifact/WiXonev3tnCN4cGSYBRjSz — republish `index.html` there after changes.
 - Design system: https://claude.ai/artifact/CijEKYQ4aHCQ3jLaPuHVF9 — tokens, components, voice. Change it when the look changes.
+- Content review sheet: https://claude.ai/artifact/HPpA9T6w31u59k7F9XdRSS — every daily item, level question and middah line, with a status per row. The `מזהה` column (e.g. `thought.3`, `hanukkah.2`) maps a row to its place in `index.html`. Approved rows are copied back into the code.
 - Screen designs and logo: https://claude.ai/artifact/V59ZCeHoDjCRLog45KFyw8 — mockups only, not the app.
 
 ## Vocabulary
