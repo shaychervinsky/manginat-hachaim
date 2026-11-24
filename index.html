@@ -211,7 +211,7 @@ textarea,input[type=text]{background:none;border:none;border-bottom:1px solid va
 <nav class="nav" id="nav" hidden aria-label="ניווט" dir="rtl" lang="he">
   <div class="nav-in">
     <button class="tab" data-tab="today" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>היום</button>
-    <button class="tab" data-tab="debrief" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>תחקיר</button>
+    <button class="tab" data-tab="debrief" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>התבוננות</button>
     <button class="moment-btn" data-act="moment" type="button">אני באוטומט</button>
     <button class="tab" data-tab="map" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 6h20M2 10h20M2 14h20M2 18h20"/><ellipse cx="9" cy="16" rx="2.6" ry="2" fill="currentColor"/></svg>המפה</button>
   </div>
@@ -456,7 +456,7 @@ function renderOnboarding(){
     <div class="card"><p class="eyebrow">שיטה לעבודה פנימית, מבוססת על ספר התניא</p>
       <h1 class="hero-title">כשטוב לך עם עצמך, טוב לך עם כולם.</h1>
       <p>החיים הם תזמורת: בית, עבודה, אנשים, ואתה עצמך. כדי שהכול יישמע מדויק, מתחילים מהשורש, מהעבודה שלך עם עצמך.</p>
-      <p class="muted">כל יום: רעיון אחד, מעשה אחד, ותחקיר קצר בערב. בלי סגולות ובלי הלקאה עצמית.</p>
+      <p class="muted">כל יום: רעיון אחד, מעשה אחד, והתבוננות קצרה בערב. בלי סגולות ובלי הלקאה עצמית.</p>
       <div><button class="btn" data-act="ob-next" type="button">להתחיל</button></div></div>`;
   } else if(o.step === 1){
     app.innerHTML = `<div class="top"><span class="brand">לפני שמתחילים</span></div>
@@ -523,15 +523,15 @@ function renderToday(){
         <div class="row">${day.done?`<button class="btn done" data-act="undo-done" type="button">✓ עשיתי</button>`:`<button class="btn" data-act="done" type="button">עשיתי</button>`}</div></div></div>
     <div class="card center"><p class="muted">עצרת היום ובחרת אחרת, גם בדבר קטן?</p>
       <div><button class="quiet-win" data-act="quick-win" type="button">לסמן רגע של בחירה</button></div></div>
-    <div class="card"><span class="label">בערב</span>${day.debrief?`<p>✓ התחקיר של היום הושלם. <button class="link" data-tab-go="debrief" type="button">לצפייה</button></p>`
-      :`<p>תחקיר של דקה: מה תכננת, מה קרה, מה אתה לוקח למחר.</p><div><button class="btn ghost" data-tab-go="debrief" type="button">לתחקיר</button></div>`}</div>`;
+    <div class="card"><span class="label">בערב</span>${day.debrief?`<p>✓ ההתבוננות של היום הושלמה. <button class="link" data-tab-go="debrief" type="button">לצפייה</button></p>`
+      :`<p>התבוננות של דקה: מה תכננת, מה קרה, מה אתה לוקח למחר.</p><div><button class="btn ghost" data-tab-go="debrief" type="button">להתבוננות</button></div>`}</div>`;
   }
   app.innerHTML = header() + body + footer();
 }
 let D = null; // debrief draft
 function renderDebrief(){
   const day = today();
-  if(now().getDay() === 6){ app.innerHTML = header() + `<div class="card center">${restMark()}<p class="eyebrow">שבת</p><p>אין תחקיר בשבת. נתראה במוצאי שבת.</p></div>` + footer(); return; }
+  if(now().getDay() === 6){ app.innerHTML = header() + `<div class="card center">${restMark()}<p class="eyebrow">שבת</p><p>אין התבוננות בשבת. נתראה במוצאי שבת.</p></div>` + footer(); return; }
   const lab = (arr,k) => (arr.find(a => a[0]===k)||[,""])[1];
   if(day.debrief && !D){
     const b = day.debrief;
@@ -540,14 +540,14 @@ function renderDebrief(){
       const rows = CHANNELS.filter(([c]) => b.g[c] && (b.g[c].text || b.g[c].result)).map(([c,name]) => { const o = b.g[c];
         return `<div class="card"><p class="eyebrow">${esc(name)}${o.result?` · <span style="color:var(--${o.result==="win"?"good":"auto"})">${o.result==="win"?"ניצחתי":"האוטומט ניהל"}</span>`:""}${o.arena?` · ${esc(lab(ARENAS,o.arena))}`:""}</p>
           <p class="small muted">${esc(L.g[c])}</p><p>${esc(o.text)||"<span class='muted'>לא נכתב</span>"}</p></div>`; }).join("");
-      app.innerHTML = header() + `<div class="card accent"><p class="eyebrow">התחקיר של היום · דרגת ${esc(L.n)}</p><h2 style="font-size:1.6rem">ראית, למדת, ממשיכים.</h2></div>`
+      app.innerHTML = header() + `<div class="card accent"><p class="eyebrow">ההתבוננות של היום · דרגת ${esc(L.n)}</p><h2 style="font-size:1.6rem">ראית, למדת, ממשיכים.</h2></div>`
         + (rows || `<div class="card"><p class="muted">לא נכתב על אף לבוש.</p></div>`)
         + (b.guideQ && b.guideQ.text ? `<div class="card"><p class="eyebrow">שאלה מהמלווה</p><p class="small muted">${esc(b.guideQ.q)}</p><p>${esc(b.guideQ.text)}</p></div>` : "")
         + `<div class="card"><span class="label">מה לוקחים למחר</span><p>${esc(b.tomorrow)||"<span class='muted'>לא נכתב</span>"}</p>
           <div><button class="link" data-act="edit-debrief" type="button">עריכה</button></div></div>` + footer();
       return;
     }
-    app.innerHTML = header() + `<div class="card accent"><p class="eyebrow">התחקיר של היום</p><h2 style="font-size:1.6rem">ראית, למדת, ממשיכים.</h2></div>
+    app.innerHTML = header() + `<div class="card accent"><p class="eyebrow">ההתבוננות של היום</p><h2 style="font-size:1.6rem">ראית, למדת, ממשיכים.</h2></div>
       <div class="card"><span class="label">מתי האוטומט ניהל אותך${b.autoChannel?` · ${esc(lab(CHANNELS,b.autoChannel))}`:""}${b.autoArena?` · ${esc(lab(ARENAS,b.autoArena))}`:""}</span><p>${esc(b.autoText)||"<span class='muted'>לא נכתב</span>"}</p>
         <span class="label">מתי אתה ניצחת${b.winArena?` · ${esc(lab(ARENAS,b.winArena))}`:""}</span><p>${esc(b.winText)||"<span class='muted'>לא נכתב</span>"}</p>
         <span class="label">מה לוקחים למחר</span><p>${esc(b.tomorrow)||"<span class='muted'>לא נכתב</span>"}</p>
@@ -558,7 +558,7 @@ function renderDebrief(){
   const L = LEVELS[D.lvl], gq = recentNote("question", 7);
   const chips = (arr, field, val) => `<div class="chips">${arr.map(([k,l]) => `<button class="chip" type="button" data-chip="${field}" data-k="${k}" aria-pressed="${val===k}">${esc(l)}</button>`).join("")}</div>`;
   const RESULTS = [["win","ניצחתי"],["auto","האוטומט ניהל"]];
-  app.innerHTML = header() + `<div class="card"><p class="eyebrow">תחקיר ערב · דרגת ${esc(L.n)}</p><p>${esc(L.focus)}</p>${S.profile && S.profile.mission ? `<p class="small"><b>השליחות שלך:</b> ${esc(S.profile.mission)}</p>` : ""}<p class="small muted">ענה על לבוש אחד לפחות. בלי האשמה, רק מה היה ומה לומדים.</p></div>`
+  app.innerHTML = header() + `<div class="card"><p class="eyebrow">התבוננות ערב · דרגת ${esc(L.n)}</p><p>${esc(L.focus)}</p>${S.profile && S.profile.mission ? `<p class="small"><b>השליחות שלך:</b> ${esc(S.profile.mission)}</p>` : ""}<p class="small muted">ענה על לבוש אחד לפחות. בלי האשמה, רק מה היה ומה לומדים.</p></div>`
   + CHANNELS.map(([c,name]) => { const o = D.g[c]; return `<div class="card"><p class="eyebrow">${esc(name)}</p>
     <label class="q" for="d-${c}">${esc(L.g[c])}</label>
     <textarea id="d-${c}" rows="2" placeholder="רגע אחד מספיק">${esc(o.text)}</textarea>
@@ -569,7 +569,7 @@ function renderDebrief(){
     <p class="small muted">המלווה לא רואה את מה שכתבת. אפשר לספר לו בשיחה, אם תרצה.</p></div>` : "")
   + `<div class="card"><label class="q" for="d-tom">על איזה לבוש תעבוד מחר, ואיך?</label>
     <input id="d-tom" type="text" placeholder="החלטה קטנה אחת" value="${esc(D.tomorrow)}"></div>
-  <div><button class="btn" data-act="save-debrief" type="button">סיום התחקיר</button></div>` + footer();
+  <div><button class="btn" data-act="save-debrief" type="button">סיום ההתבוננות</button></div>` + footer();
   CHANNELS.forEach(([c]) => document.getElementById("d-"+c).addEventListener("input", e => { D.g[c].text = e.target.value; }));
   document.getElementById("d-tom").addEventListener("input", e => { D.tomorrow = e.target.value; });
   const gqEl = document.getElementById("d-gq");
@@ -617,7 +617,7 @@ function renderMap(){
   const strongest = CHANNELS.map(([k]) => [k, chW[k]]).sort((a,b) => b[1]-a[1])[0];
   app.innerHTML = header() + `<div class="card"><p class="eyebrow">מפת השבוע</p>${weekStaff()}
     <div class="key"><span><i class="kn ink"></i>יום עבודה</span><span><i class="kn hol"></i>יום שקט</span><span><i class="kn pen"></i>היום</span><span>ככל שהתו גבוה יותר, עשית יותר</span></div></div>`
-  + (empty ? `<div class="card center"><p class="q">המפה תתמלא מהעבודה שלך</p><p class="muted">כל ״עשיתי״, כל ״ניצחתי״ וכל תחקיר ערב מוסיפים לה תו. אחרי כמה ימים תראה איפה האוטומט תופס אותך, ואיך העבודה הפנימית מגיעה לכל הזירות.</p>
+  + (empty ? `<div class="card center"><p class="q">המפה תתמלא מהעבודה שלך</p><p class="muted">כל ״עשיתי״, כל ״ניצחתי״ וכל התבוננות ערב מוסיפים לה תו. אחרי כמה ימים תראה איפה האוטומט תופס אותך, ואיך העבודה הפנימית מגיעה לכל הזירות.</p>
       <div>${S.demo?"":`<button class="btn ghost" data-act="demo-on" type="button">להציג נתוני הדגמה</button>`}</div></div>`
    : `<div class="card"><div class="stats"><div><div class="big" style="color:var(--good)">${wins}</div><span class="small muted">ניצחונות</span></div>
       <div><div class="big" style="color:var(--auto)">${autos}</div><span class="small muted">רגעי אוטומט</span></div>
@@ -656,7 +656,7 @@ function openLevelUp(i, preview){
     ${preview?`<div class="demo-banner">תצוגה בלבד. הדרגה שלך לא השתנתה.</div>`:""}
     <div class="card accent center"><p class="eyebrow">${i===0?"הדרגה הראשונה":"עלית דרגה"}</p><h2 style="font-size:2.8rem;color:var(--pen)">${esc(L.n)}</h2>
       <p class="src">${esc(L.d)}</p><p>${esc(L.focus)}</p></div>
-    <div class="card"><span class="label">מעכשיו, בתחקיר הערב</span>
+    <div class="card"><span class="label">מעכשיו, בהתבוננות הערב</span>
       ${CHANNELS.map(([c,name]) => `<p><b>${esc(name)}:</b> ${esc(L.g[c])}</p>`).join("")}
       <p class="small muted">אותם שלושה לבושים, שאלה עמוקה יותר. העבודה לא מתחילה מחדש, היא ממשיכה לעומק.</p></div>
     ${i===LEVELS.length-1 ? missionCard(preview) : ""}
@@ -721,7 +721,7 @@ function openSettings(){
     <div class="card"><p class="eyebrow">מצב הדגמה</p><p class="muted small">להצגת האפליקציה למשקיעים ולשותפים: אפשר לראות כל יום בשבוע, ולהציג נתונים לדוגמה במפה.</p>
       <span class="label">תצוגה של יום</span><div class="chips">${DAY_LABEL.map((l,i) => { const cur = now().getDay(); return `<button class="chip" type="button" data-act="pick-day" data-d="${i}" aria-pressed="${cur===i}">${l}</button>`; }).join("")}</div>
       <div class="row">${S.demo?`<button class="btn ghost" data-act="demo-off" type="button">הסתרת נתוני הדגמה</button>`:`<button class="btn ghost" data-act="demo-on" type="button">הצגת נתוני הדגמה</button>`}</div>
-      <span class="label">הדרגות ושאלות התחקיר שלהן</span><div class="chips">${LEVELS.map((l,i) => `<button class="chip" type="button" data-act="preview-level" data-i="${i}">${esc(l.n)}</button>`).join("")}</div></div>
+      <span class="label">הדרגות ושאלות ההתבוננות שלהן</span><div class="chips">${LEVELS.map((l,i) => `<button class="chip" type="button" data-act="preview-level" data-i="${i}">${esc(l.n)}</button>`).join("")}</div></div>
     <div class="card"><p class="eyebrow">הפרופיל</p><p>המידה שמובילה אותך: <b>${esc((MIDDOT[S.profile.middah]||{}).n||"")}</b></p>
       <div><button class="link" data-act="redo-quiz" type="button">לעשות שוב את השאלון</button></div></div>
     ${shareCard()}
@@ -733,7 +733,7 @@ function shareCard(){
   if(store.mode!=="cloud") return `<div class="card"><p class="eyebrow">ליווי</p><p class="small muted">שיתוף עם מלווה זמין רק כשהנתונים שמורים בחשבון שלך.</p></div>`;
   return `<div class="card"><p class="eyebrow">ליווי</p>
     <p>${on ? "אתה משתף סיכום שבועי עם המלווה שלך." : "אפשר לשתף סיכום שבועי עם מלווה."}</p>
-    <p class="small muted">המלווה רואה רק את הדרגה, את ימי העבודה, ואת מספר הניצחונות ורגעי האוטומט בכל לבוש. מה שאתה כותב בתחקיר נשאר רק אצלך.</p>
+    <p class="small muted">המלווה רואה רק את הדרגה, את ימי העבודה, ואת מספר הניצחונות ורגעי האוטומט בכל לבוש. מה שאתה כותב בהתבוננות נשאר רק אצלך.</p>
     <div><button class="btn${on?" ghost":""}" data-act="toggle-share" type="button">${on ? "הפסקת השיתוף" : "שיתוף עם המלווה"}</button></div></div>`;
 }
 /* The guide's screen: one card per person who shares, with their week by garment, and a place to send a good word or a weekly question. */
@@ -761,7 +761,7 @@ async function openGuide(){
             <button class="btn ghost" data-act="guide-send" data-i="${i}" data-k="question" type="button">שליחה כשאלה לשבוע</button></div></div>`; }).join("");
   ov.innerHTML = `<div class="overlay" role="dialog" aria-label="מסך הליווי"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>
     <div class="card accent"><p class="eyebrow">הליווי שלך</p><p>מלווים לא מתקנים ולא שופטים. מילה טובה אחת ושאלה אחת לשבוע מספיקות.</p>
-      <p class="small muted">מילה טובה מופיעה אצלו במסך ״היום״ לשבועיים. שאלה לשבוע מצטרפת לתחקיר הערב שלו לשבוע.</p></div>${body}</div></div>`;
+      <p class="small muted">מילה טובה מופיעה אצלו במסך ״היום״ לשבועיים. שאלה לשבוע מצטרפת להתבוננות הערב שלו לשבוע.</p></div>${body}</div></div>`;
 }
 function makeDemo(){
   const out = {}, d = now(), ws = weekStart(d), ar = ARENAS.map(a=>a[0]), ch = CHANNELS.map(c=>c[0]);
