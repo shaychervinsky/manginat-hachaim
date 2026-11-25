@@ -995,6 +995,41 @@ const MONTHLY = {
 ]
 }
 };
+/* Guided contemplation, once a week on the intellect day. The Tanya's own method: "יעמיק מחשבתו ויצייר בשכלו" (ch. 33).
+   Each step is read at the person's own pace. Every quote checked against the Tanya text. */
+const GUIDED = [
+ {t:"הנר שעולה", s:"תניא, פרק י״ט", steps:[
+  "שב בנוח. אם נוח לך, עצום עיניים. שלוש נשימות איטיות.",
+  "דמיין נר דולק לפניך, בחדר שקט. רק להבה אחת.",
+  "שים לב ללהבה: היא זזה כל הזמן, ותמיד כלפי מעלה. התניא מתאר את הנשמה ״כאור הנר שמתנענע תמיד למעלה בטבעו״.",
+  "עכשיו הקשב: איפה בך יש משהו שרוצה לעלות? אולי בחזה, אולי בנשימה. אין צורך למצוא. רק להקשיב.",
+  "שאל בשקט: לאן הלהבה שבי רוצה לעלות השבוע? חכה, ותן לתשובה לבוא מעצמה.",
+  "אם עלתה מילה או תמונה, קח אותה איתך. אם לא, גם זה בסדר.",
+  "שלוש נשימות. פתח את העיניים לאט, וחזור לחדר."]},
+ {t:"שני קולות בעיר אחת", s:"תניא, פרק ט׳", steps:[
+  "שב בנוח. אם נוח לך, עצום עיניים. שלוש נשימות איטיות.",
+  "דמיין עיר קטנה ושקטה. זו העיר שלך: הגוף, הימים, ההרגלים.",
+  "התניא מתאר שני מלכים ״נלחמים על עיר אחת״. אחד רוצה נוחות, עכשיו. השני רוצה משמעות.",
+  "הקשב לקול הראשון, האוטומט. מה הוא אומר לך השבוע? אל תתווכח איתו. רק שמע.",
+  "עכשיו הקשב לקול השני, העמוק. הוא שקט יותר. מה הוא רוצה בשבילך?",
+  "דמיין שהעיר מקשיבה לקול העמוק ליום אחד. איך נראה היום הזה? רגע אחד ממנו מספיק.",
+  "שלוש נשימות. פתח את העיניים לאט, וחזור לחדר."]},
+ {t:"אור קטן בחדר חשוך", s:"תניא, פרק י״ב", steps:[
+  "שב בנוח. אם נוח לך, עצום עיניים. שלוש נשימות איטיות.",
+  "דמיין חדר חשוך. לא מפחיד, רק חשוך.",
+  "מישהו מדליק אור קטן אחד. שים לב: החושך לא נלחם, הוא פשוט נסוג. ״שמעט אור גשמי דוחה הרבה מן החשך״.",
+  "חשוב על מקום אחד חשוך בשבוע שלך: מצב, קשר, הרגל.",
+  "דמיין אור קטן אחד שאתה מביא לשם. לא פתרון לכול, רק מעשה אחד קטן. מה הוא?",
+  "ראה את המקום הזה קצת יותר מואר. הישאר שם עוד נשימה אחת.",
+  "שלוש נשימות. פתח את העיניים לאט, וחזור לחדר."]},
+ {t:"פנים במים", s:"תניא, פרק מ״ו", steps:[
+  "שב בנוח. אם נוח לך, עצום עיניים. שלוש נשימות איטיות.",
+  "דמיין אגם שקט. המים חלקים כמו מראה.",
+  "התכופף והבט: הפנים שלך משתקפות. אם תחייך, ההשתקפות מחייכת. ״כמים הפנים לפנים, כן לב האדם אל האדם״.",
+  "חשוב על אדם אחד קרוב. ראה את הפנים שלו.",
+  "שלח אליו בלב משהו טוב: הוקרה, סליחה, חום. אל תחפש מילים, רק תחושה.",
+  "דמיין שהוא מקבל את זה, ומשהו מזה חוזר אליך, כמו במים.",
+  "שלוש נשימות. פתח את העיניים לאט, וחזור לחדר."]}];
 const ORD = ["הראשון","השני","השלישי","הרביעי","החמישי","השישי","השביעי","השמיני"];
 const DAY_LABEL = ["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"];
 const DAY_SHORT = ["א׳","ב׳","ג׳","ד׳","ה׳","ו׳","שבת"];
@@ -1202,7 +1237,7 @@ async function putToday(day){
   if(S.profile){ const t = new Date().toISOString(); S.profile.lastActive = t; await saveProfile(S.profile); }
   if(S.profile && S.profile.shareWithGuide) syncShare();
 }
-function activeDays(){ return Object.values(days()).filter(d => d.done || (d.moments||[]).length || d.debrief).length; }
+function activeDays(){ return Object.values(days()).filter(d => d.done || (d.moments||[]).length || d.debrief || d.morning || d.noon || d.guided).length; }
 function level(){
   const n = activeDays(); let i = 0; LEVELS.forEach((l,j) => { if(n >= l.from) i = j; });
   const next = LEVELS[i+1]; const pct = next ? Math.round((n - LEVELS[i].from) / (next.from - LEVELS[i].from) * 100) : 100;
@@ -1298,6 +1333,7 @@ function renderToday(){
   const hn = chanukahDay(d), wk = keyOf(weekStart(d)), intent = S.profile && S.profile.intents && S.profile.intents[wk];
   let body = (hn ? `<div class="staff-card">${candles(hn)}</div>` : `<div class="staff-card">${weekStaff()}</div>`)
     + (intent && dow !== 0 ? `<p class="intent">השבוע: <b>${esc(intent)}</b></p>` : "")
+    + (dow !== 6 ? morningCard(day, d) : "")
     + (dow === 0 ? weekOpeningCard(d, intent) : "") + missionNote() + guideWordCard();
   if(S.welcomeBack) body += `<div class="card accent"><p class="eyebrow">ברוך שובך</p><p>החזרה עצמה היא חלק מהעבודה. אין כאן רצף שנשבר, יש מנגינה שממשיכה.</p></div>`;
   if(dow === 6){
@@ -1317,10 +1353,31 @@ function renderToday(){
         <div class="row">${day.done?`<button class="btn done" data-act="undo-done" type="button">✓ עשיתי</button>`:`<button class="btn" data-act="done" type="button">עשיתי</button>`}</div></div></div>
     <div class="card center"><p class="muted">עצרת היום ובחרת אחרת, גם בדבר קטן?</p>
       <div><button class="quiet-win" data-act="quick-win" type="button">לסמן רגע של בחירה</button></div></div>
+    ${noonCard(day, d)}${dow === 0 ? guidedCard(day, d) : ""}
     <div class="card"><span class="label">בערב</span>${day.debrief?`<p>✓ ההתבוננות של היום הושלמה. <button class="link" data-tab-go="debrief" type="button">לצפייה</button></p>`
       :`<p>התבוננות של דקה: מה היה היום במחשבה, בדיבור ובמעשה.</p><div><button class="btn ghost" data-tab-go="debrief" type="button">להתבוננות</button></div>`}</div>`;
   }
   app.innerHTML = header() + body + footer();
+}
+/* Three touch points a day, like the prayers: a morning intention, a midday stop, the evening reflection.
+   Morning and midday show by the clock and are always optional; nothing counts what was missed. */
+function morningCard(day, d){
+  if(day.morning && day.morning.intent) return `<p class="intent">הכוונה להיום: <b>${esc(day.morning.intent)}</b></p>`;
+  if(d.getHours() >= 12 || day.morning) return "";
+  return `<div class="card center"><p class="eyebrow">רגע של בוקר</p><p>דקה אחת: שלוש נשימות וכוונה אחת ליום.</p>
+    <div><button class="btn ghost" data-act="pause" data-k="morning" type="button">להתחיל את היום</button></div></div>`;
+}
+function noonCard(day, d){
+  const h = d.getHours(); if(h < 12 || h >= 17) return "";
+  if(day.noon) return `<p class="intent">עצרת בצהריים ✓</p>`;
+  return `<div class="card center"><p class="eyebrow">עצירה של צהריים</p><p class="muted">חצי דקה: איפה אני עכשיו?</p>
+    <div><button class="btn ghost" data-act="pause" data-k="noon" type="button">לעצור לרגע</button></div></div>`;
+}
+function guidedCard(day, d){
+  const g = GUIDED[weekNum(d) % GUIDED.length];
+  return `<div class="card"><p class="eyebrow">התבוננות מודרכת · פעם בשבוע</p><h2 style="font-size:1.6rem">${esc(g.t)}</h2>
+    <p class="muted">חמש דקות של דמיון מודרך, בקצב שלך. ${day.guided ? "✓ עשית את זה היום." : ""}</p>
+    <div><button class="btn ghost" data-act="guided" type="button">${day.guided ? "שוב" : "להתחיל"}</button></div></div>`;
 }
 /* Sunday: open the week. Last week's melody, and one thing to take into this week. */
 function weekOpeningCard(d, intent){
@@ -1521,7 +1578,7 @@ function missionCard(preview){
 }
 
 /* ---------- overlays ---------- */
-function closeOv(){ ov.innerHTML = ""; clearTimeout(breathT); }
+function closeOv(){ ov.innerHTML = ""; clearTimeout(breathT); clearTimeout(pzT); PZ = null; GD = null; }
 function helpCard(lead){
   return `<div class="card help"><p class="eyebrow">עזרה עכשיו</p>${lead?`<p>${esc(lead)}</p>`:""}
     <p>האפליקציה לא יכולה להחליף אדם שמקשיב. אפשר לפנות עכשיו, בחינם ובאנונימיות:</p>
@@ -1542,6 +1599,57 @@ function openClosing(day){
       <button class="btn" data-act="close-day" type="button">${fri ? "שבת שלום" : "לילה טוב"}</button>
       <button class="quiet-win" data-act="closing-map" type="button">לצפות במפת השבוע</button></div>
   </div></div>`;
+}
+let PZ = null, pzT = null;
+function breathView(cycle, total, phase){
+  return `<svg class="ferm ${phase}" viewBox="0 0 160 110" aria-hidden="true"><path class="arc" d="M20 70 A60 60 0 0 1 140 70"/><circle class="dotp" cx="80" cy="56" r="8"/><line x1="0" y1="100" x2="160" y2="100"/></svg>
+    <div class="breath-word">${phase==="in"?"שאיפה":"נשיפה"}</div><p class="center small muted">נשימה ${cycle+1} מתוך ${total}</p>
+    <div class="center"><button class="link" data-act="pz-next" type="button">דילוג</button></div>`;
+}
+function openPause(kind){ PZ = {kind, step:0, cycle:0, phase:"in", total: kind==="morning" ? 3 : 1, who:null}; drawPause(); }
+function drawPause(){
+  clearTimeout(pzT);
+  let inner = "";
+  if(PZ.step === 0){
+    inner = `<p class="eyebrow center">${PZ.kind==="morning" ? "רגע של בוקר" : "עצירה של צהריים"}</p>` + breathView(PZ.cycle, PZ.total, PZ.phase);
+    pzT = setTimeout(() => { if(!PZ || PZ.step!==0) return; if(PZ.phase==="in") PZ.phase = "out"; else { PZ.phase = "in"; PZ.cycle++; if(PZ.cycle >= PZ.total) PZ.step = 1; } drawPause(); }, 4000);
+  } else if(PZ.kind === "morning"){
+    inner = `<div class="card accent center"><p class="eyebrow">כוונה ליום</p><label class="q" for="pz-intent">מה אתה רוצה שיהיה היום, אחרי שהוא יעבור?</label>
+      <p class="src">״ראשית העבודה ועיקרה ושרשה״ · תניא, פרק מ״א</p></div>
+      <input id="pz-intent" type="text" placeholder="משפט אחד, למשל: סבלנות בבית">
+      <div class="center"><button class="btn" data-act="pz-save" type="button">זו הכוונה שלי</button></div>`;
+  } else if(PZ.step === 1){
+    const morning = today().morning;
+    inner = `<div class="card accent center"><p class="q">איפה אני עכשיו?</p><p class="muted">מי מנהל את הרגע הזה?</p>
+      ${morning && morning.intent ? `<p class="small">הכוונה של הבוקר: <b>${esc(morning.intent)}</b></p>` : ""}</div>
+      <div class="chips" style="justify-content:center">
+        <button class="chip" type="button" data-act="pz-who" data-k="auto">האוטומט</button>
+        <button class="chip" type="button" data-act="pz-who" data-k="deep">האני העמוק</button>
+        <button class="chip" type="button" data-act="pz-who" data-k="unsure">לא בטוח</button></div>
+      <p class="center src">״ששני מלכים נלחמים על עיר אחת״ · תניא, פרק ט׳</p>`;
+  } else {
+    const line = {auto:"ראית את זה. זה כבר הרגע שבו אפשר לבחור.", deep:"יפה. תן לזה להמשיך עוד קצת.", unsure:"גם לשים לב זה חלק מהעבודה."}[PZ.who];
+    inner = `<div class="card accent center"><h2 style="font-size:1.8rem">${esc(line)}</h2></div>
+      <div class="center"><button class="btn" data-act="close" type="button">חזרה ליום</button></div>`;
+  }
+  ov.innerHTML = `<div class="overlay" role="dialog" aria-label="${PZ.kind==="morning" ? "רגע של בוקר" : "עצירה של צהריים"}"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>${inner}</div></div>`;
+}
+let GD = null;
+function openGuided(){ GD = {g: GUIDED[weekNum(now()) % GUIDED.length], step:-1}; drawGuided(); }
+function drawGuided(){
+  const {g, step} = GD, last = step === g.steps.length - 1;
+  const inner = step < 0
+    ? `<div class="card accent center"><p class="eyebrow">התבוננות מודרכת</p><h2 style="font-size:2rem">${esc(g.t)}</h2>
+        <p>קרא כל שלב, ואז תן לו זמן. אין קצב נכון. אפשר לעצור בכל רגע.</p>
+        <p class="src">״יעמיק מחשבתו ויצייר בשכלו״ · תניא, פרק ל״ג</p></div>
+       <div class="center"><button class="btn" data-act="gd-next" type="button">להתחיל</button></div>`
+    : `<div class="dots5" aria-label="שלב ${step+1} מתוך ${g.steps.length}">${g.steps.map((_,i) => `<i class="${i<=step?"on":""}"></i>`).join("")}</div>
+       <p class="q center" style="min-height:9rem;display:grid;place-items:center">${esc(g.steps[step])}</p>
+       <div class="center" style="display:grid;gap:12px;justify-items:center">
+         <button class="btn${last?"":" ghost"}" data-act="${last?"gd-done":"gd-next"}" type="button">${last?"סיום":"הבא"}</button>
+         ${step>0?`<button class="quiet-win" data-act="gd-back" type="button">חזרה</button>`:""}</div>
+       <p class="center small muted">${esc(g.s)}</p>`;
+  ov.innerHTML = `<div class="overlay" role="dialog" aria-label="התבוננות מודרכת"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>${inner}</div></div>`;
 }
 function openHelp(lead){ ov.innerHTML = `<div class="overlay"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>${helpCard(lead)}</div></div>`; }
 let M = null, breathT = null;
@@ -1655,6 +1763,15 @@ document.addEventListener("click", async e => {
   else if(a==="quick-win"){ const day = today(); day.moments = [...(day.moments||[]), {result:"win", at:new Date().toISOString()}]; await putToday(day); render(); toast("ניצחון נרשם."); }
   else if(a==="save-debrief"){ const texts = [...CHANNELS.map(([c]) => D.g[c].text), D.tomorrow, (D.guideQ && D.guideQ.text) || ""]; const day = today(); day.debrief = {...D, at:new Date().toISOString()}; D = null; await putToday(day); render(); window.scrollTo(0,0);
     if(isDistress(texts)) openHelp("נשמע שעובר עליך משהו כבד. מגיע לך שמישהו יקשיב עכשיו."); else openClosing(day); }
+  else if(a==="pause"){ openPause(t.dataset.k); }
+  else if(a==="pz-next"){ clearTimeout(pzT); PZ.step = 1; drawPause(); }
+  else if(a==="pz-save"){ const v = ((document.getElementById("pz-intent")||{}).value || "").trim(); if(!v){ toast("כתוב קודם משפט אחד."); return; }
+    const day = today(); day.morning = {intent: v, at: new Date().toISOString()}; await putToday(day); closeOv(); render(); toast("בוקר טוב. הכוונה איתך."); }
+  else if(a==="pz-who"){ PZ.who = t.dataset.k; PZ.step = 2; const day = today(); day.noon = {who: PZ.who, at: new Date().toISOString()}; await putToday(day); drawPause(); render(); }
+  else if(a==="guided"){ openGuided(); }
+  else if(a==="gd-next"){ GD.step++; drawGuided(); }
+  else if(a==="gd-back"){ GD.step = Math.max(0, GD.step-1); drawGuided(); }
+  else if(a==="gd-done"){ const day = today(); day.guided = true; await putToday(day); closeOv(); render(); toast("ראית, למדת, ממשיכים."); }
   else if(a==="close-day"){ closeOv(); S.tab = "today"; render(); window.scrollTo(0,0); }
   else if(a==="closing-map"){ closeOv(); S.tab = "map"; render(); window.scrollTo(0,0); }
   else if(a==="edit-debrief"){ const b = today().debrief; D = b.g ? JSON.parse(JSON.stringify(b)) : {...blankDraft(), tomorrow: b.tomorrow||""}; render(); }
