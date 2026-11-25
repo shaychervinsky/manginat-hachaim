@@ -1394,10 +1394,10 @@ function weekOpeningCard(d, intent){
 /* Listening: pre-made recordings (ElevenLabs v3, Israeli voices Dalit and Nimrod, read from the app text as is).
    One file per daily item and voice, at audio/<voice>/<key>.mp3, where key = first 10 hex of sha1(t|x|a).
    If an item's wording changes, its key changes, the file is missing, and the listen button hides until the audio is regenerated. */
-const AUDIO_KEYS = new Set("238e3fdfac 6cb14ef976 4b9df303e1 fd744ed960 a0d1b3bdc9 21e25ba335 e708d63233 f5b63c6bcd 693031d4c8 3c3506302c 7404273aa9 89c9c64d70 d8611f8060 5ad2454b20 914c26918c 43a4f336b1 da12966118 5762853e56 a5edcb0f4e 428259a622 9988643afe 5aa1a5a3e5 70e396ee27 7a76052cb3 d71e108a06 2469f3e0f2 025af5f2e0 339a167d69 f9d3787b78 d54f3d89fe 9ba8f88753 d70a069431 3ad81cdae6 8d3792fec6 d8fe9d3102 b6b1ccc9fe 02d0f07c3f d3e65d92b0 f987cccf2e 62346e47df 878a581ece e7344e2bb4 d7d1469740 88f07b548b 20a7a75785 ab1624547e 68e47750c5 a62648a9ed 11bb96483b 281c1fe6bf b3931ca748 e4ac5db98b f0eff83396 dc8e489445 ebf474b3a6 2e296963aa 6c9d28ab58 e77946ef17 e5cb2e5df9 8fa69db8fe 5f5b3d3822 4ef8383794 597844c854 2732bfc5f4 3d5b27ee44 f2aaa226c9 02f700854c 540a5352da 1ef62ab5bc 48dca2771d 17317f700e 1c92a26bbc 630de01f3a 3674158f6b 7d00d3c4e8 4ae9eedad1 b46eedc3fd 4c29f50202 813af2302b 6a04a39768 c004656f2c 5e71a7b6ca e414c7380e 8a276a1a1e 61763520d3 aacda6f5bf c1e5f48969 c671ef2bcf 1cc4102ad6 bf63cc34f1 d86b254c81 f05d8cf090 b25236250e 473209e2cc 4d67cc625e a07fb86529 e099cbe873 d228f2a467 d0dc2f3359 76d7867385 40b6d42492 ed582bcbff 68ab896752 ce48e02170 81d0161915 87a4a7d4b2 eaea141227 44abd835be 4de0352dd5 7498aa0270 82c60c5a91 e95404e7f5 aeefd4a5ea 183b107413".split(" "));
+const AUDIO_KEYS = new Set("238e3fdfac 6cb14ef976 4b9df303e1 fd744ed960 a0d1b3bdc9 21e25ba335 e708d63233 f5b63c6bcd 693031d4c8 3c3506302c 7404273aa9 89c9c64d70 d8611f8060 5ad2454b20 914c26918c 43a4f336b1 da12966118 5762853e56 a5edcb0f4e 428259a622 9988643afe 5aa1a5a3e5 70e396ee27 7a76052cb3 d71e108a06 2469f3e0f2 025af5f2e0 339a167d69 f9d3787b78 d54f3d89fe 9ba8f88753 d70a069431 3ad81cdae6 8d3792fec6 d8fe9d3102 b6b1ccc9fe 02d0f07c3f d3e65d92b0 f987cccf2e 62346e47df 878a581ece e7344e2bb4 d7d1469740 88f07b548b 20a7a75785 ab1624547e 68e47750c5 a62648a9ed 11bb96483b 281c1fe6bf b3931ca748 e4ac5db98b f0eff83396 dc8e489445 ebf474b3a6 2e296963aa 6c9d28ab58 e77946ef17 e5cb2e5df9 8fa69db8fe 5f5b3d3822 4ef8383794 597844c854 2732bfc5f4 3d5b27ee44 f2aaa226c9 02f700854c 540a5352da 1ef62ab5bc 48dca2771d 17317f700e 1c92a26bbc 630de01f3a 3674158f6b 7d00d3c4e8 4ae9eedad1 b46eedc3fd 4c29f50202 813af2302b 6a04a39768 c004656f2c 5e71a7b6ca e414c7380e 8a276a1a1e 61763520d3 aacda6f5bf c1e5f48969 c671ef2bcf 1cc4102ad6 bf63cc34f1 d86b254c81 f05d8cf090 b25236250e 473209e2cc 4d67cc625e a07fb86529 e099cbe873 d228f2a467 d0dc2f3359 76d7867385 40b6d42492 ed582bcbff 68ab896752 ce48e02170 81d0161915 87a4a7d4b2 eaea141227 44abd835be 4de0352dd5 7498aa0270 82c60c5a91 e95404e7f5 aeefd4a5ea 183b107413 a01c56e3a3 584dd9c08d 29913fce85 1c716b7cba a9cc54fc52 f959c0d4dd c2c25d4e3f 4b67fd9a70 7c8ec2e0c6 8449aea3f5 c9aaa70315 997aecf912 f9a5a9a6d3 6b93f9b373 136c26e100 ed795a8fdc 64de367280 1aa6b84b0e 95195bb23c b713aca3ec 148f139e9e c9272f520f".split(" "));
 const VOICES = [["Nimrod","נמרוד"],["Dalit","דלית"]];
 const RATES = [[0.85,"איטי"],[1,"רגיל"],[1.12,"מהיר"]];
-const audioKey = new WeakMap();
+const audioKey = new WeakMap(), stepAudio = new Map();
 async function hashItems(){
   if(!(window.crypto && crypto.subtle && window.TextEncoder)) return;
   const all = [...POWERS.flatMap(p => p.items), ...HANUKKAH, ...Object.values(MONTHLY).flatMap(m => Object.values(m).flat())];
@@ -1405,6 +1405,11 @@ async function hashItems(){
     const b = await crypto.subtle.digest("SHA-1", new TextEncoder().encode([it.t, it.x, it.a].join("|")));
     const k = [...new Uint8Array(b)].map(x => x.toString(16).padStart(2,"0")).join("").slice(0,10);
     if(AUDIO_KEYS.has(k)) audioKey.set(it, k);
+  }
+  for(const t of new Set(GUIDED.flatMap(g => g.steps))){
+    const b = await crypto.subtle.digest("SHA-1", new TextEncoder().encode(t));
+    const k = [...new Uint8Array(b)].map(x => x.toString(16).padStart(2,"0")).join("").slice(0,10);
+    if(AUDIO_KEYS.has(k)) stepAudio.set(t, k);
   }
 }
 function voicePref(){ const v = (S.profile && S.profile.voice) || {}; return {voice: VOICES.some(([k]) => k===v.voice) ? v.voice : "Nimrod", rate: RATES.some(([r]) => r===v.rate) ? v.rate : 1}; }
@@ -1582,7 +1587,7 @@ function missionCard(preview){
 }
 
 /* ---------- overlays ---------- */
-function closeOv(){ ov.innerHTML = ""; clearTimeout(breathT); clearTimeout(pzT); PZ = null; GD = null; }
+function closeOv(){ if(GD) stopAudio(); ov.innerHTML = ""; clearTimeout(breathT); clearTimeout(pzT); PZ = null; GD = null; }
 function helpCard(lead){
   return `<div class="card help"><p class="eyebrow">עזרה עכשיו</p>${lead?`<p>${esc(lead)}</p>`:""}
     <p>האפליקציה לא יכולה להחליף אדם שמקשיב. אפשר לפנות עכשיו, בחינם ובאנונימיות:</p>
@@ -1639,19 +1644,24 @@ function drawPause(){
   ov.innerHTML = `<div class="overlay" role="dialog" aria-label="${PZ.kind==="morning" ? "רגע של בוקר" : "עצירה של צהריים"}"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>${inner}</div></div>`;
 }
 let GD = null;
-function openGuided(){ GD = {g: GUIDED[weekNum(now()) % GUIDED.length], step:-1}; drawGuided(); }
+function openGuided(){ GD = {g: GUIDED[weekNum(now()) % GUIDED.length], step:-1, listen:false}; drawGuided(); }
+/* With listening on, each step is read aloud as it appears; moving on is still the person's own choice. */
+function guidedCanListen(g){ return S.canSpeak && g.steps.every(t => stepAudio.has(t)); }
 function drawGuided(){
   const {g, step} = GD, last = step === g.steps.length - 1;
+  stopAudio();
+  if(GD.listen && step >= 0){ const k = stepAudio.get(g.steps[step]); if(k) playFile(k, () => {}); }
   const inner = step < 0
     ? `<div class="card accent center"><p class="eyebrow">התבוננות מודרכת</p><h2 style="font-size:2rem">${esc(g.t)}</h2>
         <p>קרא כל שלב, ואז תן לו זמן. אין קצב נכון. אפשר לעצור בכל רגע.</p>
         <p class="src">״יעמיק מחשבתו ויצייר בשכלו״ · תניא, פרק ל״ג</p></div>
-       <div class="center"><button class="btn" data-act="gd-next" type="button">להתחיל</button></div>`
+       <div class="center" style="display:grid;gap:12px;justify-items:center">${guidedCanListen(g) ? `<button class="btn" data-act="gd-listen" type="button">להתחיל עם הקראה</button><button class="quiet-win" data-act="gd-next" type="button">להתחיל בקריאה שקטה</button>` : `<button class="btn" data-act="gd-next" type="button">להתחיל</button>`}</div>`
     : `<div class="dots5" aria-label="שלב ${step+1} מתוך ${g.steps.length}">${g.steps.map((_,i) => `<i class="${i<=step?"on":""}"></i>`).join("")}</div>
        <p class="q center" style="min-height:9rem;display:grid;place-items:center">${esc(g.steps[step])}</p>
        <div class="center" style="display:grid;gap:12px;justify-items:center">
          <button class="btn${last?"":" ghost"}" data-act="${last?"gd-done":"gd-next"}" type="button">${last?"סיום":"הבא"}</button>
-         ${step>0?`<button class="quiet-win" data-act="gd-back" type="button">חזרה</button>`:""}</div>
+         ${step>0?`<button class="quiet-win" data-act="gd-back" type="button">חזרה</button>`:""}
+         ${GD.listen?`<button class="quiet-win" data-act="gd-again" type="button">להשמיע שוב</button>`:""}</div>
        <p class="center small muted">${esc(g.s)}</p>`;
   ov.innerHTML = `<div class="overlay" role="dialog" aria-label="התבוננות מודרכת"><div class="ov-in"><button class="close" data-act="close" type="button">סגירה</button>${inner}</div></div>`;
 }
@@ -1774,6 +1784,8 @@ document.addEventListener("click", async e => {
   else if(a==="pz-who"){ PZ.who = t.dataset.k; PZ.step = 2; const day = today(); day.noon = {who: PZ.who, at: new Date().toISOString()}; await putToday(day); drawPause(); render(); }
   else if(a==="guided"){ openGuided(); }
   else if(a==="gd-next"){ GD.step++; drawGuided(); }
+  else if(a==="gd-listen"){ GD.listen = true; GD.step = 0; drawGuided(); }
+  else if(a==="gd-again"){ drawGuided(); }
   else if(a==="gd-back"){ GD.step = Math.max(0, GD.step-1); drawGuided(); }
   else if(a==="gd-done"){ const day = today(); day.guided = true; await putToday(day); closeOv(); render(); toast("ראית, למדת, ממשיכים."); }
   else if(a==="close-day"){ closeOv(); S.tab = "today"; render(); window.scrollTo(0,0); }
