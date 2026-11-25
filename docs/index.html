@@ -1391,11 +1391,11 @@ function weekOpeningCard(d, intent){
     <div><button class="btn" data-act="save-intent" type="button">לשמור לשבוע</button></div></div>`;
 }
 /* Listening: Claude's voice when the page runs on claude.ai, else the device's own voice. */
-/* Listening: pre-made recordings (Azure neural Hebrew voices, read from a vowelized copy of the text; the app text itself stays unvowelized).
+/* Listening: pre-made recordings (ElevenLabs v3, Israeli voices Dalit and Nimrod, read from the app text as is).
    One file per daily item and voice, at audio/<voice>/<key>.mp3, where key = first 10 hex of sha1(t|x|a).
    If an item's wording changes, its key changes, the file is missing, and the listen button hides until the audio is regenerated. */
 const AUDIO_KEYS = new Set("238e3fdfac 6cb14ef976 4b9df303e1 fd744ed960 a0d1b3bdc9 21e25ba335 e708d63233 f5b63c6bcd 693031d4c8 3c3506302c 7404273aa9 89c9c64d70 d8611f8060 5ad2454b20 914c26918c 43a4f336b1 da12966118 5762853e56 a5edcb0f4e 428259a622 9988643afe 5aa1a5a3e5 70e396ee27 7a76052cb3 d71e108a06 2469f3e0f2 025af5f2e0 339a167d69 f9d3787b78 d54f3d89fe 9ba8f88753 d70a069431 3ad81cdae6 8d3792fec6 d8fe9d3102 b6b1ccc9fe 02d0f07c3f d3e65d92b0 f987cccf2e 62346e47df 878a581ece e7344e2bb4 d7d1469740 88f07b548b 20a7a75785 ab1624547e 68e47750c5 a62648a9ed 11bb96483b 281c1fe6bf b3931ca748 e4ac5db98b f0eff83396 dc8e489445 ebf474b3a6 2e296963aa 6c9d28ab58 e77946ef17 e5cb2e5df9 8fa69db8fe 5f5b3d3822 4ef8383794 597844c854 2732bfc5f4 3d5b27ee44 f2aaa226c9 02f700854c 540a5352da 1ef62ab5bc 48dca2771d 17317f700e 1c92a26bbc 630de01f3a 3674158f6b 7d00d3c4e8 4ae9eedad1 b46eedc3fd 4c29f50202 813af2302b 6a04a39768 c004656f2c 5e71a7b6ca e414c7380e 8a276a1a1e 61763520d3 aacda6f5bf c1e5f48969 c671ef2bcf 1cc4102ad6 bf63cc34f1 d86b254c81 f05d8cf090 b25236250e 473209e2cc 4d67cc625e a07fb86529 e099cbe873 d228f2a467 d0dc2f3359 76d7867385 40b6d42492 ed582bcbff 68ab896752 ce48e02170 81d0161915 87a4a7d4b2 eaea141227 44abd835be 4de0352dd5 7498aa0270 82c60c5a91 e95404e7f5 aeefd4a5ea 183b107413".split(" "));
-const VOICES = [["Hila","הילה"],["Avri","אברי"]];
+const VOICES = [["Dalit","דלית"],["Nimrod","נמרוד"]];
 const RATES = [[0.85,"איטי"],[1,"רגיל"],[1.12,"מהיר"]];
 const audioKey = new WeakMap();
 async function hashItems(){
@@ -1407,7 +1407,7 @@ async function hashItems(){
     if(AUDIO_KEYS.has(k)) audioKey.set(it, k);
   }
 }
-function voicePref(){ const v = (S.profile && S.profile.voice) || {}; return {voice: VOICES.some(([k]) => k===v.voice) ? v.voice : "Hila", rate: RATES.some(([r]) => r===v.rate) ? v.rate : 1}; }
+function voicePref(){ const v = (S.profile && S.profile.voice) || {}; return {voice: VOICES.some(([k]) => k===v.voice) ? v.voice : "Dalit", rate: RATES.some(([r]) => r===v.rate) ? v.rate : 1}; }
 function canListen(it){ return S.canSpeak && !!it && audioKey.has(it); }
 let player = null;
 function stopAudio(){ if(player){ try{ player.pause(); }catch(e){} player = null; } }
