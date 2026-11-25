@@ -7,7 +7,7 @@ A Hebrew-first (RTL) personal-growth web app built on the Tanya's model of the s
 - `build.py` — builds the installable PWA into `docs/` (served by GitHub Pages). Run `python3 build.py` after every change to `index.html` and commit both.
 - `brand/` — the logo ("הפאוזה": a fermata, an arc over a dot — stop on the note; works in Hebrew and English) as SVG; `docs/icons/*.png` are rendered from `brand/app-icon*.svg`.
 - `SPEC.md` — product spec (Hebrew).
-- `docs/audio/<Hila|Avri>/<key>.mp3` — pre-made Hebrew recordings for "להאזין" (Azure neural voices, read from a vowelized copy; the app text stays unvowelized). Regenerate per `tools/audio/README.md` when daily wording changes, and update `AUDIO_KEYS`. The artifact needs these published as `files` too.
+- `docs/audio/<Dalit|Nimrod>/<key>.mp3` — pre-made Hebrew recordings for "להאזין" (ElevenLabs v3, Israeli library voices Dalit and Nimrod, read from the unvowelized app text). Regenerate per `tools/audio/README.md` when daily wording changes, and update `AUDIO_KEYS`. The artifact needs these published as `files` too.
 
 ## Where things live (one name each)
 - App, installable: GitHub Pages from `docs/` on `main`.
