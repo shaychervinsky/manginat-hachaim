@@ -1347,7 +1347,7 @@ function renderToday(){
     S.todayItem = it;
     body += `<div class="card"><p class="eyebrow">${hn ? `חנוכה · הנר ${ORD[hn-1]}` : `הכוח של היום: ${esc(P.name)}`}</p>
       <h2 class="insight-title">${esc(it.t)}</h2><p>${esc(it.x)}</p><p class="src">${esc(it.s)}</p>
-      ${S.canSpeak ? `<div><button class="quiet-win" data-act="listen" type="button">${S.speaking ? "עצירה" : "להאזין"}</button></div>` : ""}
+      ${canListen(it) ? `<div><button class="quiet-win" data-act="listen" type="button">${S.speaking ? "עצירה" : "להאזין"}</button></div>` : ""}
       <div class="action"><span class="label">המעשה של היום</span><p>${esc(it.a)}</p>
         ${md && md.tip ? `<p class="small muted">${esc(md.n)}: ${esc(md.tip)}</p>` : ""}
         <div class="row">${day.done?`<button class="btn done" data-act="undo-done" type="button">✓ עשיתי</button>`:`<button class="btn" data-act="done" type="button">עשיתי</button>`}</div></div></div>
@@ -1391,41 +1391,45 @@ function weekOpeningCard(d, intent){
     <div><button class="btn" data-act="save-intent" type="button">לשמור לשבוע</button></div></div>`;
 }
 /* Listening: Claude's voice when the page runs on claude.ai, else the device's own voice. */
-/* Voices for listening. Claude's voices on claude.ai (tts capability); elsewhere the device's own Hebrew voice.
-   Read line by line, a little slower than normal, so each part gets its own pause. */
-const VOICES = [["airy","אוורירי"],["rounded","עגול"],["buttery","חם"],["glassy","צלול"]];
-const RATES = [[0.85,"איטי"],[0.95,"רגיל"],[1.05,"מהיר"]];
-/* Default: the device's own Hebrew voice when there is one (a native accent); Claude's voices are an option. */
-function voicePref(){ const v = (S.profile && S.profile.voice) || {}; return {voice: v.voice || (deviceVoice() || !S.tts ? "device" : "airy"), rate: v.rate || 0.9}; }
-function speakLines(it){ return [it.t, it.x, `המעשה של היום. ${it.a}`]; }
-function deviceVoice(){ try{ const vs = speechSynthesis.getVoices(); return vs.find(v => /^he|^iw/i.test(v.lang)) || null; }catch(e){ return null; } }
-async function speakNow(lines, onDone){
-  const {voice, rate} = voicePref();
-  if(S.tts && voice !== "device"){
-    try{ await S.tts.speak(lines.map(text => ({text, voice, rate, language:"he"}))); }catch(e){}
-    onDone(); return;
+/* Listening: pre-made recordings (Azure neural Hebrew voices, read from a vowelized copy of the text; the app text itself stays unvowelized).
+   One file per daily item and voice, at audio/<voice>/<key>.mp3, where key = first 10 hex of sha1(t|x|a).
+   If an item's wording changes, its key changes, the file is missing, and the listen button hides until the audio is regenerated. */
+const AUDIO_KEYS = new Set("238e3fdfac 6cb14ef976 4b9df303e1 fd744ed960 a0d1b3bdc9 21e25ba335 e708d63233 f5b63c6bcd 693031d4c8 3c3506302c 7404273aa9 89c9c64d70 d8611f8060 5ad2454b20 914c26918c 43a4f336b1 da12966118 5762853e56 a5edcb0f4e 428259a622 9988643afe 5aa1a5a3e5 70e396ee27 7a76052cb3 d71e108a06 2469f3e0f2 025af5f2e0 339a167d69 f9d3787b78 d54f3d89fe 9ba8f88753 d70a069431 3ad81cdae6 8d3792fec6 d8fe9d3102 b6b1ccc9fe 02d0f07c3f d3e65d92b0 f987cccf2e 62346e47df 878a581ece e7344e2bb4 d7d1469740 88f07b548b 20a7a75785 ab1624547e 68e47750c5 a62648a9ed 11bb96483b 281c1fe6bf b3931ca748 e4ac5db98b f0eff83396 dc8e489445 ebf474b3a6 2e296963aa 6c9d28ab58 e77946ef17 e5cb2e5df9 8fa69db8fe 5f5b3d3822 4ef8383794 597844c854 2732bfc5f4 3d5b27ee44 f2aaa226c9 02f700854c 540a5352da 1ef62ab5bc 48dca2771d 17317f700e 1c92a26bbc 630de01f3a 3674158f6b 7d00d3c4e8 4ae9eedad1 b46eedc3fd 4c29f50202 813af2302b 6a04a39768 c004656f2c 5e71a7b6ca e414c7380e 8a276a1a1e 61763520d3 aacda6f5bf c1e5f48969 c671ef2bcf 1cc4102ad6 bf63cc34f1 d86b254c81 f05d8cf090 b25236250e 473209e2cc 4d67cc625e a07fb86529 e099cbe873 d228f2a467 d0dc2f3359 76d7867385 40b6d42492 ed582bcbff 68ab896752 ce48e02170 81d0161915 87a4a7d4b2 eaea141227 44abd835be 4de0352dd5 7498aa0270 82c60c5a91 e95404e7f5 aeefd4a5ea 183b107413".split(" "));
+const VOICES = [["Hila","הילה"],["Avri","אברי"]];
+const RATES = [[0.85,"איטי"],[1,"רגיל"],[1.12,"מהיר"]];
+const audioKey = new WeakMap();
+async function hashItems(){
+  if(!(window.crypto && crypto.subtle && window.TextEncoder)) return;
+  const all = [...POWERS.flatMap(p => p.items), ...HANUKKAH, ...Object.values(MONTHLY).flatMap(m => Object.values(m).flat())];
+  for(const it of all){
+    const b = await crypto.subtle.digest("SHA-1", new TextEncoder().encode([it.t, it.x, it.a].join("|")));
+    const k = [...new Uint8Array(b)].map(x => x.toString(16).padStart(2,"0")).join("").slice(0,10);
+    if(AUDIO_KEYS.has(k)) audioKey.set(it, k);
   }
-  try{
-    speechSynthesis.cancel();
-    const dv = deviceVoice();
-    lines.forEach((text, i) => { const u = new SpeechSynthesisUtterance(text); u.lang = "he-IL"; if(dv) u.voice = dv; u.rate = rate;
-      if(i === lines.length-1){ u.onend = onDone; u.onerror = onDone; } speechSynthesis.speak(u); });
-  }catch(e){ onDone(); }
 }
-async function toggleListen(){
-  const it = S.todayItem; if(!it) return;
-  if(S.speaking){ S.speaking = false; try{ if(S.tts) S.tts.stop(); }catch(e){} try{ speechSynthesis.cancel(); }catch(e){} render(); return; }
+function voicePref(){ const v = (S.profile && S.profile.voice) || {}; return {voice: VOICES.some(([k]) => k===v.voice) ? v.voice : "Hila", rate: RATES.some(([r]) => r===v.rate) ? v.rate : 1}; }
+function canListen(it){ return S.canSpeak && !!it && audioKey.has(it); }
+let player = null;
+function stopAudio(){ if(player){ try{ player.pause(); }catch(e){} player = null; } }
+function playFile(name, onDone){
+  stopAudio();
+  const {voice, rate} = voicePref();
+  const a = new Audio(`audio/${voice}/${name}.mp3`); a.playbackRate = rate; a.preservesPitch = true;
+  a.onended = a.onerror = () => { if(player === a) player = null; onDone(); };
+  player = a; a.play().catch(() => { if(player === a) player = null; onDone(); });
+}
+function toggleListen(){
+  const it = S.todayItem; if(!canListen(it)) return;
+  if(S.speaking){ S.speaking = false; stopAudio(); render(); return; }
   S.speaking = true; render();
-  speakNow(speakLines(it), () => { S.speaking = false; render(); });
+  playFile(audioKey.get(it), () => { S.speaking = false; render(); });
 }
 function voiceCard(){
   if(!S.canSpeak) return "";
   const {voice, rate} = voicePref();
   const chips = (arr, act, cur) => `<div class="chips">${arr.map(([k,l]) => `<button class="chip" type="button" data-act="${act}" data-k="${k}" aria-pressed="${String(cur)===String(k)}">${esc(l)}</button>`).join("")}</div>`;
   return `<div class="card"><p class="eyebrow">קול ההקראה</p>
-    ${S.tts ? `<span class="label">הקול</span>${chips([["device", deviceVoice() ? "עברי של המכשיר" : "של המכשיר"], ...VOICES], "set-voice", voice)}
-      <p class="small muted">הקול העברי של המכשיר נשמע הכי טבעי. הקולות האחרים הם של Claude, עם מבטא זר.</p>` : `<p class="small muted">ההקראה בקול העברי של המכשיר.</p>`}
-    ${!deviceVoice() ? `<p class="small muted">לא נמצא במכשיר הזה קול עברי. אפשר להוסיף אותו בהגדרות ההקראה של המכשיר (באייפון ובמק: ״כרמית״).</p>` : ""}
+    <span class="label">הקול</span>${chips(VOICES, "set-voice", voice)}
     <span class="label">הקצב</span>${chips(RATES, "set-rate", rate)}
     <div><button class="quiet-win" data-act="voice-sample" type="button">לשמוע דוגמה</button></div></div>`;
 }
@@ -1794,9 +1798,9 @@ document.addEventListener("click", async e => {
   else if(a==="save-mission"){ const v = (document.getElementById("mission").value || "").trim(); S.profile.mission = v; await saveProfile(S.profile); closeOv(); render(); toast(v ? "השליחות נשמרה." : "השליחות נמחקה."); }
   else if(a==="preview-chanukah"){ for(let i=0;i<400;i++){ const x = realNow(); x.setDate(x.getDate()+i); if(chanukahDay(x)===3 && x.getDay()!==6){ demoOffset = i; break; } } closeOv(); S.tab = "today"; render(); }
   else if(a==="listen"){ toggleListen(); }
-  else if(a==="set-voice" || a==="set-rate"){ const v = {...voicePref()}; if(a==="set-voice") v.voice = t.dataset.k; else v.rate = Number(t.dataset.k);
+  else if(a==="set-voice" || a==="set-rate"){ const v = {...voicePref()}; if(a==="set-voice") v.voice = t.dataset.k; else v.rate = Number(t.dataset.k); if(S.speaking){ S.speaking = false; stopAudio(); }
     S.profile.voice = v; await saveProfile(S.profile); openSettings(); }
-  else if(a==="voice-sample"){ speakNow(["בין הגירוי לתגובה יש רגע.", "אתה בתוכו עכשיו."], () => {}); }
+  else if(a==="voice-sample"){ playFile("sample", () => {}); }
   else if(a==="save-intent"){ const v = ((document.getElementById("wk-intent")||{}).value || "").trim(); if(!v){ toast("כתוב קודם משפט אחד."); return; }
     S.profile.intents = {...(S.profile.intents||{}), [keyOf(weekStart(now()))]: v}; await saveProfile(S.profile); render(); toast("נשמר לשבוע הזה."); }
   else if(a==="demo-on"){ S.demo = makeDemo(); closeOv(); S.tab = "map"; render(); }
@@ -1811,12 +1815,9 @@ document.addEventListener("click", async e => {
   S.days = await loadDays() || {};
   await loadNotes();
   if(store.user){ try{ S.isGuide = await store.user.canEdit(); }catch(e){ S.isGuide = false; } }
-  try{ if(window.claude && typeof window.claude.use === "function") S.tts = await withTimeout(window.claude.use("tts"), 4000); }catch(e){ S.tts = null; }
-  /* Listening is hidden for now: Claude's voices read Hebrew with a foreign accent, and the device's voice is blocked on claude.ai.
-     Turn it back on (true) once there are pre-made Hebrew audio files or human recordings. */
-  const LISTEN_ENABLED = false;
-  S.canSpeak = LISTEN_ENABLED && (!!S.tts || ("speechSynthesis" in window && typeof SpeechSynthesisUtterance === "function"));
-  try{ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => { if(ov.innerHTML.includes("קול ההקראה")) openSettings(); }; }catch(e){}
+  /* Listening plays the pre-made recordings in audio/ (see AUDIO_KEYS). */
+  try{ await hashItems(); }catch(e){}
+  S.canSpeak = typeof Audio === "function";
   if(S.profile && S.profile.lastActive){ const gap = (Date.now() - Date.parse(S.profile.lastActive)) / 864e5; S.welcomeBack = gap > 3; }
   render();
 })();

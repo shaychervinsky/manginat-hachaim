@@ -1,0 +1,10 @@
+const fs=require("fs"),vm=require("vm"),crypto=require("crypto");
+const L=fs.readFileSync(process.argv[2],"utf8").split("\n");
+const code=L.slice(240,1016).join("\n")+"\n;({POWERS,HANUKKAH,MONTHLY,GUIDED})";
+const C=vm.runInNewContext(code,{});
+const out={}; const add=(it,where)=>{const k=crypto.createHash("sha1").update([it.t,it.x,it.a].join("|")).digest("hex").slice(0,10); if(!out[k]) out[k]={where,t:it.t,x:it.x,a:it.a};};
+C.POWERS.forEach(p=>p.items.forEach((it,i)=>add(it,`pool.${p.key}.${i}`)));
+C.HANUKKAH.forEach((it,i)=>add(it,`hanukkah.${i+1}`));
+for(const m in C.MONTHLY) for(const p in C.MONTHLY[m]) C.MONTHLY[m][p].forEach((it,i)=>add(it,`month.${m}.${p}.${i}`));
+fs.writeFileSync(process.argv[3],JSON.stringify(out,null,1));
+console.log(Object.keys(out).length, Object.values(out).reduce((n,o)=>n+(o.t+o.x+o.a).length,0));
