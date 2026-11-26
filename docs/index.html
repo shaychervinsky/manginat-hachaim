@@ -1193,6 +1193,13 @@ function candles(n){
   slots.forEach((x,i) => { s += one(x, 62, i < n); });
   return s + `</svg>`;
 }
+/* Yom Tov (Israel): like Shabbat, a day of rest in the app: no tasks, no writing, no reminders. */
+function yomTov(d){ const h = hebParts(d), m = h.month;
+  if(m.includes("תשרי")) return ({1:"ראש השנה",2:"ראש השנה",10:"יום כיפור",15:"סוכות",22:"שמיני עצרת ושמחת תורה"})[h.day] || null;
+  if(m.includes("ניסן")) return ({15:"פסח",21:"שביעי של פסח"})[h.day] || null;
+  if(m.includes("סיו") && h.day===6) return "שבועות";
+  return null; }
+const restDay = d => d.getDay()===6 || !!yomTov(d);
 /* Which holiday falls on this day, if any (key of HOLIDAYS). */
 function holidayOf(d){ const h = hebParts(d), m = h.month;
   if(h.day===15 && m.includes("שבט")) return "tubishvat";
@@ -1409,10 +1416,17 @@ function renderToday(){
   const hn = chanukahDay(d), wk = keyOf(weekStart(d)), intent = S.profile && S.profile.intents && S.profile.intents[wk];
   let body = (hn ? `<div class="staff-card">${candles(hn)}</div>` : `<div class="staff-card">${weekStaff()}</div>`)
     + (intent && dow !== 0 ? `<p class="intent">השבוע: <b>${esc(intent)}</b></p>` : "")
-    + (dow !== 6 ? morningCard(day, d) : "")
-    + (dow === 0 ? weekOpeningCard(d, intent) : "") + missionNote() + guideWordCard();
+    + (!restDay(d) ? morningCard(day, d) : "")
+    + (dow === 0 && !restDay(d) ? weekOpeningCard(d, intent) : "") + missionNote() + guideWordCard();
   if(S.welcomeBack) body += `<div class="card accent"><p class="eyebrow">${G("ברוך שובך","ברוכה השבה")}</p><p>החזרה עצמה היא חלק מהעבודה. אין כאן רצף שנשבר, יש מנגינה שממשיכה.</p></div>`;
-  if(dow === 6){
+  const yt = yomTov(d);
+  if(yt){
+    /* A festival: a thought for the day (no action), and rest. */
+    const hi = HOLIDAYS[holidayOf(d)];
+    body += `<div class="card accent center">${restMark()}<p class="eyebrow">${esc(yt)}${dow===6?" · שבת":""}</p><h2 style="font-size:2.2rem">${({"ראש השנה":"שנה טובה","יום כיפור":"גמר חתימה טובה"})[yt] || (dow===6 ? "שבת שלום וחג שמח" : "חג שמח")}</h2>
+      <p>היום הזה הוא פאוזה במנגינה, כמו שבת. אין משימות ואין התראות.</p></div>
+      ${hi && dow!==6 ? `<div class="card"><p class="eyebrow">מחשבה לחג</p><h2 class="insight-title">${esc(ff(hi.t))}</h2><p>${esc(ff(hi.x))}</p><p class="src">${esc(hi.s)}</p></div>` : ""}`;
+  } else if(dow === 6){
     body += `<div class="card accent center">${restMark()}<p class="eyebrow">שבת</p><h2 style="font-size:2.2rem">שבת שלום</h2>
       <p>שבת היא הפאוזה במנגינה. היום אין משימות ואין התראות.</p><p class="muted">במוצאי שבת מחכה לך מפת השבוע.</p>
       <div><button class="btn ghost" data-tab-go="map" type="button">לצפות במפת השבוע</button></div></div>`;
@@ -1528,7 +1542,7 @@ function voiceCard(){
 let D = null; // debrief draft
 function renderDebrief(){
   const day = today();
-  if(now().getDay() === 6){ app.innerHTML = header() + `<div class="card center">${restMark()}<p class="eyebrow">שבת</p><p>בשבת לא כותבים. נתראה במוצאי שבת.</p></div>` + footer(); return; }
+  if(restDay(now())){ const yt = yomTov(now()); app.innerHTML = header() + `<div class="card center">${restMark()}<p class="eyebrow">${yt ? esc(yt) : "שבת"}</p><p>${yt ? "היום לא כותבים. נתראה בצאת החג." : "בשבת לא כותבים. נתראה במוצאי שבת."}</p></div>` + footer(); return; }
   const lab = (arr,k) => (arr.find(a => a[0]===k)||[,""])[1];
   if(day.debrief && !D){
     const b = day.debrief;
@@ -1838,13 +1852,14 @@ const APP_URL = "https://shaychervinsky.github.io/manginat-hachaim/";
 function reminderCard(){
   const tm = (S.profile && S.profile.reminder) || "08:00", inClaude = !!(window.claude && window.claude.use);
   return `<div class="card"><p class="eyebrow">תזכורת עדינה</p>
-    <p class="small">פעם ביום, בשעה ${G("שתבחר","שתבחרי")}: ״רגע של חיבור?״. מראשון עד שישי, אף פעם לא בשבת.</p>
+    <p class="small">פעם ביום, בשעה ${G("שתבחר","שתבחרי")}: ״רגע של חיבור?״. מראשון עד שישי, לא בשבת ולא בחג.</p>
     <label class="label" for="rem-time">באיזו שעה?</label><input id="rem-time" type="time" value="${esc(tm)}" style="max-width:9rem">
     <div class="row"><button class="btn ghost" data-act="rem-google" type="button">להוסיף ליומן גוגל</button>
       ${inClaude ? "" : `<button class="btn ghost" data-act="rem-ics" type="button">להוסיף ליומן אחר (אייפון, אאוטלוק)</button>`}</div>
     <p class="small muted">התזכורת נשמרת ביומן שלך. כדי להפסיק אותה, מוחקים אותה מהיומן.</p></div>`;
 }
 function reminderTime(){ const v = ((document.getElementById("rem-time")||{}).value || "08:00"); return /^\d\d:\d\d$/.test(v) ? v : "08:00"; }
+function reminderSkips(st){ const out = []; for(let i=0;i<730;i++){ const x = new Date(st); x.setDate(x.getDate()+i); if(x.getDay()!==6 && yomTov(x)) out.push(icsStamp(x)); } return out; }
 function reminderStart(tm){ const d = new Date(); d.setDate(d.getDate()+1); if(d.getDay()===6) d.setDate(d.getDate()+1); const [h,mi] = tm.split(":").map(Number); d.setHours(h, mi, 0, 0); return d; }
 const icsStamp = d => `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
 function shareCard(){
@@ -1959,10 +1974,10 @@ document.addEventListener("click", async e => {
     try{ if(navigator.share){ await navigator.share({text}); } else { await navigator.clipboard.writeText(text); toast("הועתק. אפשר להדביק ולשלוח."); } }catch(e){} }
   else if(a==="rem-google" || a==="rem-ics"){ const tm = reminderTime(); S.profile.reminder = tm; await saveProfile(S.profile);
     const st = reminderStart(tm), en = new Date(st.getTime() + 5*60000), title = "מנגינת החיים · רגע של חיבור?", url = (window.claude && window.claude.use) ? "https://claude.ai/artifact/WiXonev3tnCN4cGSYBRjSz" : APP_URL;
-    const rule = "RRULE:FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR";
+    const rule = "RRULE:FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR", skips = reminderSkips(st);
     if(a==="rem-google"){ const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Jerusalem";
-      window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${icsStamp(st)}/${icsStamp(en)}&ctz=${encodeURIComponent(tz)}&recur=${encodeURIComponent(rule)}&details=${encodeURIComponent("דקה אחת: שלוש נשימות וכוונה אחת ליום. "+url)}`, "_blank", "noopener"); }
-    else { const ics = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Manginat HaChaim//HE","BEGIN:VEVENT","UID:mh-reminder-"+Date.now()+"@manginat","DTSTAMP:"+icsStamp(new Date()),"DTSTART:"+icsStamp(st),"DTEND:"+icsStamp(en),rule,"SUMMARY:"+title,"DESCRIPTION:דקה אחת: שלוש נשימות וכוונה אחת ליום. "+url,"BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+title,"TRIGGER:PT0M","END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n");
+      window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${icsStamp(st)}/${icsStamp(en)}&ctz=${encodeURIComponent(tz)}&recur=${encodeURIComponent(rule + (skips.length ? "\nEXDATE:" + skips.join(",") : ""))}&details=${encodeURIComponent("דקה אחת: שלוש נשימות וכוונה אחת ליום. "+url)}`, "_blank", "noopener"); }
+    else { const ics = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Manginat HaChaim//HE","BEGIN:VEVENT","UID:mh-reminder-"+Date.now()+"@manginat","DTSTAMP:"+icsStamp(new Date()),"DTSTART:"+icsStamp(st),"DTEND:"+icsStamp(en),rule,...(skips.length ? ["EXDATE:"+skips.join(",")] : []),"SUMMARY:"+title,"DESCRIPTION:דקה אחת: שלוש נשימות וכוונה אחת ליום. "+url,"BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+title,"TRIGGER:PT0M","END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n");
       const aEl = document.createElement("a"); aEl.href = URL.createObjectURL(new Blob([ics], {type:"text/calendar"})); aEl.download = "manginat-reminder.ics"; document.body.appendChild(aEl); aEl.click(); aEl.remove(); }
     toast("השעה נשמרה. עכשיו מאשרים ביומן."); }
   else if(a==="set-voice" || a==="set-rate"){ const v = {...voicePref()}; if(a==="set-voice") v.voice = t.dataset.k; else v.rate = Number(t.dataset.k); if(S.speaking){ S.speaking = false; stopAudio(); }

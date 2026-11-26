@@ -24,7 +24,7 @@ A Hebrew-first (RTL) personal-growth web app built on the Tanya's model of the s
 ## Rules
 - The Tanya is the backbone of the content, but not the only source: other sources (e.g. the Lubavitcher Rebbe) are welcome. Every insight and quote names its source (a Tanya chapter, or the author). Keep quotes short and attributed; otherwise write in the brand's own words rather than copying long passages.
 - Tone: no commandments, no charms, no self-blame ("ראית, למדת, ממשיכים").
-- No tasks or notifications on Shabbat.
+- No tasks or notifications on Shabbat, and on Yom Tov the same (`yomTov()`, Israel).
 - Keep the "not a substitute for therapy" consent and the help card (ERAN 1201, Sahar, MDA 101, Police 100).
 - Storage: `store` abstraction — private per-user cloud store when hosted as a Claude artifact (`window.claude.use("db")`), else `localStorage`, else memory. Replace with a real backend when moving to a native app.
 
