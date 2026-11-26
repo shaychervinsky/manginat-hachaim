@@ -1662,7 +1662,7 @@ function renderMap(){
 }
 function footer(){
   const m = {cloud:"הנתונים שלך שמורים באופן פרטי בחשבון שלך.", local:"הנתונים נשמרים במכשיר הזה בלבד.", memory:"הנתונים נשמרים רק עד סגירת הדף."}[store.mode];
-  return `<div class="foot"><span>${m}</span><span>האפליקציה אינה מחליפה טיפול נפשי. <button class="link" data-act="help" type="button">${G("צריך","צריכה")} עזרה עכשיו?</button></span></div>`;
+  return `<div class="foot"><span>${m}</span><span><button class="link" data-act="help" type="button">${G("צריך","צריכה")} עזרה עכשיו?</button></span></div>`;
 }
 function render(){
   if(!S.profile){ renderOnboarding(); return; }
